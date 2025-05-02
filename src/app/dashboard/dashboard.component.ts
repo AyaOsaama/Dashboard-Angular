@@ -6,7 +6,8 @@ import { ChartOptions, ChartType, ChartData } from 'chart.js';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BaseChartDirective],  // 👈 هذا هو الصح هنا
+  imports: [CommonModule, BaseChartDirective],  
+  
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
