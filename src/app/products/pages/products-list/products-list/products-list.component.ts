@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Product } from './models/product'; 
-import { ProductService } from './services/product.service'; 
+import { Product } from './models/product';
+import { ProductService } from './services/product.service';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { RatingModule } from 'primeng/rating';
@@ -15,6 +15,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 
 @Component({
@@ -31,6 +32,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     RippleModule,
     InputTextModule,
     ConfirmDialogModule,
+    ToastModule,
   ],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css',
@@ -69,6 +71,7 @@ export class ProductsListComponent implements OnInit {
     // this show a message that the product has been updated
 
     this.messageService.add({
+      key: 'myToast',
       severity: 'success',
       summary: 'Product Updated',
       detail: 'Product details have been updated.'
