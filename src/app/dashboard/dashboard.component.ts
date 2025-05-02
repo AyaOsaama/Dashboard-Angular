@@ -7,7 +7,6 @@ import { ChartOptions, ChartType, ChartData } from 'chart.js';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, BaseChartDirective],  
-  
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
