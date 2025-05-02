@@ -1,0 +1,14 @@
+.caption{
+    padding: 10px;
+    border-radius: 7px;
+}
+.searchInput{
+ position: relative;
+}
+.pi-search{
+position: absolute;
+z-index: 5;
+right: 10px;
+top: 50%;
+transform: translateY(-50%);
+} 

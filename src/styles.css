@@ -3,21 +3,14 @@
 @import "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
 
-#root,
-app-root {
-  height: 100%;
-}
-html,
-body {
-  height: 100%;
-  margin: 0;
-  overflow: hidden; 
-}
-
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-
+html{
+  scroll-behavior: smooth;
+}
 body {
   font-family: 'Segoe UI', sans-serif;
 }

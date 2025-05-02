@@ -1,0 +1,24 @@
+.header{
+    background-color: #f8f9fa;
+    height: 70px;
+}
+.container{
+    background-color: #f8f9fa;
+    display: flex;
+    height: calc( 100vh - 70px);
+}
+.sidebar{
+    background-color: #f8f9fa;
+    width: 300px;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto
+
+}
+.main-content{
+ background-color: white;
+ height: 100%;
+ overflow-y: auto;
+ padding: 20px;
+ flex-grow: 1;
+}
