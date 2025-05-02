@@ -3,6 +3,10 @@
 @import "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
 
+#root,
+app-root {
+  height: 100%;
+}
 html,
 body {
   height: 100%;
@@ -17,6 +21,7 @@ body {
 body {
   font-family: 'Segoe UI', sans-serif;
 }
+
 body.dark-mode {
   background-color: #121212;
   color: white;
@@ -29,5 +34,7 @@ body.dark-mode .p-toolbar {
 body.dark-mode .p-button {
   color: white;
 }
+
+
 
 
