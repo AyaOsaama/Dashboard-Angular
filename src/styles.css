@@ -2,3 +2,32 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; 
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+}
+body.dark-mode {
+  background-color: #121212;
+  color: white;
+}
+
+body.dark-mode .p-toolbar {
+  background-color: #1f1f1f !important;
+}
+
+body.dark-mode .p-button {
+  color: white;
+}
+
+

@@ -15,19 +15,18 @@ import { ProductsListComponent } from "./products/pages/products-list/products-l
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    ProductsListComponent
-    // ButtonModule,
-    // TableModule,
-    // TagModule,
-    // RatingModule,
-    // ButtonModule,
-    // CommonModule,
-    // FormsModule,
-    // CarouselModule,
+    ButtonModule,
+    TableModule,
+    TagModule,
+    RatingModule,
+    ButtonModule,
+    CommonModule,
+    FormsModule,
+    CarouselModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-
+  title = 'Dashboard';
 }
