@@ -4,8 +4,8 @@ import { LoginComponent } from './auth/login/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductsListComponent } from './products/pages/products-list/products-list/products-list.component';
 import { InsertProductComponent } from './products/pages/insert-product/insert-product/insert-product.component';
-import { CategoriesListComponent } from './category/pages/categories-list/categories-list/categories-list.component';
-import { InsertCategoryComponent } from './category/pages/insert-category/insert-category/insert-category.component';
+import { CategoriesListComponent } from './category/categories-list/categories-list/categories-list.component';
+import { InsertCategoryComponent } from './category/insert-category/insert-category/insert-category.component';
 import { SubcategoriesListComponent } from './subcategory/pages/subcategories-list/subcategories-list/subcategories-list.component';
 import { InsertSubcategoryComponent } from './subcategory/pages/insert-subcategory/insert-subcategory/insert-subcategory.component';
 import { UsersListComponent } from './users/pages/users-list/users-list/users-list.component';
@@ -19,7 +19,7 @@ import { InsertOrderComponent } from './orders/pages/insert-order/insert-order/i
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
-  
+
     {
       path: '',
       component: MainLayoutComponent,
@@ -29,26 +29,26 @@ export const routes: Routes = [
 
         { path: 'products', component: ProductsListComponent },
         { path: 'products/insert', component: InsertProductComponent },
-  
+
         { path: 'categories', component: CategoriesListComponent },
         { path: 'categories/insert', component: InsertCategoryComponent },
-  
+
         { path: 'subcategories', component: SubcategoriesListComponent },
         { path: 'subcategories/insert', component: InsertSubcategoryComponent },
 
         { path: 'orders' , component:OrdersListComponent},
         { path: 'orders/insert', component:InsertOrderComponent},
-  
+
         { path: 'users', component: UsersListComponent },
         { path: 'users/insert', component: InsertUserComponent },
-  
+
         { path: 'posts', component: PostsListComponent },
         { path: 'posts/insert', component: InsertPostComponent },
-  
+
         { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
       ]
     },
-  
+
     { path: '**', component: NotFoundComponent }
   ];
-  
+
