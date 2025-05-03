@@ -1,47 +1,31 @@
 <!-- Toggle button (for small screens) -->
 <button class="md:hidden p-2 text-primary" (click)="isSidebarOpen = !isSidebarOpen">
-    <i class="pi pi-bars text-xl"></i>
-  </button>
-  
-  <div class="h-full w-full overflow-y-auto bg-surface-0 p-3 md:block"
+  <i class="pi pi-bars text-xl"></i>
+</button>
 
-    [class.hidden]="!isSidebarOpen"
-  >
-  
+<div class="h-full w-full overflow-y-auto bg-surface-0 p-3 md:block" [class.hidden]="!isSidebarOpen">
+
   <div class="flex items-center justify-center gap-2 mb-6 px-5">
 
-    <img 
-  src="https://img.freepik.com/free-psd/elegant-armchair-coffee-table-set-modern-comfort-style_191095-80516.jpg?t=st=1746138140~exp=1746141740~hmac=28b6efff5b75e85e93093429447ab87f2ad9708391bd9f98fe031dff7af7497d&w=826" 
-  width="60" height="60" 
-  alt="Furniture Logo"
-  style="border-radius: 50%;"/>
+    <img
+      src="https://img.freepik.com/free-psd/elegant-armchair-coffee-table-set-modern-comfort-style_191095-80516.jpg?t=st=1746138140~exp=1746141740~hmac=28b6efff5b75e85e93093429447ab87f2ad9708391bd9f98fe031dff7af7497d&w=826"
+      width="60" height="60" alt="Furniture Logo" style="border-radius: 50%;" />
 
-      <span class="text-xl font-semibold px-0 mx-0 ">
-        FURNITURE<span class="text-pink-600">APP</span>
-      </span>
-    </div>
-  
-    <p-panelMenu
-      [model]="items"
-      class="w-full"
-      [style]="{ 'border': 'none' }"
-    ></p-panelMenu>
-  
-    <div class="mt-6 border-t pt-4 px-2">
-      <button
-        pRipple
-        class="flex items-center gap-3 w-full hover:bg-surface-100 p-2 rounded transition"
-      >
-        <p-avatar
-          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-          shape="circle"
-        />
-        <div class="flex flex-col">
-          <span class="font-bold">Amy Elsner</span>
-          <span class="text-sm text-gray-500">Admin</span>
-        </div>
-      </button>
-    </div>
-  
+    <span class="text-xl font-semibold px-0 mx-0 ">
+      FURNITURE<span class="text-pink-600">APP</span>
+    </span>
   </div>
-  
+
+  <p-panelMenu [model]="items" class="w-full" [style]="{ 'border': 'none' }"></p-panelMenu>
+
+  <div class="mt-6 border-t pt-4 px-2">
+    <button pRipple class="flex items-center gap-3 w-full hover:bg-surface-100 p-2 rounded transition">
+      <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+      <div class="flex flex-col">
+        <span class="font-bold">Amy Elsner</span>
+        <span class="text-sm text-gray-500">Admin</span>
+      </div>
+    </button>
+  </div>
+
+</div>

@@ -15,14 +15,7 @@ import { ProductsListComponent } from "./products/pages/products-list/products-l
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    ButtonModule,
-    TableModule,
-    TagModule,
-    RatingModule,
-    ButtonModule,
-    CommonModule,
-    FormsModule,
-    CarouselModule,
+
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

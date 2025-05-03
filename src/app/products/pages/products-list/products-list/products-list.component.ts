@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Product } from './models/product';
 import { ProductService } from './services/product.service';
 import { TableModule } from 'primeng/table';
@@ -16,6 +16,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+
 
 
 @Component({
@@ -55,6 +56,8 @@ export class ProductsListComponent implements OnInit {
 
       this.products = data;  // load the data of the service into the products array
     });
+
+
   }
 
   addNewProduct() {
@@ -106,6 +109,36 @@ export class ProductsListComponent implements OnInit {
       }
     });
   }
+
+  // @ViewChild('draggableBox', { static: false }) draggableBox!: ElementRef;
+
+  // dragging = false;
+  // offsetX = 0;
+  // offsetY = 0;
+
+  // startDrag(event: MouseEvent) {
+  //   this.dragging = true;
+
+  //   const el = this.draggableBox.nativeElement as HTMLElement;
+  //   const rect = el.getBoundingClientRect();
+  //   this.offsetX = event.clientX - rect.left;
+  //   this.offsetY = event.clientY - rect.top;
+
+  //   const move = (moveEvent: MouseEvent) => {
+  //     if (!this.dragging) return;
+  //     el.style.left = `${moveEvent.clientX - this.offsetX}px`;
+  //     el.style.top = `${moveEvent.clientY - this.offsetY}px`;
+  //   };
+
+  //   const up = () => {
+  //     this.dragging = false;
+  //     document.removeEventListener('mousemove', move);
+  //     document.removeEventListener('mouseup', up);
+  //   };
+
+  //   document.addEventListener('mousemove', move);
+  //   document.addEventListener('mouseup', up);
+  // }
 
   getSeverity(inStock: number): 'success' | 'warn' | 'danger' | 'info' | undefined {
     if (inStock > 9) {
