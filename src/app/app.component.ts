@@ -15,11 +15,21 @@ import { ProductsListComponent } from "./products/pages/products-list/products-l
   selector: 'app-root',
   imports: [
     RouterOutlet,
+<<<<<<< HEAD
 
   ],
+=======
+],
+
+>>>>>>> a26f2e4550730bdab462654041e745832172be7d
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'Dashboard';
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> a26f2e4550730bdab462654041e745832172be7d
 }

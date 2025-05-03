@@ -1,9 +1,9 @@
 .caption{
-    padding: 10px;
-    border-radius: 7px;
+  padding: 10px;
+  border-radius: 7px;
 }
 .searchInput{
- position: relative;
+position: relative;
 }
 .pi-search{
 position: absolute;
