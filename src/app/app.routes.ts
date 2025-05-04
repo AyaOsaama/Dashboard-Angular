@@ -18,37 +18,36 @@ import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orde
 import { InsertOrderComponent } from './orders/pages/insert-order/insert-order/insert-order.component';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-  
-    {
-      path: '',
-      component: MainLayoutComponent,
-      canActivate:[authGuard],
-      children: [
-        { path: 'dashboard', component: DashboardComponent },
+  { path: 'login', component: LoginComponent },
 
-        { path: 'products', component: ProductsListComponent },
-        { path: 'products/insert', component: InsertProductComponent },
-  
-        { path: 'categories', component: CategoriesListComponent },
-        { path: 'categories/insert', component: InsertCategoryComponent },
-  
-        { path: 'subcategories', component: SubcategoriesListComponent },
-        { path: 'subcategories/insert', component: InsertSubcategoryComponent },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: 'dashboard', component: DashboardComponent },
 
-        { path: 'orders' , component:OrdersListComponent},
-        { path: 'orders/insert', component:InsertOrderComponent},
-  
-        { path: 'users', component: UsersListComponent },
-        { path: 'users/insert', component: InsertUserComponent },
-  
-        { path: 'posts', component: PostsListComponent },
-        { path: 'posts/insert', component: InsertPostComponent },
-  
-        { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-      ]
-    },
-  
-    { path: '**', component: NotFoundComponent }
-  ];
-  
+      { path: 'products', component: ProductsListComponent },
+      { path: 'products/insert', component: InsertProductComponent },
+
+      { path: 'categories', component: CategoriesListComponent },
+      { path: 'categories/insert', component: InsertCategoryComponent },
+
+      { path: 'subcategories', component: SubcategoriesListComponent },
+      { path: 'subcategories/insert', component: InsertSubcategoryComponent },
+
+      { path: 'orders', component: OrdersListComponent },
+      { path: 'orders/insert', component: InsertOrderComponent },
+
+      { path: 'users', component: UsersListComponent },
+      { path: 'users/insert', component: InsertUserComponent },
+
+      { path: 'posts', component: PostsListComponent },
+      { path: 'posts/insert', component: InsertPostComponent },
+
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
+  },
+
+  { path: '**', component: NotFoundComponent },
+];

@@ -4,44 +4,42 @@ import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { SplitButtonModule } from 'primeng/splitbutton';
 
-
 @Component({
   selector: 'app-header',
-  imports: [ToolbarModule,AvatarModule,ButtonModule,SplitButtonModule],
+  imports: [ToolbarModule, AvatarModule, ButtonModule, SplitButtonModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent {
   newMenuItems = [
     {
       label: 'Product',
       icon: 'pi pi-box',
-      routerLink: ['/products/insert']
+      routerLink: ['/products/insert'],
     },
     {
       label: 'Category',
       icon: 'pi pi-tags',
-      routerLink: ['/categories/insert']
+      routerLink: ['/categories/insert'],
     },
     {
       label: 'Subcategory',
       icon: 'pi pi-tag',
-      routerLink: ['/subcategories/insert']
+      routerLink: ['/subcategories/insert'],
     },
     {
       label: 'User',
       icon: 'pi pi-user',
-      routerLink: ['/users/insert']
+      routerLink: ['/users/insert'],
     },
     {
       label: 'Order',
       icon: 'pi pi-shopping-cart',
-      routerLink: ['/orders/insert']
-    }
+      routerLink: ['/orders/insert'],
+    },
   ];
-  
+
   toggleTheme() {
     document.body.classList.toggle('dark-mode');
   }
-  
 }
