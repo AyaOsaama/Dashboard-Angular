@@ -16,9 +16,16 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { authGuard } from './Gurads/auth.guard';
 import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
 import { InsertOrderComponent } from './orders/pages/insert-order/insert-order/insert-order.component';
+import { loginGuard } from './Gurads/login.guard';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
+
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
 
   {
     path: '',
@@ -44,8 +51,6 @@ export const routes: Routes = [
 
       { path: 'posts', component: PostsListComponent },
       { path: 'posts/insert', component: InsertPostComponent },
-
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
 

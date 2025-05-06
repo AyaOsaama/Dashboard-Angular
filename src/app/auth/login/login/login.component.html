@@ -1,55 +1,49 @@
 <p-toast></p-toast>
 
-<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-sm formLogin">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6 text-start">Login</h1>
+<div
+  class="min-h-screen flex items-center justify-center bg-cover bg-center login-bg"
+>
+  <section class="form-glass">
+    <form class="w-full max-w-sm text-white" autocomplete="off">
+      <h1 class="text-3xl font-bold text-center mb-6">Login</h1>
 
-    <div class="mb-4">
-      <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-        Email
-      </label>
-      <input
-        pInputText
-        id="email"
-        type="email"
-        [(ngModel)]="email"
-        name="email"
-        placeholder="Type your email"
-        class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none"
-      />
-    </div>
+      <div class="inputbox">
+        <input
+          pInputText
+          id="email"
+          type="email"
+          required
+          autocomplete="off"
+          [(ngModel)]="email"
+          name="email"
+        />
+        <label for="email">User</label>
+      </div>
 
-    <div class="mb-6 relative">
-      <label
-        for="password"
-        class="block text-sm font-medium text-gray-700 mb-2"
-      >
-        Password
-      </label>
-      <input
-        pInputText
-        id="password"
-        [type]="showPassword ? 'text' : 'password'"
-        [(ngModel)]="password"
-        name="password"
-        placeholder="Type your password"
-        class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none"
-      />
-      <i
-        class="pi absolute right-3 top-[38px] cursor-pointer"
-        [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
-        (click)="showPassword = !showPassword"
-      ></i>
-    </div>
+      <div class="inputbox">
+        <input
+          pInputText
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          required
+          autocomplete="off"
+          [(ngModel)]="password"
+          name="password"
+        />
+        <label for="password">Password</label>
+        <i
+          class="pi cursor-pointer absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
+          [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
+          (click)="showPassword = !showPassword"
+        ></i>
+      </div>
 
-    <div class="mb-4">
       <button
         (click)="login()"
-        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-4 rounded border-none"
-        style="background-color: #a3b3b3; color: white; font-weight: 600"
+        class="w-full py-2 bg-white text-black rounded-full font-semibold"
       >
-        Sign In
+        Login
       </button>
-    </div>
-  </div>
+    </form>
+  </section>
 </div>
