@@ -15,8 +15,8 @@ import { RouterModule } from '@angular/router';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
+  user:any;
   isSidebarOpen = true;
-
   items = [
     {
       label: 'Dashboard',
@@ -72,7 +72,20 @@ export class SidebarComponent {
       ]
     }
   ];
+  userName!: String;
+  userImage !:String;
+  ngOnInit() {
+    const userString = localStorage.getItem("user");
   
+    if (userString) {
+      const user = JSON.parse(userString);
+      this.userName = user.name;
+      this.userImage = user.imageUrl;
+    } else {
+      console.warn("لم يتم العثور على بيانات المستخدم في localStorage");
+      // this.router.navigate(['/login']);
+    }
+  }
   
 
 }

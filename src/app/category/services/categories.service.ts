@@ -17,8 +17,6 @@ export class CategoriesService {
   getAllCategory(): Observable<{ categories: ICategory[] }> {
     return this.http.get<{ categories: ICategory[] }>(`${environment.apiUrl}/categories`);
   }
-  
-
   addNewCategory(category:ICategory):Observable<ICategory>{
     return this.http.post<ICategory>(`${environment.apiUrl}/categories`,category,this.httpHeader)
   }

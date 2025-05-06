@@ -56,6 +56,7 @@ export class CategoriesListComponent {
   ) {
     this.loadCategories();
   }
+ 
 
   loadCategories() {
     this.categoryService.getAllCategory().subscribe({
