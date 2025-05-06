@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { PasswordModule } from 'primeng/password';
-import { CommonModule } from '@angular/common';
+import { MessageService } from 'primeng/api';
+import { AuthService } from '../services/login.service.js';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   showPassword: boolean = false;
 
   constructor(
-    private http: HttpClient,
+    private authService: AuthService,
     private router: Router,
     private messageService: MessageService
   ) {}
@@ -57,35 +57,23 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.http
-      .post<any>(
-        'https://furniture-backend-production-8726.up.railway.app/auth/login',
-        {
-          email: this.email,
-          password: this.password,
+    this.authService.login(this.email, this.password).subscribe({
+      next: (res) => {
+        if (res?.token) {
+          localStorage.setItem('token', res.token);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Login Success',
+            detail: 'You have logged in successfully!',
+          });
+          setTimeout(() => this.router.navigate(['/dashboard']), 1000);
+        } else {
+          this.showError('Invalid credentials or server error.');
         }
-      )
-
-      .subscribe({
-        next: (res) => {
-          if (res?.token) {
-            localStorage.setItem('token', res.token);
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Login Success',
-              detail: 'You have logged in successfully!',
-            });
-
-            setTimeout(() => {
-              this.router.navigate(['/dashboard']);
-            }, 1000);
-          } else {
-            this.showError('Invalid credentials or server error.');
-          }
-        },
-        error: (err) => {
-          this.showError(err?.error?.message || 'Invalid email or password');
-        },
-      });
+      },
+      error: (err) => {
+        this.showError(err?.error?.message || 'Invalid email or password');
+      },
+    });
   }
 }
