@@ -8,11 +8,11 @@
   margin: 0;
   padding: 0;
 }
-html{
+html {
   scroll-behavior: smooth;
 }
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 body.dark-mode {
@@ -28,6 +28,7 @@ body.dark-mode .p-button {
   color: white;
 }
 
-
-
-
+.header {
+  margin: 0;
+  padding: 0;
+}
