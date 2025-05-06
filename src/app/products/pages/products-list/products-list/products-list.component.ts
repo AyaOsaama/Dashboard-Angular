@@ -58,7 +58,7 @@ export class ProductsListComponent implements OnInit {
   }
 
   addNewProduct() {
-    this.router.navigate(['/add-product']);  // routing to the add product page
+    this.router.navigate(['/products/insert']);  // routing to the add product page
   }
 
   onEditProduct(product: Product) {
