@@ -1,0 +1,129 @@
+<div class="container mx-auto p-4">
+  <div class="flex items-center justify-between">
+    <span class="text-xl font-bold">Sub Categories</span>
+    <p-button icon="pi pi-refresh" rounded raised></p-button>
+  </div>
+  <br />
+  <div class="bg-white shadow-md rounded-md overflow-hidden">
+    <!-- Group for Add Button and Search Input -->
+    <div class="p-inputgroup justify-between py-3 px-4" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <button pButton label="Add Sub Category" icon="pi pi-plus" (click)="openAddDialog()" class="p-button-success" style="margin-left: 1rem; width: 230px;"></button>
+      <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchTerm" style="flex: 1; margin-left: 1rem; margin-right: 1rem;" />
+    </div>
+    
+    <!-- Add New Sub Category Dialog -->
+    <p-dialog
+      header="Add New Sub Category"
+      [(visible)]="addDialogVisible"
+      [modal]="true"
+      [style]="{ width: '30vw' }"
+      [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+      [draggable]="false"
+      [resizable]="false"
+      [dismissableMask]="true"
+    >
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="add-code">Code</label>
+          <input id="add-code" type="text" pInputText [(ngModel)]="newProduct.code" />
+        </div>
+        <div class="p-field">
+          <label for="add-name">Name</label>
+          <input id="add-name" type="text" pInputText [(ngModel)]="newProduct.name" />
+        </div>
+        <div class="p-field">
+          <label for="add-category">Category</label>
+          <input id="add-category" type="text" pInputText [(ngModel)]="newProduct.category" />
+        </div>
+        <div class="p-field">
+          <label for="add-quantity">Quantity</label>
+          <input id="add-quantity" type="number" pInputText [(ngModel)]="newProduct.quantity" />
+        </div>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton label="Add" icon="pi pi-check" (click)="addProduct()" class="p-button-success" ></button>
+        <button pButton label="Cancel" icon="pi pi-times" (click)="addDialogVisible=false" class="p-button-text" ></button>
+      </ng-template>
+    </p-dialog>
+    
+    <!-- Edit Sub Category Dialog -->
+    <p-dialog
+      header="Edit Sub Category"
+      [(visible)]="editDialogVisible"
+      [modal]="true"
+      [style]="{ width: '30vw' }"
+      [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
+      [draggable]="false"
+      [resizable]="false"
+      [dismissableMask]="true"
+    >
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="edit-code">Code</label>
+          <input id="edit-code" type="text" pInputText [(ngModel)]="editForm.code" />
+        </div>
+        <div class="p-field">
+          <label for="edit-name">Name</label>
+          <input id="edit-name" type="text" pInputText [(ngModel)]="editForm.name" />
+        </div>
+        <div class="p-field">
+          <label for="edit-category">Category</label>
+          <input id="edit-category" type="text" pInputText [(ngModel)]="editForm.category" />
+        </div>
+        <div class="p-field">
+          <label for="edit-quantity">Quantity</label>
+          <input id="edit-quantity" type="number" pInputText [(ngModel)]="editForm.quantity" />
+        </div>
+      </div>
+      <ng-template pTemplate="footer">
+        <button pButton label="Cancel" icon="pi pi-times" (click)="editDialogVisible=false" class="p-button-text" ></button>
+        <button pButton label="Save" icon="pi pi-check" (click)="saveEdit()" class="p-button-success" ></button>
+      </ng-template>
+    </p-dialog>
+    
+    <!-- Table for displaying products -->
+    <p-table [value]="filteredProducts" [tableStyle]="{ 'min-width': '60rem' }">
+      <ng-template #caption>
+        <ng-template #header>
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+      </ng-template>
+      <ng-template #body let-product let-i="rowIndex">
+        <tr>
+          <td>{{ product.code }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.category }}</td>
+          <td>
+            <p-badge [value]="product.quantity" [severity]="stockSeverity(product)"></p-badge>
+          </td>
+          <td>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-pencil"
+              (click)="openEditDialog(i)"
+              class="p-button-rounded p-button-text p-button-info"
+              title="Edit"
+            ></button>
+
+            <button
+              type="button"
+              pButton
+              icon="pi pi-trash"
+              (click)="confirmDelete(i)"
+              class="p-button-rounded p-button-text p-button-danger"
+              title="Delete"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p-confirmDialog></p-confirmDialog>
+  </div>
+</div>

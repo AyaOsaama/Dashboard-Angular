@@ -1,0 +1,17 @@
+<h2 style="text-align: center;">Monthly Sales Overview</h2>
+<div style="max-width: 700px; margin: auto;">
+  <canvas baseChart
+          [data]="barChartData"
+          [options]="barChartOptions"
+          [type]="barChartType">
+  </canvas>
+</div>
+
+<h2 style="text-align: center; margin-top: 50px;">Top Selling Categories</h2>
+<div style="max-width: 500px; margin: auto;">
+  <canvas baseChart
+          [data]="doughnutChartData"
+          [options]="doughnutChartOptions"
+          [type]="doughnutChartType">
+  </canvas>
+</div>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<div class="container mx-auto p-4">
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast key="myToast"></p-toast>
+  <h2 class="text-2xl font-semibold text-gray-800">
+    Products
+  </h2>
+  <div class="bg-white shadow-md rounded-md overflow-hidden">
+    <p-table #dt [value]="products" [tableStyle]="{ 'min-width': '180rem' }" [paginator]="true" [rows]="10"
+      [globalFilterFields]="['_id', 'code', 'rating', 'variants.0.name.en', 'variants.0.name.ar', 'brand', 'categories.main', 'categories.sub', 'orderId', 'nameEn', 'nameAr', 'variants.0.price', 'variants.0.discountPrice', 'colorEn', 'colorAr', 'colorImage', 'image', 'images', 'variants.0.inStock', 'descriptionEn', 'descriptionAr', 'materialEn', 'materialAr']"
+      class="w-full">
+
+      <ng-template pTemplate="caption">
+        <div class="flex items-center justify-between py-3 px-4 bg-gray-100 caption">
+
+
+          <div class="flex items-center space-x-2 gap-4">
+            <button pButton type="button" icon="pi pi-plus" label="Add Product" class="p-button-success"
+              (click)="addNewProduct()"></button>
+            <button pButton type="button" icon="pi pi-trash" label="Delete All" class="p-button-danger"
+              (click)="confirmDeleteAll()"></button>
+          </div>
+
+          <span class="p-input-icon-left searchInput">
+            <i class="pi pi-search"></i>
+            <input  #filterInput pInputText type="text" (input)="dt.filterGlobal(filterInput.value, 'contains')"
+              placeholder="Search keyword" class="w-full md:w-auto " />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr class="bg-gray-50 text-gray-700">
+          <th class="text-left p-3">ID</th>
+          <th class="text-left p-3">Code</th>
+          <th class="text-left p-3">Rating</th>
+          <th class="text-left p-3">Name (EN)</th>
+          <th class="text-left p-3">Name (AR)</th>
+          <th class="text-left p-3">Price</th>
+          <th class="text-left p-3">Discount Price</th>
+          <th class="text-left p-3">Color (EN)</th>
+          <th class="text-left p-3">Color (AR)</th>
+          <th class="text-left p-3">Color Image</th>
+          <th class="text-left p-3">Main Image</th>
+          <th class="text-left p-3">Images</th>
+          <th class="text-left p-3">Brand</th>
+          <th class="text-left p-3">Category (Main)</th>
+          <th class="text-left p-3">Category (Sub)</th>
+          <th class="text-left p-3">In Stock</th>
+          <th class="text-left p-3">Status</th>
+          <th class="text-left p-3">Description (EN)</th>
+          <th class="text-left p-3">Description (AR)</th>
+          <th class="text-left p-3">Material (EN)</th>
+          <th class="text-left p-3">Material (AR)</th>
+          <th class="text-left p-3">Order IDs</th>
+          <th class="text-left p-3">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-product>
+        <tr>
+          <td class="p-3">{{ product._id }}</td>
+          <td class="p-3">{{ product.code }}</td>
+          <td class="p-3">
+            <p-rating [(ngModel)]="product.rating" [readonly]="!product.editMode" [stars]="5" class="block"></p-rating>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.variants[0].name.en"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.variants[0].name.en }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.variants[0].name.ar"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.variants[0].name.ar }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.variants[0].price" type="number"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.variants[0].price | currency: 'USD' }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.variants[0].discountPrice" type="number"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.variants[0].discountPrice | currency: 'USD' }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.colorEn" class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.colorEn }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.colorAr" class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.colorAr }}</span>
+          </td>
+          <td class="p-3">
+            <div *ngIf="product.editMode">
+              <input pInputText type="text" [(ngModel)]="product.colorImage" placeholder="رابط صورة اللون"
+                class="w-full editable-input" />
+            </div>
+            <img *ngIf="product.colorImage && !product.editMode" [src]="product.colorImage"
+              alt="{{ product.colorEn || product.colorAr }}" class="w-16 rounded" />
+            <span *ngIf="!product.colorImage && !product.editMode">-</span>
+          </td>
+          <td class="p-3">
+            <div *ngIf="product.editMode">
+              <input pInputText type="text" [(ngModel)]="product.image" placeholder="رابط الصورة الرئيسية"
+                class="w-full editable-input" />
+            </div>
+            <img *ngIf="product.image && !product.editMode" [src]="product.image"
+              alt="{{ product.nameEn || product.nameAr }}" class="w-24 rounded" />
+            <span *ngIf="!product.image && !product.editMode">-</span>
+          </td>
+          <td class="p-3">
+            <div *ngIf="product.editMode">
+              <div class="flex flex-col gap-1">
+                <input pInputText type="text" *ngFor="let i of [].constructor(3); let j = index"
+                  [(ngModel)]="product.images[j]" placeholder="رابط صورة فرعية {{ j + 1 }}"
+                  class="w-full editable-input" />
+              </div>
+            </div>
+            <div *ngIf="!product.editMode" class="flex flex-wrap gap-1">
+              <img *ngFor="let img of product.images" [src]="img" alt="Thumbnail" class="w-12 h-12 rounded border" />
+            </div>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.brand" class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.brand }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.categories.main"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.categories.main }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.categories.sub"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.categories.sub }}</span>
+          </td>
+          <td class="p-3">
+            <span *ngIf="!product.editMode">{{ product.variants[0].inStock }}</span>
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.variants[0].inStock" type="number"
+              class="w-full editable-input" />
+          </td>
+          <td class="p-3">
+            <p-tag
+              [value]="product.variants[0].inStock > 9 ? 'INSTOCK' : (product.variants[0].inStock > 0 ? 'LOWSTOCK' : 'OUTOFSTOCK')"
+              [severity]="getSeverity(product.variants[0].inStock)"></p-tag>
+          </td>
+          <td class="p-3">
+            <textarea *ngIf="product.editMode" pInputTextarea [(ngModel)]="product.variants[0].description.en" rows="2"
+              cols="20" class="w-full editable-textarea"></textarea>
+            <span *ngIf="!product.editMode"
+              [title]="product.variants[0].description.en">{{ product.variants[0].description.en | slice:0:50 }}...</span>
+          </td>
+          <td class="p-3">
+            <textarea *ngIf="product.editMode" pInputTextarea [(ngModel)]="product.variants[0].description.ar" rows="2"
+              cols="20" class="w-full editable-textarea"></textarea>
+            <span *ngIf="!product.editMode"
+              [title]="product.variants[0].description.ar">{{ product.variants[0].description.ar | slice:0:50 }}...</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.variants[0].material.en"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.variants[0].material.en }}</span>
+          </td>
+          <td class="p-3">
+            <input *ngIf="product.editMode" pInputText [(ngModel)]="product.variants[0].material.ar"
+              class="w-full editable-input" />
+            <span *ngIf="!product.editMode">{{ product.variants[0].material.ar }}</span>
+          </td>
+          <td class="p-3">
+            <div class="flex flex-wrap gap-1">
+              <span *ngFor="let orderId of product.orderId"
+                class="border p-1 rounded text-sm bg-gray-100">{{ orderId }}</span>
+            </div>
+          </td>
+          <td class="p-3 flex gap-2">
+            <button *ngIf="!product.editMode" pButton type="button" icon="pi pi-pencil"
+              class="p-button-sm p-button-info" (click)="onEditProduct(product)"></button>
+
+            <button *ngIf="product.editMode" pButton type="button" icon="pi pi-check"
+              class="p-button-sm p-button-success" (click)="onSaveProduct(product)"></button>
+
+            <button pButton type="button" icon="pi pi-trash" class="p-button-sm p-button-danger"
+              (click)="onDeleteProduct(product)"></button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="flex justify-end font-bold p-6 fixed bottom-2 right-5 bg-white shadow-md">
+          <span class="text-2xl transition-all duration-600 hover:scale-110 hover:text-blue-500">
+            <i class="pi pi-box mr-2 "></i>
+          </span>
+          <span class="text-2xl font-bold transition-all duration-600 hover:scale-110 hover:text-blue-500">
+            {{ products ? products.length : 0 }}
+          </span>
+        </div>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

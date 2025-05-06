@@ -1,0 +1,10 @@
+  ::ng-deep .p-panelmenu {
+    border: none !important;
+    box-shadow: none !important;
+    gap: 20px !important;
+    padding-bottom: 20px;
+  }
+  .user{
+    padding: 20px;
+    border-top: 2px solid #8b8b8b;
+  }

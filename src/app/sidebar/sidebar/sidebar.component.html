@@ -1,0 +1,23 @@
+<!-- Toggle button (for small screens) -->
+<!-- <button class="md:hidden p-2 text-primary" (click)="isSidebarOpen = !isSidebarOpen">
+    <i class="pi pi-bars text-xl"></i>
+  </button> -->
+  
+  <div class=" w-full  p-3 md:block ">  
+    <p-panelMenu  [multiple]="true" [model]="items" class="w-full"[style]="{ 'border': 'none' }"></p-panelMenu>
+  
+    <div class=" user">
+      <button pRipple class="flex items-center gap-3 w-full hover:bg-surface-100 p-2 rounded transition">
+        <p-avatar
+          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+          shape="circle"
+        />
+        <div class="flex flex-col">
+          <span class="font-bold">Amy Elsner</span>
+          <span class="text-sm text-gray-500">Admin</span>
+        </div>
+      </button>
+    </div>
+  
+  </div>
+  
