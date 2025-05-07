@@ -38,6 +38,7 @@ import {  Router } from '@angular/router';
 
 })
 export class OrdersListComponent {
+  id?:string='' ;
   editOrderDialog = false;
   orderService = inject(OrderService);
   orders: Iorder[] = [];
@@ -65,14 +66,16 @@ export class OrdersListComponent {
   loadOrders() {
     this.orderService.getAllOrders().subscribe({
       next: data => {
-        console.log(data);
-        this.orders = data;
+        console.log('Fetched Orders:', data);   //{[]} 
+        this.orders = data.orders;  // [{[]}]
+        console.log('====================================');
         console.log(this.orders);
-        
+        console.log('====================================');
       },
       error: err => console.error('Failed to load orders:', err)
     });
   }
+  
   
   
   

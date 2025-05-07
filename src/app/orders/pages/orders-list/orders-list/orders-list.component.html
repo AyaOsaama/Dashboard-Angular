@@ -34,8 +34,8 @@
       
           <!-- Caption -->
           <ng-template pTemplate="caption">
-            <div class="flex items-center justify-between py-3 px-4 bg-gray-100">
-              <span class="p-input-icon-left">
+            <div class="flex items-center justify-between py-3 px-4 bg-gray-100 caption">
+              <span class="p-input-icon-left searchInput">
                 <i class="pi pi-search"></i>
                 <input pInputText type="text" [(ngModel)]="searchTerm"
                        (ngModelChange)="dt.filterGlobal(searchTerm, 'contains')" 
@@ -49,7 +49,8 @@
             <tr class="bg-gray-50 text-gray-700">
               <th class="text-left p-3">Order ID</th>
               <th class="text-left p-3">User</th>
-              <th class="text-left p-3">Total</th>
+              <th class="text-left p-3">Total Products</th>
+              <th class="text-left p-3">Total Price</th>
               <th class="text-left p-3">Status</th>
               <th class="text-left p-3">Created At</th>
               <th class="text-left p-3">Actions</th>
@@ -61,11 +62,13 @@
             <tr>
               <td class="p-3">{{ order._id }}</td>
               <td class="p-3">{{ order.user?.name || '-' }}</td>
+              <td class="p-3">{{ order.product.lenght }}</td>
               <td class="p-3">{{ order.totalPrice | currency:'USD' }}</td>
               <td class="p-3 capitalize">{{ order.status }}</td>
               <td class="p-3">{{ order.createdAt | date:'short' }}</td>
-              <td class="p-3 flex gap-2">
-                <button pButton icon="pi pi-pencil" class="p-button-sm p-button-info" (click)="onEditOrder(order)"></button>
+              <td class="p-3 flex gap-2 actions">
+                <button pButton icon="pi pi-pencil " class="p-button-sm p-button-info button-action" (click)="onEditOrder(order)"></button>
+                <button pButton icon="pi pi-info " class="p-button-sm p-button-info button-action" (click)="onEditOrder(order)"></button>
               </td>
             </tr>
           </ng-template>

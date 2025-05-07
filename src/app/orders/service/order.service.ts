@@ -32,9 +32,9 @@ export class OrderService {
     );
   }
 
-  getAllOrders(): Observable<Iorder[]> {
+  getAllOrders(): Observable<{ orders: Iorder[] }> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
-    return this.http.get<Iorder[]>(`${environment.apiUrl}/orders/all`, { headers });
-  } 
+    return this.http.get<{ orders: Iorder[] }>(`${environment.apiUrl}/orders/all`, { headers });
+  }
   
 }
