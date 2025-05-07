@@ -11,6 +11,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  user: any;
   newMenuItems = [
     {
       label: 'Product',
@@ -38,6 +39,19 @@ export class HeaderComponent {
       routerLink: ['/orders/insert'],
     },
   ];
+  ngOnInit() {
+    const userBackStr = localStorage.getItem("user");
+    if (userBackStr && userBackStr !== "undefined") {
+      try {
+        this.user = JSON.parse(userBackStr);
+        console.log("User loaded:", this.user);
+      } catch (error) {
+        console.error("Failed to parse user from localStorage:", error);
+      }
+    } else {
+      console.warn("No user data found in localStorage");
+    }
+  }
 
   toggleTheme() {
     document.body.classList.toggle('dark-mode');
