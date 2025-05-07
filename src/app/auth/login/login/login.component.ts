@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
         next: (res) => {
           if (res?.token) {
             localStorage.setItem('token', res.token);
-            localStorage.setItem('user', JSON.stringify(res.user));
+            localStorage.setItem("user", JSON.stringify(res.user))
             this.messageService.add({
               severity: 'success',
               summary: 'Login Success',

@@ -15,8 +15,10 @@ import { RouterModule } from '@angular/router';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  user:any;
-  isSidebarOpen = true;
+  userName!: string;
+  userImage!: string;
+  userRole!: string;
+  user: any;
   items = [
     {
       label: 'Dashboard',
@@ -72,20 +74,19 @@ export class SidebarComponent {
       ]
     }
   ];
-  userName!: String;
-  userImage !:String;
+  
   ngOnInit() {
-    const userString = localStorage.getItem("user");
-  
-    if (userString) {
-      const user = JSON.parse(userString);
-      this.userName = user.name;
-      this.userImage = user.imageUrl;
+    const userBackStr = localStorage.getItem("user");
+    if (userBackStr && userBackStr !== "undefined") {
+      try {
+        this.user = JSON.parse(userBackStr);
+        console.log("User loaded:", this.user);
+      } catch (error) {
+        console.error("Failed to parse user from localStorage:", error);
+      }
     } else {
-      console.warn("لم يتم العثور على بيانات المستخدم في localStorage");
-      // this.router.navigate(['/login']);
+      console.warn("No user data found in localStorage");
     }
-  }
-  
+  }  
 
 }
