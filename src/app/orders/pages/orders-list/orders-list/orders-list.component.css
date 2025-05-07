@@ -1,0 +1,23 @@
+.caption{
+    padding: 10px;
+    border-radius: 7px;
+  }
+  .searchInput{
+  position: relative;
+  }
+  .pi-search{
+  position: absolute;
+  z-index: 5;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  } 
+  .actions{
+    height: 200px;
+    position: relative;
+  }
+  .button-action{
+    margin-top: 70px;
+    height: 45px;
+    width: 40px;
+  }
