@@ -1,0 +1,39 @@
+.user-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f5f6f8;
+  border-bottom: 1px solid #ddd;
+  flex-wrap: wrap;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 280px;
+  margin-top: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 14px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 0.75rem;
+  color: #666;
+  pointer-events: none;
+}

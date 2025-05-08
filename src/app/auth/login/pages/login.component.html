@@ -1,0 +1,49 @@
+<p-toast></p-toast>
+
+<div
+  class="min-h-screen flex items-center justify-center bg-cover bg-center login-bg"
+>
+  <section class="form-glass">
+    <form class="w-full max-w-sm text-white" autocomplete="off">
+      <h1 class="text-3xl font-bold text-center mb-6">Login</h1>
+
+      <div class="inputbox">
+        <input
+          pInputText
+          id="email"
+          type="email"
+          required
+          autocomplete="off"
+          [(ngModel)]="email"
+          name="email"
+        />
+        <label for="email">User</label>
+      </div>
+
+      <div class="inputbox">
+        <input
+          pInputText
+          id="password"
+          [type]="showPassword ? 'text' : 'password'"
+          required
+          autocomplete="off"
+          [(ngModel)]="password"
+          name="password"
+        />
+        <label for="password">Password</label>
+        <i
+          class="pi cursor-pointer absolute right-3 top-1/2 transform -translate-y-1/2 text-white"
+          [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
+          (click)="showPassword = !showPassword"
+        ></i>
+      </div>
+
+      <button
+        (click)="login()"
+        class="w-full py-2 bg-white text-black rounded-full font-semibold"
+      >
+        Login
+      </button>
+    </form>
+  </section>
+</div>

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
-import { LoginComponent } from './auth/login/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProductsListComponent } from './products/pages/products-list/products-list/products-list.component';
 import { InsertProductComponent } from './products/pages/insert-product/insert-product/insert-product.component';
@@ -13,17 +12,20 @@ import { InsertUserComponent } from './users/pages/insert-user/insert-user/inser
 import { PostsListComponent } from './posts/pages/posts-list/posts-list/posts-list.component';
 import { InsertPostComponent } from './posts/pages/insert-post/insert-post/insert-post.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { loginGuard } from './Gurads/login.guard';
 import { authGuard } from './Gurads/auth.guard';
-import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
+import { LoginComponent } from './auth/login/pages/login.component.js';import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './orders/pages/order-details/order-details.component';
 
 export const routes: Routes = [
-    { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
+  { path: '',redirectTo: 'login',pathMatch: 'full',
+  },
 
     {
       path: '',
       component: MainLayoutComponent,
-      canActivate:[authGuard],
+      canActivate: [authGuard],
       children: [
         { path: 'dashboard', component: DashboardComponent },
 
@@ -45,11 +47,9 @@ export const routes: Routes = [
         { path: 'posts', component: PostsListComponent },
         { path: 'posts/insert', component: InsertPostComponent },
 
-        { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
       ]
     },
 
     { path: '**', component: NotFoundComponent }
   ];
-
 
