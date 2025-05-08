@@ -16,6 +16,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 

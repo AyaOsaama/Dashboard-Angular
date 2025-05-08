@@ -1,1 +1,287 @@
-<p>insert-product works!</p>
+<!DOCTYPE html>
+
+
+<div class="card grid grid-cols-1 md:grid-cols-2 gap-4 p-5 m-5">
+  <!-- section id & code -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        ID :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-tags"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="ID" />
+      </p-inputgroup>
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Code :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-barcode"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="Code" />
+      </p-inputgroup>
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        In Stock :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-box"></i>
+        </p-inputgroup-addon>
+        <p-inputnumber [(ngModel)]="value2" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" />
+      </p-inputgroup>
+    </div>
+
+
+  </p-fluid>
+
+  <!-- section name -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Name (EN) :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-box"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="Name (EN)" />
+      </p-inputgroup>
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Name (AR) :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-box"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="Name (AR)" />
+      </p-inputgroup>
+    </div>
+
+  </p-fluid>
+
+  <!-- section price & discount -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Price
+      </label>
+      <p-inputnumber [(ngModel)]="value1" [showButtons]="true" inputId="stacked" mode="currency" currency="USD" />
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Discount Price
+      </label>
+      <p-inputnumber [(ngModel)]="value2" [showButtons]="true" inputId="stacked" mode="currency" currency="USD" />
+    </div>
+
+  </p-fluid>
+
+  <!-- section color names -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Color (EN) :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-palette"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="Color (EN)" />
+      </p-inputgroup>
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Color (AR):
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-palette"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="Color (AR)" />
+      </p-inputgroup>
+    </div>
+
+  </p-fluid>
+
+  <!-- color image & main image -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Color Image :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>www</p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text2" placeholder="Color Image" />
+      </p-inputgroup>
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Main Image:
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>www</p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text2" placeholder="Main Image" />
+      </p-inputgroup>
+    </div>
+  </p-fluid>
+
+  <!-- images section -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Images :
+      </label>
+      <div class="card flex flex-col md:items-end md:flex-row gap-4">
+        <p-inputgroup>
+          <p-inputgroup-addon>www</p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <input pInputText id="on_label" [(ngModel)]="value3" />
+            <label for="on_label">Img 1</label>
+          </p-floatlabel>
+        </p-inputgroup>
+
+        <p-inputgroup>
+          <p-inputgroup-addon>www</p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <input pInputText id="on_label" [(ngModel)]="value3" />
+            <label for="on_label">Img 2</label>
+          </p-floatlabel>
+        </p-inputgroup>
+
+        <p-inputgroup>
+          <p-inputgroup-addon>www</p-inputgroup-addon>
+          <p-floatlabel variant="on">
+            <input pInputText id="on_label" [(ngModel)]="value3" />
+            <label for="on_label">Img 3</label>
+          </p-floatlabel>
+        </p-inputgroup>
+      </div>
+    </div>
+
+  </p-fluid>
+
+  <!-- brand section -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Brand :
+      </label>
+      <div class="card flex flex-col md:items-end md:flex-row gap-4">
+        <p-inputgroup class="flex-auto">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class=" pi pi-map"></i>
+            </p-inputgroup-addon>
+            <p-select [(ngModel)]="selectedCategory" [options]="cities" optionLabel="name" placeholder="Brand" />
+          </p-inputgroup>
+        </p-inputgroup>
+
+        <p-inputgroup>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class=" pi pi-map"></i>
+            </p-inputgroup-addon>
+            <p-select [(ngModel)]="selectedCategory" [options]="cities" optionLabel="name"
+              placeholder="Category (Main):" />
+          </p-inputgroup>
+        </p-inputgroup>
+
+        <p-inputgroup>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class=" pi pi-map"></i>
+            </p-inputgroup-addon>
+            <p-select [(ngModel)]="selectedCategory" [options]="cities" optionLabel="name"
+              placeholder="Category (Sub):" />
+          </p-inputgroup>
+        </p-inputgroup>
+      </div>
+    </div>
+  </p-fluid>
+
+  <!-- Description section -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Description :
+      </label>
+      <div class="card flex flex-col md:items-end md:flex-row gap-4">
+        <div class="card flex flex-wrap justify-center items-stretch gap-4">
+          <p-floatlabel variant="on">
+            <textarea pTextarea id="over_label" [(ngModel)]="value3" rows="5" cols="61" style="resize: none"
+              class="h-full"></textarea>
+            <label for="on_label">Description (EN)</label>
+          </p-floatlabel>
+
+          <p-floatlabel variant="on">
+            <textarea pTextarea id="over_label" [(ngModel)]="value3" rows="5" cols="61" style="resize: none"
+              class="h-full"></textarea>
+            <label for="on_label">Description (AR)</label>
+          </p-floatlabel>
+        </div>
+
+        <!-- <p-inputgroup>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class=" pi pi-map"></i>
+            </p-inputgroup-addon>
+            <p-select [(ngModel)]="selectedCategory" [options]="cities" optionLabel="name"
+              placeholder="Category (Sub):" />
+          </p-inputgroup>
+        </p-inputgroup> -->
+      </div>
+    </div>
+  </p-fluid>
+
+  <!-- section color names -->
+  <p-fluid class="card flex flex-wrap gap-4">
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Material (EN) :
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-info-circle"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="Color (EN)" />
+      </p-inputgroup>
+    </div>
+
+    <div class="flex-auto">
+      <label class="mb-2 block font-bold" for="stacked">
+        Material (AR):
+      </label>
+      <p-inputgroup>
+        <p-inputgroup-addon>
+          <i class="pi pi-info-circle"></i>
+        </p-inputgroup-addon>
+        <input pInputText [(ngModel)]="text1" placeholder="Color (AR)" />
+      </p-inputgroup>
+    </div>
+
+  </p-fluid>
+
+
+
+
+
+
+
+
+
+</div>
