@@ -1,44 +1,54 @@
-<p-toolbar [style]="{ 'border-radius': '3rem', 'padding': '5px'}" class="m-3 navbar">
-    <ng-template #start>
-      <div class="flex items-center gap-4">
-        <!-- Logo + Title -->
-        <div class="flex items-center justify-center gap-2 m-2 px-2">
-          <img 
-            src="https://img.freepik.com/free-psd/elegant-armchair-coffee-table-set-modern-comfort-style_191095-80516.jpg?t=st=1746138140~exp=1746141740~hmac=28b6efff5b75e85e93093429447ab87f2ad9708391bd9f98fe031dff7af7497d&w=826" 
-            width="60" height="60" 
-            alt="Furniture Logo"
-            style="border-radius: 50%;" />
-          <span class="text-xl font-semibold">
-            FURNITURE<span class="text-pink-600">APP</span>
-          </span>         
-        </div>
-  
-        <p-splitButton 
-        label="New" 
-        icon="pi pi-plus" 
-        [model]="newMenuItems" 
+<p-toolbar
+  [style]="{ 'border-radius': '3rem', padding: '5px' }"
+  class="m-3 navbar"
+>
+  <ng-template #start>
+    <div class="flex items-center gap-4">
+      <!-- Logo + Title -->
+      <div class="flex items-center justify-center gap-2 m-2 px-2 header">
+        <img
+          src="https://img.freepik.com/free-psd/elegant-armchair-coffee-table-set-modern-comfort-style_191095-80516.jpg?t=st=1746138140~exp=1746141740~hmac=28b6efff5b75e85e93093429447ab87f2ad9708391bd9f98fe031dff7af7497d&w=826"
+          width="60"
+          height="60"
+          alt="Furniture Logo"
+          style="border-radius: 50%"
+        />
+        <span class="text-xl font-semibold">
+          FURNITURE<span class="text-pink-600">APP</span>
+        </span>
+      </div>
+
+      <p-splitButton
+        label="New"
+        icon="pi pi-plus"
+        [model]="newMenuItems"
         severity="secondary"
-        class="bg-transparent px-3 py-2 rounded-md">
+        class="bg-transparent px-3 py-2 rounded-md"
+      >
       </p-splitButton>
-      
-      </div>
-    </ng-template>
-  
-    <ng-template #end>
-      <div class="flex items-center gap-3 pr-3">
-        <!-- Theme toggle button -->
-        <button 
-          class="p-2 rounded-full hover:bg-gray-200 transition"
-          (click)="toggleTheme()">
-          <i class="pi pi-moon text-xl text-gray-600"></i>
-        </button>
-  
-        <!-- Profile avatar -->
-        <p-avatar 
-          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" 
-          [style]="{ width: '50px', height: '50px' }" 
-          class="m-2 px-1"/>
-      </div>
-    </ng-template>
-  </p-toolbar>
-  
+    </div>
+  </ng-template>
+
+  <ng-template #end>
+    <div class="flex items-center gap-3 pr-3">
+      <!-- Theme toggle button -->
+      <button
+        class="p-2 rounded-full hover:bg-gray-200 transition"
+        (click)="toggleTheme()"
+      >
+        <i class="pi pi-moon text-xl text-gray-600"></i>
+      </button>
+
+      <!-- Profile avatar -->
+      <p-avatar
+      [image]="user.image || 'default.png'"
+      shape="circle"
+      [style]="{ width: '50px', height: '50px' }"
+      class="m-2 px-1"></p-avatar>
+      <!-- <p-avatar
+        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+        [style]="{ width: '50px', height: '50px' }"
+        class="m-2 px-1"/> -->
+    </div>
+  </ng-template>
+</p-toolbar>
