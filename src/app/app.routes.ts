@@ -15,7 +15,7 @@ import { InsertPostComponent } from './posts/pages/insert-post/insert-post/inser
 import { NotFoundComponent } from './not-found/not-found.component';
 import { authGuard } from './Gurads/auth.guard';
 import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
-import { InsertOrderComponent } from './orders/pages/insert-order/insert-order/insert-order.component';
+import { OrderDetailsComponent } from './orders/pages/order-details/order-details.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -37,7 +37,7 @@ export const routes: Routes = [
         { path: 'subcategories/insert', component: InsertSubcategoryComponent },
 
         { path: 'orders' , component:OrdersListComponent},
-        { path: 'orders/insert', component:InsertOrderComponent},
+        { path: 'orders/:id', component: OrderDetailsComponent },
 
         { path: 'users', component: UsersListComponent },
         { path: 'users/insert', component: InsertUserComponent },

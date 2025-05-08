@@ -1,0 +1,46 @@
+<p-card header="Order Details" class="shadow-lg rounded-xl bg-white">
+    <div *ngIf="order" class="space-y-4 p-4">
+  
+      <!-- Order Main Info -->
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <p><strong>Order ID:</strong> {{ order._id }}</p>
+        <p><strong>Status:</strong> <span class="text-green-600 font-semibold">{{ order.status }}</span></p>
+        <p><strong>Total Price:</strong> <span class="text-blue-600">{{ order.totalPrice }} EGP</span></p>
+        <p><strong>Payment Method:</strong> {{ order.paymentMethod }}</p>
+        <p class="col-span-2"><strong>Shipping Address:</strong> {{ order.shippingAddress }}</p>
+        <p><strong>User Name:</strong> {{ userName }}</p>
+      </div>
+  
+      <hr class="border-t" />
+  
+      <!-- Product Section -->
+      <h3 class="text-lg font-bold text-gray-700">Products:</h3>
+      <div *ngFor="let p of order.products" class="border p-4 rounded-lg shadow-sm bg-gray-50 space-y-3">
+  
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <p><strong>Quantity:</strong> {{ p.quantity }}</p>
+          <!-- <p><strong>Price at Purchase:</strong> {{ p.priceAtPurchase }} EGP</p> -->
+        </div>
+  
+        <!-- Variants (if exist) -->
+        <div *ngIf="p.productId?.variants?.length" class="space-y-2">
+          <div *ngFor="let v of p.productId.variants" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+            <div>
+              <p><strong>Product Name: </strong> {{ v.name.en || v.name.ar }}</p>
+              <p ><strong>Price:  </strong> <span style="text-decoration: line-through;">
+                {{ v.price }} EGP
+              </span></p>
+              <p *ngIf="v.discountPrice">
+                <strong>Discount Price: </strong>
+                <span class="text-red-500">{{ v.discountPrice }} EGP</span>
+              </p>
+            </div>
+            <div>
+              <img *ngIf="v.image" [src]="v.image" alt="Product Image" class="rounded-lg w-28 h-auto shadow" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-card>
+  

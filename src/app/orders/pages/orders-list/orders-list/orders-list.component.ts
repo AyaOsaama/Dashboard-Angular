@@ -45,7 +45,13 @@ export class OrdersListComponent {
   searchTerm: string = '';
   editedOrder: Iorder = {
     _id: '',
-    userId: '',
+    userId: {
+      userName: {
+        ar: '',
+        en: '',
+      },
+      email: '',
+    },
     products: [],
     totalPrice: 0,
     status: 'pending',
@@ -75,6 +81,10 @@ export class OrdersListComponent {
       error: err => console.error('Failed to load orders:', err)
     });
   }
+  getTotalProducts(products: any[]): number {
+    if (!products) return 0;
+    return products.reduce((total, item) => total + item.quantity, 0);
+  }
   
   
   
@@ -86,62 +96,32 @@ export class OrdersListComponent {
   }
   
   onSaveOrder() {
-    if (this.editedOrder._id && this.editedOrder.status) {
-      this.orderService.updateOrderStatus(this.editedOrder._id, this.editedOrder.status).subscribe({
-        next: (updatedOrder) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Updated',
-            detail: `Order ${updatedOrder._id} updated to ${updatedOrder.status}`
-          });
-          this.editOrderDialog = false;
-          this.loadOrders();
-        },
-        error: (err) => {
-          console.error('Update error', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Failed to update order'
-          });
-        }
-      });
-    }
+    if (!this.editedOrder._id || !this.editedOrder.status) return;
+  
+    this.orderService.updateOrderStatus(this.editedOrder._id, this.editedOrder.status).subscribe({
+      next: (updatedOrder) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Updated',
+          detail: `Order status updated to${updatedOrder.status}`
+        });
+        this.editOrderDialog = false;
+        this.loadOrders();
+      },
+      error: (err) => {
+        console.error('Update error:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update order status'
+        });
+      }
+    });
   }
   
-
-  // onDeleteOrder(order: Iorder) {
-  //   this.confirmationService.confirm({
-  //     message: `Are you sure you want to delete category "${order.name.en}"?`,
-  //     header: 'Confirm Delete',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     accept: () => {
-  //       if (!order._id) return;
-  //       this.orderService.del(order._id).subscribe(() => {
-  //         this.messageService.add({
-  //           severity: 'success',
-  //           summary: 'Deleted',
-  //           detail: `${order.name.en} deleted`
-  //         });
-  //         this.loadOrders(); 
-  //       });
-  //     }
-  //   });
-  // }
-
-  // confirmDeleteAll() {
-  //   this.confirmationService.confirm({
-  //     message: 'Are you sure you want to delete all orders?',
-  //     header: 'Confirm Deletion',
-  //     icon: 'pi pi-exclamation-triangle',
-  //     accept: () => {
-  //       this.messageService.add({ severity: 'info', summary: 'TODO', detail: 'Delete all not implemented yet' });
-  //     }
-  //   });
-  // }
-  // getSubordersNames(subcategories: any[]): string {
-  //   return subcategories
-  //     .map((sub, index) => `${index + 1}. ${sub.name}`)
-  //     .join('\n');   }
+orderDetails(order: Iorder) {
+    this.router.navigate(['/orders', order._id]);
+}
+  
   
 }
