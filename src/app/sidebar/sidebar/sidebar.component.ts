@@ -49,14 +49,7 @@ export class SidebarComponent {
         { label: 'Insert', icon: 'pi pi-plus', routerLink: ['/subcategories/insert'] }
       ]
     },
-    {
-      label: 'Orders',
-      icon: 'pi pi-shopping-cart',
-      items: [
-        { label: 'List', icon: 'pi pi-list', routerLink: ['/orders'] },
-        { label: 'Insert', icon: 'pi pi-plus', routerLink: ['/orders/insert'] }
-      ]
-    },
+    
     {
       label: 'Users',
       icon: 'pi pi-users',
@@ -72,7 +65,12 @@ export class SidebarComponent {
         { label: 'List', icon: 'pi pi-list', routerLink: ['/posts'] },
         { label: 'Insert', icon: 'pi pi-plus', routerLink: ['/posts/insert'] }
       ]
-    }
+    },
+    {
+      label: 'Orders',
+      icon: 'pi pi-shopping-cart',
+      routerLink: ['/orders'] 
+    },
   ];
   
   ngOnInit() {
