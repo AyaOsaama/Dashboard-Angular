@@ -1,1 +1,180 @@
-<p>posts-list works!</p>
+<h2 class="text-2xl font-semibold text-gray-800 mb-4">Posts</h2>
+
+<div *ngIf="loading">
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+</div>
+
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div class="posts-container" *ngIf="!loading && posts.length > 0">
+  <p-card *ngFor="let post of posts" [style]="{ width: '30rem', marginBottom: '2rem' }">
+    <ng-template pTemplate="header">
+      <img alt="Post Image" class="w-full Image" [src]="post.image" />
+    </ng-template>
+
+    <ng-template pTemplate="title"> {{ post.title.en }} </ng-template>
+    <ng-template pTemplate="subtitle"> Author: {{ post.author }} </ng-template>
+
+    <p><strong>Description:</strong> {{ post.description.en || '-' }}</p>
+    <p><strong>Content:</strong> {{ post.content.en || '-' }}</p>
+
+    <div class="flex justify-between mt-3">
+      <div class="button mt-3">
+        <!-- Likes Button -->
+        <span (click)="openLikesDialog(post)" class="cursor-pointer text-primary">
+          <i class="pi pi-thumbs-up mr-1"></i>
+          {{ post.likes.length || 0 }} Likes
+        </span>
+
+        <!-- Comments Button -->
+        <span (click)="openCommentsDialog(post)" class="cursor-pointer text-primary">
+          <i class="pi pi-comments mr-1"></i>
+          {{ post.comments.length || 0 }} Comments
+        </span>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex gap-4 mt-3">
+        <button 
+          pButton 
+          type="button" 
+          label="Edit" 
+          severity="info"
+          class="w-full" 
+          (click)="onEditPost(post)">
+        </button>
+
+        <button 
+          pButton 
+          type="button" 
+          label="Delete" 
+          severity="danger"
+          class="w-full" 
+          (click)="onDeletePost(post)">
+        </button>
+      </div>
+    </ng-template>
+  </p-card>
+</div>
+
+<div *ngIf="!loading && posts.length === 0">No Posts.</div>
+
+<!-- Likes Modal -->
+<p-dialog 
+  header="Likes" 
+  [(visible)]="likesDialogVisible" 
+  [modal]="true" 
+  [style]="{width: '30vw'}"
+  [closable]="true"
+>
+  <div *ngIf="selectedPost?.likes?.length > 0; else noLikes">
+    <div *ngFor="let like of selectedPost.likes" class="mb-2 flex align-items-center gap-2">
+      <img 
+        [src]="like.user.image || defaultAvatar" 
+        width="32" 
+        height="32" 
+        class="border-circle" 
+      />
+      <strong>{{ like.user.userName.en || 'Unknown' }}</strong>
+    </div>
+  </div>
+  <ng-template #noLikes>
+    <p>No likes yet.</p>
+  </ng-template>
+</p-dialog>
+
+<!-- Comments Modal -->
+<p-dialog 
+  header="Comments" 
+  [(visible)]="commentsDialogVisible" 
+  [modal]="true" 
+  [style]="{width: '40vw'}"
+  [closable]="true"
+>
+  <div *ngIf="selectedPost?.comments?.length > 0; else noComments">
+    <div *ngFor="let comment of selectedPost.comments" class="mb-3">
+      <div class="flex align-items-center gap-2">
+        <img 
+          [src]="comment.user.image || defaultAvatar" 
+          width="32" 
+          height="32" 
+          class="border-circle" 
+        />
+        <strong>{{ comment.user.userName.en || 'Unknown' }}</strong>
+      </div>
+      <p class="ml-2 mt-1 mb-0">{{ comment.comment }}</p>
+      <small class="ml-2 text-muted">
+        {{ comment.createdAt ? (comment.createdAt | date: 'short') : '' }}
+      </small>
+    </div>
+  </div>
+  <ng-template #noComments>
+    <p>No comments yet.</p>
+
+  </ng-template>
+
+</p-dialog>
+<p-dialog header="Edit Post" [(visible)]="editPostDialog" [modal]="true" [style]="{ width: '700px' }">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      <div>
+        <label class="font-semibold block mb-1">Title (EN)</label>
+        <input type="text" pInputText [(ngModel)]="editedPost.title.en" class="w-full">
+      </div>
+  
+      <div>
+        <label class="font-semibold block mb-1">Title (AR)</label>
+        <input type="text" pInputText [(ngModel)]="editedPost.title.ar" class="w-full">
+      </div>
+  
+      <div>
+        <label class="font-semibold block mb-1">Description (EN)</label>
+        <textarea pInputTextarea rows="3" [(ngModel)]="editedPost.description.en" class="w-full"></textarea>
+      </div>
+  
+      <div>
+        <label class="font-semibold block mb-1">Description (AR)</label>
+        <textarea pInputTextarea rows="3" [(ngModel)]="editedPost.description.ar" class="w-full"></textarea>
+      </div>
+  
+      <div class="md:col-span-2">
+        <label class="font-semibold block mb-1">Content (EN)</label>
+        <textarea pInputTextarea rows="4" [(ngModel)]="editedPost.content.en" class="w-full"></textarea>
+      </div>
+  
+      <div class="md:col-span-2">
+        <label class="font-semibold block mb-1">Content (AR)</label>
+        <textarea pInputTextarea rows="4" [(ngModel)]="editedPost.content.ar" class="w-full"></textarea>
+      </div>
+  
+      <div class="md:col-span-2">
+        <label class="font-semibold block mb-1">Author</label>
+        <input type="text" pInputText [(ngModel)]="editedPost.author" class="w-full">
+      </div>
+  
+      <div class="md:col-span-2">
+        <label class="font-semibold block mb-2">Image</label>
+        <div class="flex items-center gap-4">
+          <img 
+            [src]="editedPost.imagePreview || defaultAvatar" 
+            alt="Preview" 
+            width="100" 
+            height="100" 
+            class="rounded shadow border border-gray-300 object-cover"
+          >
+          <input type="file" (change)="onImageSelectedForPost($event)">
+        </div>
+      </div>
+  
+    </div>
+  
+    <ng-template pTemplate="footer">
+      <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="editPostDialog = false"></button>
+      <button pButton label="Save" icon="pi pi-check" class="p-button-success" (click)="onSavePost()"></button>
+    </ng-template>
+  </p-dialog>
+  
+  
+<p-confirmDialog [baseZIndex]="10000"></p-confirmDialog>
+

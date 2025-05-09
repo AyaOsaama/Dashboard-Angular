@@ -1,1 +1,5 @@
-<router-outlet></router-outlet>
+
+<div *ngIf="isLoading | async" class="loader-overlay">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+  </div>  
+  <router-outlet></router-outlet>

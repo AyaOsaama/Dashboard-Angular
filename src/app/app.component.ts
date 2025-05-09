@@ -6,22 +6,31 @@ import { ProductsListComponent } from "./products/pages/products-list/products-l
 // import { TableModule } from 'primeng/table';
 // import { TagModule } from 'primeng/tag';
 // import { RatingModule } from 'primeng/rating';
-// import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 // import { ButtonModule } from 'primeng/button';
 // import { FormsModule } from '@angular/forms';
 // import { CarouselModule } from 'primeng/carousel';
+import { LoaderService } from './service/loader.service';
 
 @Component({
   selector: 'app-root',
   imports: [
-    RouterOutlet,
+    RouterOutlet,CommonModule
 ],
 
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'Dashboard';
+  isLoading: any; 
 
+  constructor(private loaderService: LoaderService) {}
+
+  ngOnInit() {
+    this.isLoading = this.loaderService.isLoading;
+  }
+
+
+  title = 'Dashboard';
 
 }
