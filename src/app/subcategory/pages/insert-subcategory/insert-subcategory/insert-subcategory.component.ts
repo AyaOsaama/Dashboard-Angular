@@ -22,6 +22,7 @@ import { RouterModule } from '@angular/router';
   ],
   templateUrl: './insert-subcategory.component.html',
 })
+//----
 export class InsertSubcategoriesListComponent {
   newSubCategory: SubCategory = {
     code: '',
