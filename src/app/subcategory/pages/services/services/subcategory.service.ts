@@ -1,22 +1,28 @@
 import { Injectable } from '@angular/core';
+import { SubCategory } from '../../models/categories';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SubService {
-  private products = [
-    { code: 'P001', name: 'Laptop', category: 'Electronics', quantity: 5 },
-    { code: 'P002', name: 'Shampoo', category: 'Beauty', quantity: 15 },
-    { code: 'P003', name: 'Shoes', category: 'Fashion', quantity: 0 },
+  private subCategories: SubCategory[] = [
+    { code: '001', name: 'Sub 1', category: 'Cat A', quantity: 5 },
+    { code: '002', name: 'Sub 2', category: 'Cat B', quantity: 2 },
   ];
 
-  constructor() {}
-
-  getProducts() {
-    return this.products;
+  getSubCategories(): SubCategory[] {
+    return this.subCategories;
   }
 
-  addProduct(newProduct: any) {
-    this.products.push(newProduct);
+  addSubCategory(subCategory: SubCategory): void {
+    this.subCategories.push(subCategory);
+  }
+
+  updateSubCategory(index: number, subCategory: SubCategory): void {
+    this.subCategories[index] = subCategory;
+  }
+
+  deleteSubCategory(index: number): void {
+    this.subCategories.splice(index, 1);
   }
 }

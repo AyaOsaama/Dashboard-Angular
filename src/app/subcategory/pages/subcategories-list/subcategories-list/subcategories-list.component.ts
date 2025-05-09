@@ -1,15 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { SubService } from '../../services/services/subcategory.service';
 import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { PrimeIcons, MenuItem, ConfirmationService } from 'primeng/api';
-import { DialogModule } from 'primeng/dialog';
+import { PrimeIcons, MenuItem} from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
+import { SubService } from '../../services/services/subcategory.service';
+import { SubCategory } from '../../models/categories';
+import { ConfirmationService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
+import { RouterModule } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-subcategories-list',
@@ -24,27 +29,27 @@ import { FormsModule } from '@angular/forms';
     InputTextModule,
     ConfirmDialogModule,
     FormsModule,
+    RouterModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './subcategories-list.component.html',
   styleUrls: ['./subcategories-list.component.css'],
 })
 export class SubCategoriesListComponent implements OnInit {
-  // سيتم تحميل المنتجات من الخدمة
-  products: any[] = [];
   searchTerm = '';
-
+  selectedSubCategoryIndex: number = -1;
   editDialogVisible = false;
-  selectedProductIndex: number = -1;
-  editForm = {
+  addDialogVisible = false;
+
+  editForm: SubCategory = {
     code: '',
     name: '',
     category: '',
     quantity: 0,
   };
+  
 
-  addDialogVisible = false;
-  newProduct = {
+  newSubCategory: SubCategory = {
     code: '',
     name: '',
     category: '',
@@ -53,66 +58,80 @@ export class SubCategoriesListComponent implements OnInit {
 
   constructor(
     private confirmationService: ConfirmationService,
-    private SubService: SubService 
+    private subService: SubService
   ) {}
 
-  ngOnInit() {
-    this.products = this.SubService.getProducts();
+  ngOnInit(): void {}
+
+  get subCategories(): SubCategory[] {
+    return this.subService.getSubCategories();
   }
 
-  get filteredProducts() {
-    return this.products.filter((product) =>
-      product.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
-
-  stockSeverity(product: any): 'success' | 'warn' | 'danger' {
-    if (product.quantity === 0) return 'danger';
-    if (product.quantity < 5) return 'warn';
+  stockSeverity(subCategory: SubCategory): 'success' | 'warn' | 'danger' {
+    if (subCategory.quantity === 0) return 'danger';
+    if (subCategory.quantity < 5) return 'warn';
     return 'success';
   }
 
-  openEditDialog(index: number) {
-    this.selectedProductIndex = index;
-    const product = this.products[index];
-    this.editForm = { ...product };
-    this.editDialogVisible = true;
+openEditDialog(subCategory: SubCategory): void {
+  this.editForm = { ...subCategory }; 
+  this.editDialogVisible = true;
+}
+
+saveEdit(): void {
+  this.subService.updateSubCategory(this.selectedSubCategoryIndex, {
+    ...this.editForm,
+  });
+  this.editDialogVisible = false; 
+}
+confirmDelete(subCategory: SubCategory): void {
+  console.log('Trying to delete:', subCategory); 
+  this.confirmationService.confirm({
+    message: 'Are you sure you want to delete this subcategory?',
+    header: 'Confirm Delete',
+    icon: 'pi pi-exclamation-triangle',
+    acceptLabel: 'Yes',
+    rejectLabel: 'No',
+    accept: () => {
+      this.deleteSubCategory(subCategory);
+    },
+  });
+}
+
+
+deleteSubCategory(subCategory: SubCategory): void {
+  const index = this.subCategories.findIndex(
+    sub => sub.code === subCategory.code
+  );
+  if (index !== -1) {
+    this.subCategories.splice(index, 1);
+  }
+}
+
+openAddDialog(): void {
+  this.newSubCategory = {
+    code: '',
+    name: '',
+    category: '',
+    quantity: 1,
+  };
+  this.addDialogVisible = true;
   }
 
-  saveEdit() {
-    const updatedList = [...this.products];
-    updatedList[this.selectedProductIndex] = { ...this.editForm };
-    this.products = updatedList;
-    this.editDialogVisible = false;
+  addSubCategory(): void {
+    if (this.newSubCategory.code && this.newSubCategory.name && this.newSubCategory.category) {
+      this.subService.addSubCategory({ ...this.newSubCategory });
+      this.addDialogVisible = false;
+    } else {
+      alert('Please fill in all fields');
+    }
   }
 
-  confirmDelete(index: number) {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this product?',
-      header: 'Confirm Delete',
-      icon: 'pi pi-exclamation-triangle',
-      acceptLabel: 'Yes',
-      rejectLabel: 'No',
-      accept: () => {
-        const updatedList = [...this.products];
-        updatedList.splice(index, 1);
-        this.products = updatedList;
-      },
-    });
-  }
-
-  openAddDialog() {
-    this.newProduct = {
-      code: '',
-      name: '',
-      category: '',
-      quantity: 1,
-    };
-    this.addDialogVisible = true;
-  }
-
-  addProduct() {
-    this.products = [...this.products, { ...this.newProduct }];
-    this.addDialogVisible = false;
+  filteredSubCategories() {
+    if (!this.searchTerm) return this.subCategories;
+    return this.subCategories.filter(sub =>
+      sub.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      sub.code.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 }

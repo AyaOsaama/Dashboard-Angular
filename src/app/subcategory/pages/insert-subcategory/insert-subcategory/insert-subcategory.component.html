@@ -1,136 +1,67 @@
-<div class="container mx-auto p-4">
-  <div class="flex items-center justify-between mb-4">
-    <span class="text-xl font-bold">Sub Categories</span>
-    <div class="flex gap-2">
-      <p-button label="Add" icon="pi pi-plus" (click)="openAddDialog()" class="p-button-success"></p-button>
-      <p-button icon="pi pi-refresh" rounded raised></p-button>
-    </div>
-  </div>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+  <button
+    pButton
+    label="Add Sub Category"
+    icon="pi pi-plus"
+    (click)="displayDialog = true"
+    class="p-button-primary"
+  ></button>
 
-  <!-- إضافة خانة البحث -->
-  <div class="mb-4">
-    <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchTerm" style="width: 100%;" />
-  </div>
-
-  <p-table [value]="filteredProducts">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Quantity</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-product>
-      <tr>
-        <td>{{ product.code }}</td>
-        <td>{{ product.name }}</td>
-        <td>{{ product.category }}</td>
-        <td>{{ produc<div class="container mx-auto p-4">
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-xl font-bold">Sub Categories</span>
-            <div class="flex gap-2">
-              <p-button label="Add" icon="pi pi-plus" (click)="openAddDialog()" class="p-button-success"></p-button>
-              <p-button icon="pi pi-refresh" rounded raised></p-button>
-            </div>
-          </div>
-        
-          <!-- إضافة خانة البحث -->
-          <div class="mb-4">
-            <input type="text" pInputText placeholder="Search..." [(ngModel)]="searchTerm" style="width: 100%;" />
-          </div>
-        
-          <p-table [value]="filteredProducts">
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Code</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Quantity</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-product>
-              <tr>
-                <td>{{ product.code }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.category }}</td>
-                <td>{{ product.quantity }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        
-          <!-- Dialog لإضافة منتج جديد -->
-          <p-dialog
-            header="Add New Sub Category"
-            [(visible)]="addDialogVisible"
-            [modal]="true"
-            [style]="{ width: '30vw' }"
-            [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
-            [draggable]="false"
-            [resizable]="false"
-            [dismissableMask]="true"
-          >
-            <div class="p-fluid">
-              <div class="p-field">
-                <label for="add-code">Code</label>
-                <input id="add-code" type="text" pInputText [(ngModel)]="newProduct.code" />
-              </div>
-              <div class="p-field">
-                <label for="add-name">Name</label>
-                <input id="add-name" type="text" pInputText [(ngModel)]="newProduct.name" />
-              </div>
-              <div class="p-field">
-                <label for="add-category">Category</label>
-                <input id="add-category" type="text" pInputText [(ngModel)]="newProduct.category" />
-              </div>
-              <div class="p-field">
-                <label for="add-quantity">Quantity</label>
-                <input id="add-quantity" type="number" pInputText [(ngModel)]="newProduct.quantity" />
-              </div>
-            </div>
-            <ng-template pTemplate="footer">
-              <button pButton label="Add" icon="pi pi-check" (click)="addProduct()" class="p-button-success"></button>
-              <button pButton label="Cancel" icon="pi pi-times" (click)="addDialogVisible=false" class="p-button-text"></button>
-            </ng-template>
-          </p-dialog>
-        </div>
-        t.quantity }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-  <!-- Dialog لإضافة منتج جديد -->
-  <p-dialog
-    header="Add New Sub Category"
-    [(visible)]="addDialogVisible"
-    [modal]="true"
-    [style]="{ width: '30vw' }"
-    [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
-    [draggable]="false"
-    [resizable]="false"
-    [dismissableMask]="true"
-  >
-    <div class="p-fluid">
-      <div class="p-field">
-        <label for="add-code">Code</label>
-        <input id="add-code" type="text" pInputText [(ngModel)]="newProduct.code" />
-      </div>
-      <div class="p-field">
-        <label for="add-name">Name</label>
-        <input id="add-name" type="text" pInputText [(ngModel)]="newProduct.name" />
-      </div>
-      <div class="p-field">
-        <label for="add-category">Category</label>
-        <input id="add-category" type="text" pInputText [(ngModel)]="newProduct.category" />
-      </div>
-      <div class="p-field">
-        <label for="add-quantity">Quantity</label>
-        <input id="add-quantity" type="number" pInputText [(ngModel)]="newProduct.quantity" />
-      </div>
-    </div>
-    <ng-template pTemplate="footer">
-      <button pButton label="Add" icon="pi pi-check" (click)="addProduct()" class="p-button-success"></button>
-      <button pButton label="Cancel" icon="pi pi-times" (click)="addDialogVisible=false" class="p-button-text"></button>
-    </ng-template>
-  </p-dialog>
+  <button
+    pButton
+    label="Back To List"
+    icon="pi pi-arrow-left"
+    [routerLink]="['/subcategories']"
+    class="p-button-warning"
+  ></button>
 </div>
+
+<!-- Dialog -->
+<p-dialog
+  header="Add Sub Category"
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [style]="{ width: '400px' }"
+  [closable]="true"
+  [baseZIndex]="10000"
+>
+  <div class="p-fluid" style="padding-top: 1rem;">
+    <div class="p-field" style="margin-bottom: 1rem;">
+      <label for="add-code" class="p-mb-1">Code </label>
+      <input id="add-code" type="text" pInputText [(ngModel)]="newSubCategory.code" />
+    </div>
+
+    <div class="p-field" style="margin-bottom: 1rem;">
+      <label for="add-name" class="p-mb-1">Name </label>
+      <input id="add-name" type="text" pInputText [(ngModel)]="newSubCategory.name" />
+    </div>
+
+    <div class="p-field" style="margin-bottom: 1rem;">
+      <label for="add-category" class="p-mb-1">Category </label>
+      <input id="add-category" type="text" pInputText [(ngModel)]="newSubCategory.category" />
+    </div>
+
+    <div class="p-field" style="margin-bottom: 1rem;">
+      <label for="add-quantity" class="p-mb-1">Quantity </label>
+      <input id="add-quantity" type="number" pInputText [(ngModel)]="newSubCategory.quantity" />
+    </div>
+
+    <div style="text-align: right; margin-top: 1.5rem;">
+      <button
+        pButton
+        label="Add"
+        icon="pi pi-check"
+        (click)="addSubCategory(); displayDialog = false"
+        class="p-button-success"
+      ></button>
+      <button
+        pButton
+        label="Cancel"
+        icon="pi pi-times"
+        (click)="displayDialog = false"
+        class="p-button-secondary"
+        style="margin-left: 0.5rem;"
+      ></button>
+    </div>
+  </div>
+</p-dialog>
