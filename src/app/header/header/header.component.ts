@@ -33,11 +33,6 @@ export class HeaderComponent {
       icon: 'pi pi-user',
       routerLink: ['/users/insert'],
     },
-    {
-      label: 'Order',
-      icon: 'pi pi-shopping-cart',
-      routerLink: ['/orders/insert'],
-    },
   ];
   ngOnInit() {
     const userBackStr = localStorage.getItem("user");
