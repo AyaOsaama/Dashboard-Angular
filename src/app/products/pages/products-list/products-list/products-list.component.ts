@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
 import { Product } from './models/product';
-import { ProductService } from './services/product.service';
+// import { ProductService } from './services/product.service';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { RatingModule } from 'primeng/rating';
@@ -17,6 +17,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ProductApiService } from '../../../../services/product-api.service';
+import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 
@@ -35,30 +38,75 @@ import { ReactiveFormsModule } from '@angular/forms';
     InputTextModule,
     ConfirmDialogModule,
     ToastModule,
+    RouterModule
   ],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css',
   providers: [MessageService, ConfirmationService]
 })
-export class ProductsListComponent implements OnInit {
+export class ProductsListComponent implements OnInit, OnDestroy {
+  // products!: Product[];  // products array to hold the list of products
   products!: Product[];  // products array to hold the list of products
+  // prodAfterSearch: Iproduct[] = [];
   clonedProducts: { [s: string]: Product; } = {};  // copy of products for editing
 
   constructor(
-    private productService: ProductService,
+    // private productService: ProductService,
+    private productApi: ProductApiService,
     private router: Router,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
-  ) { }
+  ) {
+
+  }
+
+  //to supscripe the data
+  supScripe!: Subscription;
+
+
+  ngOnDestroy(): void {
+    if (this.supScripe) {
+      this.supScripe.unsubscribe();  // Unsubscribe to avoid memory leaks
+    }
+    // this.supScripe.unsubscribe(); //will fire when the component is destroyed or the component is not used or the task complete or error
+  }
 
   ngOnInit() {
-    this.productService.getProductsAll().then((data) => {
-      console.log('Products:', data);
+    // this.supScripe = this.productApi.getAllProducts().subscribe({
+    //   next: (data) => {
+    //     console.log(data);
+    //     this.products = data;
+    //   },
+    //   error: (err) => {
+    //     console.log(err);
+    //   }
+    // })
 
-      this.products = data;  // load the data of the service into the products array
+    // this.productApi.getAllProducts().subscribe({
+    //   next: (res) => {
+    //     this.products = res;
+    //   },
+    //   error: (err) => {
+    //     console.error('فشل تحميل المنتجات:', err);
+    //   }
+    // });
+
+    this.supScripe = this.productApi.getAllProducts().subscribe({
+      next: (res: any) => {
+        // تحقق إذا كان الكائن يحتوي على خاصية 'products' التي هي مصفوفة
+        if (Array.isArray(res.products)) {
+          this.products = res.products;  // تعيين البيانات إلى المصفوفة إذا كانت صحيحة
+          console.log(this.products)
+        } else {
+          console.error('البيانات ليست مصفوفة:', res);
+          this.products = [];  // تعيين مصفوفة فارغة إذا لم تكن البيانات مصفوفة
+        }
+      },
+      error: (err) => {
+        console.error('فشل تحميل المنتجات:', err);
+        this.products = [];  // تعيين مصفوفة فارغة في حال حدوث خطأ
+      }
     });
-
-
   }
 
   addNewProduct() {
@@ -70,30 +118,55 @@ export class ProductsListComponent implements OnInit {
   }
 
   onSaveProduct(product: Product) {
-    product.editMode = false;  // cancel the edit mode
-
-    // this show a message that the product has been updated
-
-    this.messageService.add({
-      key: 'myToast',
-      severity: 'success',
-      summary: 'Product Updated',
-      detail: 'Product details have been updated.'
+    this.productApi.updateProduct(product._id, product).subscribe({
+      next: () => {
+        product.editMode = false;
+        this.messageService.add({
+          key: 'myToast',
+          severity: 'success',
+          summary: 'Product Updated',
+          detail: 'Product details have been updated in the database.'
+        });
+      },
+      error: (err) => {
+        console.error('Failed to update product:', err);
+        this.messageService.add({
+          key: 'myToast',
+          severity: 'error',
+          summary: 'Update Failed',
+          detail: 'Could not update product in the database.'
+        });
+      }
     });
   }
 
+
   onDeleteProduct(product: Product) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete ${product.nameEn}?`,
+      message: `Are you sure you want to delete ${product.variants[0].name.en}?`,
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.products = this.products.filter(p => p !== product);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Deleted',
-          detail: 'Product deleted',
-          life: 3000
+        console.log('Deleting product with ID:', product._id); // <-- ضيف السطر ده
+        this.productApi.deleteProductVariant(product._id, product.variants[0]._id).subscribe({
+          next: () => {
+            this.products = this.products.filter(p => p._id !== product._id);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Deleted',
+              detail: 'Product deleted from the database.',
+              life: 3000
+            });
+          },
+          error: (err) => {
+            console.error('Failed to delete product:', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Deletion Failed',
+              detail: 'Could not delete product from the database.',
+              life: 3000
+            });
+          }
         });
       }
     });

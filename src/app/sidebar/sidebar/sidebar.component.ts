@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MenuModule } from 'primeng/menu';
 import { RippleModule } from 'primeng/ripple';
-import { BadgeModule } from 'primeng/badge'; 
+import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { RouterModule } from '@angular/router';
@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [MenuModule,CommonModule,RippleModule,BadgeModule,AvatarModule,PanelMenuModule,RouterModule],
+  imports: [MenuModule, CommonModule, RippleModule, BadgeModule, AvatarModule, PanelMenuModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
@@ -74,7 +74,7 @@ export class SidebarComponent {
       ]
     }
   ];
-  
+
   ngOnInit() {
     const userBackStr = localStorage.getItem("user");
     if (userBackStr && userBackStr !== "undefined") {
@@ -87,6 +87,6 @@ export class SidebarComponent {
     } else {
       console.warn("No user data found in localStorage");
     }
-  }  
+  }
 
 }

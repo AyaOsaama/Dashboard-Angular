@@ -61,14 +61,14 @@
           <ng-template pTemplate="body" let-order>
             <tr>
               <td class="p-3">{{ order._id }}</td>
-              <td class="p-3">{{ order.user?.name || '-' }}</td>
-              <td class="p-3">{{ order.product.lenght }}</td>
+              <td class="p-3">{{ order.userId?.userName?.en || '-' }}</td>
+              <td class="p-3">{{ getTotalProducts(order.products) }}</td>
               <td class="p-3">{{ order.totalPrice | currency:'USD' }}</td>
               <td class="p-3 capitalize">{{ order.status }}</td>
               <td class="p-3">{{ order.createdAt | date:'short' }}</td>
-              <td class="p-3 flex gap-2 actions">
-                <button pButton icon="pi pi-pencil " class="p-button-sm p-button-info button-action" (click)="onEditOrder(order)"></button>
-                <button pButton icon="pi pi-info " class="p-button-sm p-button-info button-action" (click)="onEditOrder(order)"></button>
+              <td class="p-3 flex gap-2 ">
+                <button pButton icon="pi pi-pencil" class="p-button-sm p-button-info" (click)="onEditOrder(order)"></button>
+                <button pButton icon="pi pi-info" class="p-button-sm p-button-info" (click)="orderDetails(order)"></button>
               </td>
             </tr>
           </ng-template>

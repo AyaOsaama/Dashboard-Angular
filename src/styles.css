@@ -3,18 +3,20 @@
 @import "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
-html {
-  scroll-behavior: smooth;
-}
+
 body {
   font-family: "Segoe UI", sans-serif;
 }
-
 body.dark-mode {
   background-color: #121212;
   color: white;
@@ -26,9 +28,4 @@ body.dark-mode .p-toolbar {
 
 body.dark-mode .p-button {
   color: white;
-}
-
-.header {
-  margin: 0;
-  padding: 0;
 }

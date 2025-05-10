@@ -20,17 +20,23 @@ export class OrderService {
     return this.http.get<Iorder[]>(this.baseUrl);
   }
 
-  getOrderById(orderId: string): Observable<Iorder> {
-    return this.http.get<Iorder>(`${this.baseUrl}/${orderId}`);
+  getOrderById(orderId: string): Observable<{ order: Iorder}> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+    return this.http.get<{order:Iorder}>(`${this.baseUrl}/${orderId}`,{headers});
   }
 
   updateOrderStatus(orderId: string, status: string): Observable<Iorder> {
-    return this.http.patch<Iorder>(
-      `${this.baseUrl}/${orderId}`,
-      { status },
-      this.httpHeader
-    );
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+  
+    return this.http.patch<Iorder>(`${this.baseUrl}/${orderId}`,{ status },{ headers });
   }
+  
 
   getAllOrders(): Observable<{ orders: Iorder[] }> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
