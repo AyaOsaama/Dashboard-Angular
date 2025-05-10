@@ -1,9 +1,17 @@
+body{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
 .header{
     background-color: #f8f9fa;
     height: 70px;
 }
 .container{
-    background-color: #f8f9fa;
+    padding: 0;
+    margin: 0;
+    background-color: #3674b3;
     display: flex;
     height: calc( 100vh - 70px);
 }
@@ -12,13 +20,13 @@
     width: 300px;
     padding: 20px;
     height: 100%;
-    overflow-y: auto
-
+    overflow-y: auto;
+    flex-shrink: 0;
 }
 .main-content{
  background-color: white;
  height: 100%;
  overflow-y: auto;
  padding: 20px;
- flex-grow: 1;
+ flex-grow: 1 ;
 }

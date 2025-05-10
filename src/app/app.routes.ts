@@ -16,6 +16,7 @@ import { loginGuard } from './Gurads/login.guard';
 import { authGuard } from './Gurads/auth.guard';
 import { LoginComponent } from './auth/login/pages/login.component.js';import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './orders/pages/order-details/order-details.component';
+import { TestComponent } from './test/test.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
@@ -27,6 +28,7 @@ export const routes: Routes = [
       component: MainLayoutComponent,
       canActivate: [authGuard],
       children: [
+        {path:'test', component:TestComponent},
         { path: 'dashboard', component: DashboardComponent },
 
         { path: 'products', component: ProductsListComponent },
