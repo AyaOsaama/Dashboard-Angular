@@ -34,16 +34,16 @@ import { UserService } from '../../../services/user-list.service';
   ],
 })
 export class UsersListComponent implements OnInit {
- 
   users: IUser[] = [];
   editedUser: IEditableUser = this.createEmptyUser();
   editUserDialog = false;
   loading = true;
- 
+
+
   currentUserRole: 'super_admin' | 'admin' | 'user' | null = null;
   rolesList: { label: string, value: string }[] = [];
- 
- 
+
+
   constructor(
     private userService: UserService,
     private confirm: ConfirmationService,
@@ -67,8 +67,7 @@ export class UsersListComponent implements OnInit {
       error: () => this.loading = false
     });
   }
- 
-  createEmptyUser(): IEditableUser {
+   createEmptyUser(): IEditableUser {
     return {
       _id: '',
       userName: { en: '', ar: '' },
@@ -81,8 +80,8 @@ export class UsersListComponent implements OnInit {
       imagePreview: ''
     };
   }
- 
- 
+
+
   onAddUser() {
     this.router.navigate(['/users/insert']);
   }
@@ -94,28 +93,28 @@ export class UsersListComponent implements OnInit {
     };
     this.editUserDialog = true;
   }
- 
+
   onImageSelected(event: any): void {
     const file = event.target.files[0];
     if (!file) return;
- 
+
     this.editedUser.imageFile = file;
     const reader = new FileReader();
     reader.onload = () => this.editedUser.imagePreview = reader.result as string;
     reader.readAsDataURL(file);
   }
- 
- 
- 
- 
+
+  
+
+  
   onSaveUser() {
     if (!this.editedUser._id) {
       this.msg.add({ severity: 'error', summary: 'Error', detail: 'User ID is missing' });
       return;
     }
- 
+  
     const safe = (val: string | undefined | null) => val ?? '';  // Helper function عشان مانفكرش كتير
- 
+  
     const formData = new FormData();
     formData.append('userName.en', safe(this.editedUser.userName.en));
     formData.append('userName.ar', safe(this.editedUser.userName.ar));
@@ -124,11 +123,11 @@ export class UsersListComponent implements OnInit {
     formData.append('role', safe(this.editedUser.role));
     formData.append('address.en', safe(this.editedUser.address.en));
     formData.append('address.ar', safe(this.editedUser.address.ar));
- 
+  
     if (this.editedUser.imageFile) {
       formData.append('image', this.editedUser.imageFile);
     }
- 
+  
     this.userService.updateUser(this.editedUser._id, formData).subscribe({
       next: () => {
         this.editUserDialog = false;
@@ -141,17 +140,16 @@ export class UsersListComponent implements OnInit {
       },
     });
   }
- 
- 
- 
- 
- 
- 
+  
+  
+  
+  
+
+  
   onDeleteUser(userId: string, role: IUser['role']) {
     if (role === 'super_admin' && this.currentUserRole !== 'super_admin') {
       return this.msg.add({ severity: 'error', summary: 'Denied', detail: 'You cannot delete a super admin' });
     }
- 
     this.confirm.confirm({
       message: 'Are you sure you want to delete this user?',
       accept: () => {
@@ -167,7 +165,7 @@ export class UsersListComponent implements OnInit {
       }
     });
   }
- 
+
   onDeleteAllUsers() {
     this.confirm.confirm({
       message: 'Are you sure you want to delete all users?',
@@ -177,8 +175,7 @@ export class UsersListComponent implements OnInit {
       },
     });
   }
- 
- 
+
   getRoleOptions() {
     return this.currentUserRole === 'super_admin'
       ? [
@@ -191,18 +188,18 @@ export class UsersListComponent implements OnInit {
           { label: 'User', value: 'user' }
         ];
   }
- 
+
   canEditUser(user: IUser): boolean {
-    return this.currentUserRole === 'super_admin' ||
+    return this.currentUserRole === 'super_admin' || 
            (this.currentUserRole === 'admin' && user.role !== 'super_admin');
   }
- 
+
   canDeleteUser(user: IUser): boolean {
-    return this.currentUserRole === 'super_admin' ||
+    return this.currentUserRole === 'super_admin' || 
            (this.currentUserRole === 'admin' && user.role === 'user');
   }
+
  
  
- 
- 
+  
 }

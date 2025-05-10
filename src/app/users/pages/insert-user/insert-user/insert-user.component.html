@@ -1,1 +1,56 @@
-<p>insert-user works!</p>
+<div class="card p-4 w-full max-w-lg mx-auto">
+    <h2 class="text-xl mb-4">Add New User</h2>
+  
+    <div class="field mb-3">
+      <label>Username (EN)</label>
+      <input type="text" pInputText [(ngModel)]="user.userName.en">
+    </div>
+  
+    <div class="field mb-3">
+      <label>Username (AR)</label>
+      <input type="text" pInputText [(ngModel)]="user.userName.ar">
+    </div>
+  
+    <div class="field mb-3">
+      <label>Email</label>
+      <input type="email" pInputText [(ngModel)]="user.email">
+    </div>
+  
+    <div class="field mb-3">
+      <label>Password</label>
+      <input type="password" pInputText [(ngModel)]="user.password">
+    </div>
+  
+    <div class="field mb-3">
+      <label>Phone</label>
+      <input type="text" pInputText [(ngModel)]="user.phone">
+    </div>
+  
+    <div class="field mb-3">
+      <label>Address (EN)</label>
+      <input type="text" pInputText [(ngModel)]="user.address.en">
+    </div>
+  
+    <div class="field mb-3">
+      <label>Address (AR)</label>
+      <input type="text" pInputText [(ngModel)]="user.address.ar">
+    </div>
+  
+    <div class="field mb-3">
+      <label>Role</label>
+      <select [(ngModel)]="user.role" class="p-inputtext p-component">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+        <option value="super_admin">Super Admin</option>
+      </select>
+    </div>
+  
+    <div class="field mb-3">
+      <label>Image</label>
+      <input type="file" (change)="onImageChange($event)">
+      <img *ngIf="user.imagePreview" [src]="user.imagePreview" alt="Preview" class="mt-2 rounded w-32 h-32 object-cover">
+    </div>
+  
+    <button pButton label="Add User" (click)="onSubmit()" class="mt-3 w-full"></button>
+  </div>
+  

@@ -1,0 +1,16 @@
+.border-t {
+    margin-block: 40px;
+}
+.product{
+    margin-bottom: 20px;
+}
+.boxOrder{
+    padding: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+.content{
+    margin-top: 12px;
+}
