@@ -22,7 +22,7 @@ export class UserService {
   addUser(data: FormData): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post<any>(this.apiUrl, data, { headers });
+    return this.http.post<any>(`${this.apiUrl}/auth/register`, data, { headers });
   }
   deleteUser(id: string): Observable<any> {
     const token = localStorage.getItem('token');

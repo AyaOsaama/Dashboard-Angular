@@ -9,25 +9,37 @@ import { Observable } from 'rxjs';
 })
 export class CategoriesService {
   httpHeader={}
+  
   constructor(private http:HttpClient) {
     this.httpHeader={headers:new HttpHeaders({
     'Content-Type':'application/json'
       })}
+     
   }
   getAllCategory(): Observable<{ categories: ICategory[] }> {
-    return this.http.get<{ categories: ICategory[] }>(`${environment.apiUrl}/categories`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<{ categories: ICategory[] }>(`${environment.apiUrl}/categories`,{headers});
   }
   addNewCategory(category:ICategory):Observable<ICategory>{
-    return this.http.post<ICategory>(`${environment.apiUrl}/categories`,category,this.httpHeader)
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<ICategory>(`${environment.apiUrl}/categories`,category,{headers})
   }
   deleteCategory(id: string): Observable<any> {
-    return this.http.delete(`${environment.apiUrl}/categories/${id}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete(`${environment.apiUrl}/categories/${id}`,{headers});
   }
     
   updateCategory(id: string, category: ICategory): Observable<ICategory> {
-    return this.http.put<ICategory>(`${environment.apiUrl}/categories/${id}`, category, this.httpHeader);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<ICategory>(`${environment.apiUrl}/categories/${id}`, category, {headers});
   }
   getCategoryById(id: string): Observable<ICategory> {
-    return this.http.get<ICategory>(`${environment.apiUrl}/categories/${id}`);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<ICategory>(`${environment.apiUrl}/categories/${id}`,{headers});
   }  
 }

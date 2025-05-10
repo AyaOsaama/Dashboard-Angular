@@ -12,4 +12,22 @@
   input, select {
     width: 100%;
   }
+  .formParent{
+    position: absolute;
+    top: 15%;
+    left: 60%;
+    transform: translateY(-15%);
+    transform: translateX(-60%);
+    /* width: 700px;
+    height: 500px; */
+  }
+  .container{
+    padding: 30px;
+    width: 700px;
+    height: 650px;
+  }
+  .containerImage{
+    margin-block: 10px;
+    padding-block: 20px;
+  }
   
