@@ -113,7 +113,7 @@ export class UsersListComponent implements OnInit {
       return;
     }
   
-    const safe = (val: string | undefined | null) => val ?? '';  // Helper function عشان مانفكرش كتير
+    const safe = (val: string | undefined | null) => val ?? ''; 
   
     const formData = new FormData();
     formData.append('userName.en', safe(this.editedUser.userName.en));
