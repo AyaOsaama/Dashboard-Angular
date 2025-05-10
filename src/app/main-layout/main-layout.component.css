@@ -14,6 +14,9 @@ body{
     background-color: #3674b3;
     display: flex;
     height: calc( 100vh - 70px);
+    width: 100%;
+    max-width: 100%;
+
 }
 .sidebar{
     background-color: #f8f9fa;
