@@ -42,16 +42,3 @@ export interface Ipost {
   showComments?: boolean; 
 }
 
-// ikes: {
-//   user: {
-//     _id: string;
-//     username: string;
-//   };
-// }[];
-
-// comments: {
-//   user: {
-//     _id: string;
-//     username: string;
-//   };
-//   comment: string;

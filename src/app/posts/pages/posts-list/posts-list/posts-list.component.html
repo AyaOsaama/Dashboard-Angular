@@ -1,4 +1,16 @@
-<h2 class="text-2xl font-semibold text-gray-800 mb-4">Posts</h2>
+<h2  class="text-2xl font-semibold text-gray-800 title">Posts</h2>
+
+<div class="flex justify-between items-center">
+
+ <p-iconfield class="flex items-center">
+    <p-inputicon styleClass="pi pi-search" />
+    <input pInputText type="text" [(ngModel)]="searchTerm" (input)="filterPosts(searchTerm)" placeholder="Search Posts..." />
+</p-iconfield>
+  <div class="flex justify-between gap-5">
+  <button pButton label="Add Post" icon="pi pi-plus" class="p-button-success" (click)="addNewPost()"></button>
+  <button pButton label="Delete All" icon="pi pi-trash" class="p-button-danger" (click)="confirmDeleteAll()"></button>
+</div>
+</div>
 
 <div *ngIf="loading">
   <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
@@ -6,8 +18,10 @@
 
 <div *ngIf="errorMessage">{{ errorMessage }}</div>
 
-<div class="posts-container" *ngIf="!loading && posts.length > 0">
-  <p-card *ngFor="let post of posts" [style]="{ width: '30rem', marginBottom: '2rem' }">
+<div class="posts-container">
+    @for(post of filteredPosts; track post._id){
+  <p-card [style]="{ width: '30rem', marginBottom: '2rem' }">
+  
     <ng-template pTemplate="header">
       <img alt="Post Image" class="w-full Image" [src]="post.image" />
     </ng-template>
@@ -20,13 +34,11 @@
 
     <div class="flex justify-between mt-3">
       <div class="button mt-3">
-        <!-- Likes Button -->
         <span (click)="openLikesDialog(post)" class="cursor-pointer text-primary">
           <i class="pi pi-thumbs-up mr-1"></i>
           {{ post.likes.length || 0 }} Likes
         </span>
 
-        <!-- Comments Button -->
         <span (click)="openCommentsDialog(post)" class="cursor-pointer text-primary">
           <i class="pi pi-comments mr-1"></i>
           {{ post.comments.length || 0 }} Comments
@@ -49,16 +61,18 @@
           pButton 
           type="button" 
           label="Delete" 
-          severity="danger"
+          severity="danger" 
           class="w-full" 
           (click)="onDeletePost(post)">
         </button>
       </div>
     </ng-template>
+
   </p-card>
+    }
 </div>
 
-<div *ngIf="!loading && posts.length === 0">No Posts.</div>
+<div *ngIf="!loading && filteredPosts.length === 0">No Posts.</div>
 
 <!-- Likes Modal -->
 <p-dialog 
@@ -111,70 +125,70 @@
   </div>
   <ng-template #noComments>
     <p>No comments yet.</p>
-
   </ng-template>
-
 </p-dialog>
+
+<!-- Edit Post Modal -->
 <p-dialog header="Edit Post" [(visible)]="editPostDialog" [modal]="true" [style]="{ width: '700px' }">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      
-      <div>
-        <label class="font-semibold block mb-1">Title (EN)</label>
-        <input type="text" pInputText [(ngModel)]="editedPost.title.en" class="w-full">
-      </div>
-  
-      <div>
-        <label class="font-semibold block mb-1">Title (AR)</label>
-        <input type="text" pInputText [(ngModel)]="editedPost.title.ar" class="w-full">
-      </div>
-  
-      <div>
-        <label class="font-semibold block mb-1">Description (EN)</label>
-        <textarea pInputTextarea rows="3" [(ngModel)]="editedPost.description.en" class="w-full"></textarea>
-      </div>
-  
-      <div>
-        <label class="font-semibold block mb-1">Description (AR)</label>
-        <textarea pInputTextarea rows="3" [(ngModel)]="editedPost.description.ar" class="w-full"></textarea>
-      </div>
-  
-      <div class="md:col-span-2">
-        <label class="font-semibold block mb-1">Content (EN)</label>
-        <textarea pInputTextarea rows="4" [(ngModel)]="editedPost.content.en" class="w-full"></textarea>
-      </div>
-  
-      <div class="md:col-span-2">
-        <label class="font-semibold block mb-1">Content (AR)</label>
-        <textarea pInputTextarea rows="4" [(ngModel)]="editedPost.content.ar" class="w-full"></textarea>
-      </div>
-  
-      <div class="md:col-span-2">
-        <label class="font-semibold block mb-1">Author</label>
-        <input type="text" pInputText [(ngModel)]="editedPost.author" class="w-full">
-      </div>
-  
-      <div class="md:col-span-2">
-        <label class="font-semibold block mb-2">Image</label>
-        <div class="flex items-center gap-4">
-          <img 
-            [src]="editedPost.imagePreview || defaultAvatar" 
-            alt="Preview" 
-            width="100" 
-            height="100" 
-            class="rounded shadow border border-gray-300 object-cover"
-          >
-          <input type="file" (change)="onImageSelectedForPost($event)">
-        </div>
-      </div>
-  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="font-semibold block mb-1">Title (EN)</label>
+      <input type="text" pInputText [(ngModel)]="editedPost.title.en" class="w-full">
     </div>
-  
-    <ng-template pTemplate="footer">
-      <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="editPostDialog = false"></button>
-      <button pButton label="Save" icon="pi pi-check" class="p-button-success" (click)="onSavePost()"></button>
-    </ng-template>
-  </p-dialog>
-  
-  
-<p-confirmDialog [baseZIndex]="10000"></p-confirmDialog>
+    <div>
+      <label class="font-semibold block mb-1">Title (AR)</label>
+      <input type="text" pInputText [(ngModel)]="editedPost.title.ar" class="w-full">
+    </div>
+    <div>
+      <label class="font-semibold block mb-1">Description (EN)</label>
+      <textarea pInputTextarea rows="3" [(ngModel)]="editedPost.description.en" class="w-full"></textarea>
+    </div>
+    <div>
+      <label class="font-semibold block mb-1">Description (AR)</label>
+      <textarea pInputTextarea rows="3" [(ngModel)]="editedPost.description.ar" class="w-full"></textarea>
+    </div>
+    <div class="md:col-span-2">
+      <label class="font-semibold block mb-1">Content (EN)</label>
+      <textarea pInputTextarea rows="4" [(ngModel)]="editedPost.content.en" class="w-full"></textarea>
+    </div>
+    <div class="md:col-span-2">
+      <label class="font-semibold block mb-1">Content (AR)</label>
+      <textarea pInputTextarea rows="4" [(ngModel)]="editedPost.content.ar" class="w-full"></textarea>
+    </div>
+    <div class="md:col-span-2">
+      <label class="font-semibold block mb-1">Author</label>
+      <input type="text" pInputText [(ngModel)]="editedPost.author" class="w-full">
+    </div>
+    <div class="md:col-span-2">
+      <label class="font-semibold block mb-2">Image</label>
+      <div class="flex items-center gap-4">
+        <img 
+          [src]="editedPost.imagePreview || defaultAvatar" 
+          alt="Preview" 
+          width="100" 
+          height="100" 
+          class="rounded shadow border border-gray-300 object-cover"
+        >
+        <input type="file" (change)="onImageSelectedForPost($event)">
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="editPostDialog = false"></button>
+    <button pButton label="Save" icon="pi pi-check" class="p-button-success" (click)="onSavePost()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-confirmDialog
+  header="Confirmation"
+  [visible]="confirmDialogVisible"
+  [acceptLabel]="'Yes'"
+  [rejectLabel]="'No'"
+  (accept)="deleteAllPosts()"
+  (reject)="cancelDeleteAll()">
+  <p>Are you sure you want to delete all posts?</p> 
+</p-confirmDialog>
+
+
 

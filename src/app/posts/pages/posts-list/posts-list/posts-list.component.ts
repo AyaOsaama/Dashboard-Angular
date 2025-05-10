@@ -10,18 +10,28 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { FormsModule } from '@angular/forms';
+import { InputIcon } from 'primeng/inputicon';
+import { IconField } from 'primeng/iconfield';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @Component({
   selector: 'app-posts-list',
-  imports: [CardModule,ButtonModule,CommonModule,DialogModule,ConfirmDialogModule,FormsModule],
+  imports: [CardModule, ButtonModule, CommonModule, DialogModule, ConfirmDialogModule, FormsModule,    
+    ButtonModule,
+    CommonModule,
+    DialogModule,
+    ConfirmDialogModule,
+    FormsModule,InputIcon, IconField, InputTextModule,
+  ],
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.css',
   providers: [ConfirmationService, MessageService]  
-
 })
 export class PostsListComponent {
-  posts: any[] = [];
+  posts!: Ieditpost[]; 
+  filteredPosts!: Ieditpost[]; 
+  searchTerm: string = ''; 
   loading = true;
   errorMessage = '';
   likesDialogVisible = false;
@@ -30,12 +40,18 @@ export class PostsListComponent {
   defaultAvatar = 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg';
   editedPost: Ieditpost = this.createEmptyPost();
   editPostDialog = false;
-  constructor(private postService: PostService , private confirmationService: ConfirmationService,
-    private messageService: MessageService,private router: Router) {}
+  confirmDialogVisible = false;   
+  constructor(
+    private postService: PostService, 
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-  this.loadPosts()
+    this.loadPosts();
   }
+
   createEmptyPost(): Ieditpost {
     return {
       _id: '',
@@ -50,30 +66,38 @@ export class PostsListComponent {
       imagePreview: '',
     };
   }
-loadPosts(){
-  this.postService.getAllPosts().subscribe({
-    next: (res) => {
-      console.log('====================================');
-      console.log(res);
-      console.log('====================================');
-      this.posts = res.posts || []; 
-      this.loading = false;
-    },
-    error: (err) => {
-      this.errorMessage = 'Faild Upload Post ';
-      this.loading = false;
-    }
-  });
-}
+
+  loadPosts(){
+    this.postService.getAllPosts().subscribe({
+      next: (res) => {
+        this.posts = res.posts; 
+        this.filteredPosts=res.posts;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.errorMessage = 'Failed to upload posts';
+        this.loading = false;
+      }
+    });
+  }
+  filterPosts(postTitle: String):Ieditpost[]{
+    if(postTitle){}
+    return this.filteredPosts= this.posts.filter((post:Ieditpost)=>{
+      return post.title.en.toLowerCase().includes(postTitle.toLowerCase()) ||
+            post.title.ar.toLowerCase().includes(postTitle.toLowerCase())
+          
+    })
+  }
   openLikesDialog(post: any) {
     this.selectedPost = post;
     this.likesDialogVisible = true;
   }
-  
+
   openCommentsDialog(post: any) {
     this.selectedPost = post;
     this.commentsDialogVisible = true;
   }
+
   onDeletePost(post: any) {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete post "${post.title.en}"?`,
@@ -104,11 +128,7 @@ loadPosts(){
   }
 
   onEditPost(post: Ipost & { _id: string }) {
-    this.editedPost = {
-      ...this.createEmptyPost(),
-      ...post,
-      imagePreview: post.image || ''
-    };
+    this.editedPost = { ...this.createEmptyPost(), ...post, imagePreview: post.image || '' };
     this.editPostDialog = true;
   }
   
@@ -121,6 +141,7 @@ loadPosts(){
     reader.onload = () => this.editedPost['imagePreview'] = reader.result as string;
     reader.readAsDataURL(file);
   }
+
   onSavePost() {
     const safe = (val: string | undefined | null) => val ?? '';
   
@@ -149,7 +170,7 @@ loadPosts(){
       }
     });
   }
-  
+
   onImageSelected(event: any): void {
     const file = event.target.files[0];
     if (!file) return;
@@ -158,6 +179,44 @@ loadPosts(){
     const reader = new FileReader();
     reader.onload = () => this.editedPost.imagePreview = reader.result as string;
     reader.readAsDataURL(file);
+  }
+
+  addNewPost() {
+    this.router.navigate(['posts/insert']); 
+  }
+
+
+
+  confirmDeleteAll() {
+    this.confirmDialogVisible = true;  
+  }
+
+  deleteAllPosts() {
+    this.loading = true;
+    this.postService.deleteAllPosts().subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Deleted',
+          detail: 'All posts deleted successfully!',
+        });
+        this.loadPosts();
+        this.confirmDialogVisible = false; 
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to delete all posts',
+        });
+        this.loading = false;
+        this.confirmDialogVisible = false;
+      },
+    });
+  }
+
+  cancelDeleteAll() {
+    this.confirmDialogVisible = false;
   }
   
 }
