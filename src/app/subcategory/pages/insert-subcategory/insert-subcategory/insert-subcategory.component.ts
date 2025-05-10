@@ -1,20 +1,19 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { SubService } from '../../services/services/subcategory.service';
-import { SubCategory } from '../../models/categories';
+import { SubService } from '../../../services/services/subcategory.service.js';
+import { SubCategory } from '../../../models/subcategories.js';
 import { RouterModule } from '@angular/router';
-
 
 @Component({
   selector: 'app-subcategories-insert',
-  standalone: true, 
+  standalone: true,
   imports: [
     CommonModule,
-    FormsModule,         
+    FormsModule,
     DialogModule,
     InputTextModule,
     RouterModule,
@@ -24,13 +23,9 @@ import { RouterModule } from '@angular/router';
 })
 //----
 export class InsertSubcategoriesListComponent {
-  newSubCategory: SubCategory = {
-    code: '',
-    name: '',
-    category: '',
-    quantity: 1,
-  };
-displayDialog: boolean = false;
+  newSubCategory: SubCategory = { name: '' };
+
+  displayDialog: boolean = false;
   constructor(private subService: SubService) {}
 
   addSubCategory(): void {
