@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Output, OnDestroy, Input, EventEmitter } from '@angular/core';
-import { Product } from './models/product';
-// import { ProductService } from './services/product.service';
+import { Product } from '../../../model/product';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { RatingModule } from 'primeng/rating';
@@ -16,8 +15,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ProductApiService } from '../../../../services/product-api.service';
+import { ProductApiService } from '../../../services/product-api.service';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -118,26 +116,26 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   onSaveProduct(product: Product) {
-    this.productApi.updateProduct(product._id, product).subscribe({
-      next: () => {
-        product.editMode = false;
-        this.messageService.add({
-          key: 'myToast',
-          severity: 'success',
-          summary: 'Product Updated',
-          detail: 'Product details have been updated in the database.'
-        });
-      },
-      error: (err) => {
-        console.error('Failed to update product:', err);
-        this.messageService.add({
-          key: 'myToast',
-          severity: 'error',
-          summary: 'Update Failed',
-          detail: 'Could not update product in the database.'
-        });
-      }
-    });
+    // this.productApi.updateProduct(product._id, product).subscribe({
+    //   next: () => {
+    //     product.editMode = false;
+    //     this.messageService.add({
+    //       key: 'myToast',
+    //       severity: 'success',
+    //       summary: 'Product Updated',
+    //       detail: 'Product details have been updated in the database.'
+    //     });
+    //   },
+    //   error: (err) => {
+    //     console.error('Failed to update product:', err);
+    //     this.messageService.add({
+    //       key: 'myToast',
+    //       severity: 'error',
+    //       summary: 'Update Failed',
+    //       detail: 'Could not update product in the database.'
+    //     });
+    //   }
+    // });
   }
 
 
@@ -148,26 +146,26 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         console.log('Deleting product with ID:', product._id); // <-- ضيف السطر ده
-        this.productApi.deleteProductVariant(product._id, product.variants[0]._id).subscribe({
-          next: () => {
-            this.products = this.products.filter(p => p._id !== product._id);
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Deleted',
-              detail: 'Product deleted from the database.',
-              life: 3000
-            });
-          },
-          error: (err) => {
-            console.error('Failed to delete product:', err);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Deletion Failed',
-              detail: 'Could not delete product from the database.',
-              life: 3000
-            });
-          }
-        });
+        // this.productApi.deleteProductVariant(product._id, product.variants[0]._id).subscribe({
+        //   next: () => {
+        //     this.products = this.products.filter(p => p._id !== product._id);
+        //     this.messageService.add({
+        //       severity: 'success',
+        //       summary: 'Deleted',
+        //       detail: 'Product deleted from the database.',
+        //       life: 3000
+        //     });
+        //   },
+        //   error: (err) => {
+        //     console.error('Failed to delete product:', err);
+        //     this.messageService.add({
+        //       severity: 'error',
+        //       summary: 'Deletion Failed',
+        //       detail: 'Could not delete product from the database.',
+        //       life: 3000
+        //     });
+        //   }
+        // });
       }
     });
   }
