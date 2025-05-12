@@ -228,16 +228,7 @@ export class InsertProductComponent implements OnInit {
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' }),
     });
   }
-  // onSelectMainImage(event: any) {
-  //   const file = event.files[0];
-  //   this.uploadedFiles[0] = file; 
-  // }
-  
-  // onSelectImages(event: any) {
-  //   for (let file of event.files) {
-  //     this.uploadedFiles.push(file); 
-  //     }
-  // }
+ 
   onSelectMainImage(event: any): void {
     const file = event.files[0];
     if (file) {
@@ -252,123 +243,65 @@ export class InsertProductComponent implements OnInit {
     }
   }
   
-  // addNewProduct() {
-  //   if (this.prodForm.valid) {
-  //     const formValue = this.prodForm.value;
-  //     const formData = new FormData();
-  
-  //     formData.append('brand', formValue.brand);
-  //     formData.append('categories', JSON.stringify({
-  //       main: this.categoryId,
-  //       sub: this.subcategoryId ?? ''
-  //     }));
-  //     formData.append('description', JSON.stringify({
-  //       en: formValue.DescriptionEN,
-  //       ar: formValue.DescriptionAR
-  //     }));
-  //     formData.append('material', JSON.stringify({
-  //       en: formValue.materialEN,
-  //       ar: formValue.materialAR
-  //     }));
-  
-  //     const mainVariant: any = {
-  //       name: {
-  //         en: formValue.nameEN,
-  //         ar: formValue.nameAR
-  //       },
-  //       price: formValue.price,
-  //       discountPrice: formValue.discountPrice,
-  //       inStock: formValue.inStock,
-  //       color: {
-  //         en: formValue.colorEN,
-  //         ar: formValue.colorAR
-  //       }
-  //     };
-  
-  //     if (this.uploadedFiles.length > 0) {
-  //       formData.append('image', this.uploadedFiles[0]);
-  
-  //       mainVariant.images = []; 
-  //       for (let i = 0; i < this.uploadedFiles.length; i++) {
-  //         formData.append('variantsImages', this.uploadedFiles[i]); 
-  //       }
-  //     }
-  
-  //     formData.append('variants', JSON.stringify([mainVariant]));
-  
-  //     this.productApi.addNewProduct(formData).subscribe({
-  //       next: () => {
-  //         this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المنتج بنجاح' });
-  //         this.router.navigate(['/products']);
-  //       },
-  //       error: (err) => {
-  //         this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل في إضافة المنتج' });
-  //         console.error(err);
-  //       }
-  //     });
-  //   } else {
-  //     this.messageService.add({ severity: 'warn', summary: 'تحذير', detail: 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح' });
-  //   }
-  // }
 
- addNewProduct() {
-  if (this.prodForm.valid && this.mainImageFile) {
-    const formValue = this.prodForm.value;
-    const formData = new FormData();
+addNewProduct() {
+  if (this.prodForm.invalid) {
+    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly' });
+    return;
+  }
 
-    formData.append('brand', formValue.brand);
-    formData.append('categories', JSON.stringify({
-      main: this.categoryId,
-      sub: this.subcategoryId ?? ''
-    }));
-    formData.append('description', JSON.stringify({
-      en: formValue.DescriptionEN,
-      ar: formValue.DescriptionAR
-    }));
-    formData.append('material', JSON.stringify({
-      en: formValue.materialEN,
-      ar: formValue.materialAR
-    }));
+  if (!this.mainImageFile) {
+    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please upload the main product image' });
+    return;
+  }
 
-    // Variants
-    const variants = [
-      {
-        name: { en: formValue.nameEN, ar: formValue.nameAR },
-        color: { en: formValue.colorEN, ar: formValue.colorAR }, 
-        price: formValue.price,
-        discountPrice: formValue.discountPrice,
-        inStock: formValue.inStock,
-      }
-    ];
-    formData.append('variants', JSON.stringify(variants));
+  const formValue = this.prodForm.value;
+  const formData = new FormData();
 
-    // Variant images
-    formData.append('variantImage', this.mainImageFile);
-    this.additionalImages.forEach((file) => {
-      formData.append('variantImages', file);
-    });
+  formData.append('brand', formValue.brand);
+  formData.append('categories', JSON.stringify({
+    main: this.categoryId,
+    sub: this.subcategoryId ?? ''
+  }));
 
-    this.productApi.addNewProduct(formData).subscribe({
-      next: (res) => {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
-        this.router.navigate(['/products']);
-      console.log('====================================');
-      console.log(res);
-      console.log('====================================');
-      },
-      error: (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the product' });
-        console.error(err);
-      }
-    });
-    
-    } else {
-      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly' });
+  formData.append('description', JSON.stringify({
+    en: formValue.DescriptionEN,
+    ar: formValue.DescriptionAR
+  }));
+
+  formData.append('material', JSON.stringify({
+    en: formValue.materialEN,
+    ar: formValue.materialAR
+  }));
+
+  const variants = [
+    {
+      name: { en: formValue.nameEN, ar: formValue.nameAR },
+      color: { en: formValue.colorEN, ar: formValue.colorAR },
+      price: formValue.price,
+      discountPrice: formValue.discountPrice,
+      inStock: formValue.inStock
     }
-    
+  ];
+  formData.append('variants', JSON.stringify(variants));
+
+  formData.append('variantImage', this.mainImageFile);
+  this.additionalImages.forEach((file) => {
+    formData.append('variantImages', file);
+  });
+
+  this.productApi.addNewProduct(formData).subscribe({
+    next: (res) => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
+      this.router.navigate(['/products']);
+    },
+    error: (err) => {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the product' });
+      console.error(err);
+    }
+  });
 }
 
-  
   
   
   
