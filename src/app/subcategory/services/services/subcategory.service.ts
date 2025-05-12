@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
-import { SubCategory } from '../../models/categories';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { SubCategory } from '../../models/subcategories';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SubService {
-  private subCategories: SubCategory[] = [
-    { code: '001', name: 'Sub 1', category: 'Cat A', quantity: 5 },
-    { code: '002', name: 'Sub 2', category: 'Cat B', quantity: 2 },
-  ];
+  private apiUrl =
+    'https://furniture-backend-production-8726.up.railway.app/subcategories';
 
-  getSubCategories(): SubCategory[] {
-    return this.subCategories;
+  constructor(private http: HttpClient) {}
+
+  getSubCategories(): Observable<{ subcategories: SubCategory[] }> {
+    return this.http.get<{ subcategories: SubCategory[] }>(this.apiUrl);
   }
 
-  addSubCategory(subCategory: SubCategory): void {
-    this.subCategories.push(subCategory);
+  addSubCategory(subCategory: SubCategory): Observable<SubCategory> {
+    return this.http.post<SubCategory>(this.apiUrl, subCategory);
   }
 
-  updateSubCategory(index: number, subCategory: SubCategory): void {
-    this.subCategories[index] = subCategory;
+  updateSubCategory(
+    id: string,
+    subCategory: SubCategory
+  ): Observable<SubCategory> {
+    return this.http.put<SubCategory>(`${this.apiUrl}/${id}`, subCategory);
   }
 
-  deleteSubCategory(index: number): void {
-    this.subCategories.splice(index, 1);
+  deleteSubCategory(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }
