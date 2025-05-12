@@ -29,3 +29,14 @@ body.dark-mode .p-toolbar {
 body.dark-mode .p-button {
   color: white;
 }
+
+.header {
+  margin: 0;
+  padding: 0;
+}
+.pi-spinner{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% -50%);
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Product } from '../model/product';
 import { environment } from '../../../environments/environment';
 
@@ -9,9 +9,12 @@ import { environment } from '../../../environments/environment';
 })
 
 export class ProductApiService {
+
   httpHeaders = {};
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient
+  ) {
 
     this.httpHeaders = {
       headers: new HttpHeaders(
@@ -21,6 +24,7 @@ export class ProductApiService {
         }
       )
     };
+
   }
 
   getAllProducts(): Observable<Product[]> {
@@ -30,29 +34,22 @@ export class ProductApiService {
   }
 
 
-
   getProductById(id: string): Observable<Product> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<Product>(`${environment.apiUrl}/products/${id}`, { headers });
   }
 
-  addNewProduct(productData: any, imageFiles: File[]): Observable<any> {
+  addNewProduct(formData: FormData): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
     });
-
-    const formData = new FormData();
-    formData.append('product', JSON.stringify(productData));
-
-    imageFiles.forEach(file => {
-      formData.append('images', file);
-    });
-
-    return this.http.post<any>(`${environment.apiUrl}/products`, formData, { headers });
+  
+    const response= this.http.post<any>(`${environment.apiUrl}/products`, formData, { headers });
+     return response;
   }
-
+  
 
   updateProduct(productId: string, updatedProd: Product): Observable<Product> {
     const token = localStorage.getItem('token');
@@ -72,12 +69,10 @@ export class ProductApiService {
     return this.http.delete<void>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, { headers });
   }
 
-
   getProductAferSearch(value: string): Observable<Product[]> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<Product[]>(`${environment.apiUrl}/products?productName=${value}`, { headers });
   }
-
 
 }

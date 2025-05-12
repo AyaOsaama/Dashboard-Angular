@@ -5,8 +5,8 @@ import { ProductsListComponent } from './products/pages/products-list/products-l
 import { InsertProductComponent } from './products/pages/insert-product/insert-product/insert-product.component';
 import { CategoriesListComponent } from './category/pages/categories-list/categories-list.component';
 import { InsertCategoryComponent } from './category/pages/insert-category/insert-category.component';
-import { SubcategoriesListComponent } from './subcategory/pages/subcategories-list/subcategories-list/subcategories-list.component';
-import { InsertSubcategoryComponent } from './subcategory/pages/insert-subcategory/insert-subcategory/insert-subcategory.component';
+import { SubCategoriesListComponent } from './subcategory/pages/subcategories-list/subcategories-list/subcategories-list.component';
+import { InsertSubcategoriesListComponent } from './subcategory/pages/insert-subcategory/insert-subcategory/insert-subcategory.component';
 import { UsersListComponent } from './users/pages/users-list/users-list/users-list.component';
 import { InsertUserComponent } from './users/pages/insert-user/insert-user/insert-user.component';
 import { PostsListComponent } from './posts/pages/posts-list/posts-list/posts-list.component';
@@ -16,6 +16,7 @@ import { loginGuard } from './Gurads/login.guard';
 import { authGuard } from './Gurads/auth.guard';
 import { LoginComponent } from './auth/login/pages/login.component.js';import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './orders/pages/order-details/order-details.component';
+import { TestComponent } from './test/test.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
@@ -27,6 +28,7 @@ export const routes: Routes = [
       component: MainLayoutComponent,
       canActivate: [authGuard],
       children: [
+        {path:'test', component:TestComponent},
         { path: 'dashboard', component: DashboardComponent },
 
         { path: 'products', component: ProductsListComponent },
@@ -35,8 +37,8 @@ export const routes: Routes = [
         { path: 'categories', component: CategoriesListComponent },
         { path: 'categories/insert', component: InsertCategoryComponent },
 
-        { path: 'subcategories', component: SubcategoriesListComponent },
-        { path: 'subcategories/insert', component: InsertSubcategoryComponent },
+        { path: 'subcategories', component: SubCategoriesListComponent },
+        { path: 'subcategories/insert', component: InsertSubcategoriesListComponent },
 
         { path: 'orders' , component:OrdersListComponent},
         { path: 'orders/:id', component: OrderDetailsComponent },

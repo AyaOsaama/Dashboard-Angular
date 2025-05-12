@@ -70,9 +70,7 @@ export class CategoriesListComponent {
   
   
   addNewCategory() {
-    // this.messageService.add({ severity: 'info', summary: 'Add Category', detail: 'Add Category Clicked' });
     this.router.navigate(['subcategories/insert']); 
-
   }
 
   onEditCategory(category: ICategory) {

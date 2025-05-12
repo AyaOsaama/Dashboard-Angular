@@ -34,9 +34,9 @@ export class HeaderComponent {
       routerLink: ['/users/insert'],
     },
     {
-      label: 'Order',
-      icon: 'pi pi-shopping-cart',
-      routerLink: ['/orders/insert'],
+      label: 'Post',
+      icon: 'pi pi-pencil',
+      routerLink: ['/posts/insert'],
     },
   ];
   ngOnInit() {
