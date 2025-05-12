@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { Product } from '../pages/products-list/products-list/models/product';
+import { Product } from '../model/product';
+import { ProductVariant } from '../model/product';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -10,11 +11,6 @@ import { environment } from '../../../environments/environment';
 
 export class ProductApiService {
 
-  //you can use it just here in this services and concate with "this" URL
-  // URL :string = `${environment.baseURL}/products`;
-
-
-  // the use of this header to set limitation of some who can  send  the data that can be sent to the server
   httpHeaders = {};
 
   constructor(
@@ -33,13 +29,11 @@ export class ProductApiService {
   }
 
   getAllProducts(): Observable<Product[]> {
-
-    const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
+      const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Authorization Header:", headers);
     return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
   }
+
 
 
   getProdByIdStr(strID: string): Observable<Product> {
@@ -48,11 +42,17 @@ export class ProductApiService {
     return this.http.get<Product>(`${environment.apiUrl}/products/${strID}`, { headers });
   }
 
-  addNewProduct(newProduct: Product): Observable<Product> {
+
+  addNewProduct(formData: FormData): Observable<any> {
     const token = localStorage.getItem('token');
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post<Product>(`${environment.apiUrl}/products`, newProduct, { headers });
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+  
+    const response= this.http.post<any>(`${environment.apiUrl}/products`, formData, { headers });
+     return response;
   }
+  
 
   updateProduct(productId: string, updatedProd: Product): Observable<Product> {
     const token = localStorage.getItem('token');
@@ -68,27 +68,13 @@ export class ProductApiService {
 
   deleteProductVariant(productId: string, variantId: string): Observable<void> {
     const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Authorization Header:", headers);
     return this.http.delete<void>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, { headers });
   }
 
-
-  // getAllIDs(): Observable<string[]> {
-  //   // const token = localStorage.getItem('token');
-  //   // console.log('Token sent:', token);
-  //   // const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  //   // console.log("Authorization Header:", headers);
-  //   // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
-  //   return this.getAllProducts().pipe(map((prds) => prds.map((prd) => prd._id)))
-  // }
-
   getProductAferSearch(value: string): Observable<Product[]> {
     const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Authorization Header:", headers);
     return this.http.get<Product[]>(`${environment.apiUrl}/products?productName=${value}`, { headers });
   }
 
