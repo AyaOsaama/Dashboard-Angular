@@ -1,20 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
-import { MenuModule } from 'primeng/menu';
-import { PrimeIcons, MenuItem} from 'primeng/api';
-import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { FormsModule } from '@angular/forms';
-import { SubService } from '../../services/services/subcategory.service';
-import { SubCategory } from '../../models/categories';
-import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
-import { RouterModule } from '@angular/router';
-
-
+import { FormsModule } from '@angular/forms';
+import { SubService } from '../../../services/services/subcategory.service.js';
+import { SubCategory } from '../../../models/subcategories.js';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-subcategories-list',
@@ -22,116 +17,113 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     TableModule,
-    BadgeModule,
     ButtonModule,
-    MenuModule,
-    DialogModule,
-    InputTextModule,
     ConfirmDialogModule,
+    DialogModule,
     FormsModule,
-    RouterModule,
+    ToastModule,
   ],
-  providers: [ConfirmationService],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './subcategories-list.component.html',
   styleUrls: ['./subcategories-list.component.css'],
 })
 export class SubCategoriesListComponent implements OnInit {
+  subCategories: SubCategory[] = [];
   searchTerm = '';
-  selectedSubCategoryIndex: number = -1;
-  editDialogVisible = false;
   addDialogVisible = false;
-
-  editForm: SubCategory = {
-    code: '',
-    name: '',
-    category: '',
-    quantity: 0,
-  };
-  
-
-  newSubCategory: SubCategory = {
-    code: '',
-    name: '',
-    category: '',
-    quantity: 1,
-  };
+  editDialogVisible = false;
+  editForm: SubCategory = { name: '' };
+  editTags: string = '';
+  newSubCategory: SubCategory = { name: '' };
 
   constructor(
+    private subService: SubService,
     private confirmationService: ConfirmationService,
-    private subService: SubService
+    private messageService: MessageService,
+    private router: Router
   ) {}
 
-  ngOnInit(): void {}
-
-  get subCategories(): SubCategory[] {
-    return this.subService.getSubCategories();
+  ngOnInit(): void {
+    this.loadSubCategories();
   }
 
-  stockSeverity(subCategory: SubCategory): 'success' | 'warn' | 'danger' {
-    if (subCategory.quantity === 0) return 'danger';
-    if (subCategory.quantity < 5) return 'warn';
-    return 'success';
+  loadSubCategories(): void {
+    this.subService.getSubCategories().subscribe({
+      next: (data) => (this.subCategories = data.subcategories ?? []),
+      error: (err) => console.error(err),
+    });
   }
 
-openEditDialog(subCategory: SubCategory): void {
-  this.editForm = { ...subCategory }; 
-  this.editDialogVisible = true;
-}
-
-saveEdit(): void {
-  this.subService.updateSubCategory(this.selectedSubCategoryIndex, {
-    ...this.editForm,
-  });
-  this.editDialogVisible = false; 
-}
-confirmDelete(subCategory: SubCategory): void {
-  console.log('Trying to delete:', subCategory); 
-  this.confirmationService.confirm({
-    message: 'Are you sure you want to delete this subcategory?',
-    header: 'Confirm Delete',
-    icon: 'pi pi-exclamation-triangle',
-    acceptLabel: 'Yes',
-    rejectLabel: 'No',
-    accept: () => {
-      this.deleteSubCategory(subCategory);
-    },
-  });
-}
-
-
-deleteSubCategory(subCategory: SubCategory): void {
-  const index = this.subCategories.findIndex(
-    sub => sub.code === subCategory.code
-  );
-  if (index !== -1) {
-    this.subCategories.splice(index, 1);
-  }
-}
-
-openAddDialog(): void {
-  this.newSubCategory = {
-    code: '',
-    name: '',
-    category: '',
-    quantity: 1,
-  };
-  this.addDialogVisible = true;
+  goToInsertPage(): void {
+    this.router.navigate(['/subcategories/insert']);
   }
 
   addSubCategory(): void {
-    if (this.newSubCategory.code && this.newSubCategory.name && this.newSubCategory.category) {
-      this.subService.addSubCategory({ ...this.newSubCategory });
-      this.addDialogVisible = false;
-    } else {
-      alert('Please fill in all fields');
+    if (this.newSubCategory.name) {
+      this.subService.addSubCategory(this.newSubCategory).subscribe(() => {
+        this.loadSubCategories();
+        this.addDialogVisible = false;
+      });
     }
   }
 
-  filteredSubCategories() {
+  openEditDialog(sub: SubCategory): void {
+    this.editForm = JSON.parse(JSON.stringify(sub));
+    this.editTags = sub.tags ? sub.tags.join(', ') : '';
+    this.editDialogVisible = true;
+  }
+
+  saveEdit(): void {
+    if (this.editForm._id) {
+      this.editForm.tags = this.editTags
+        .split(',')
+        .map((tag) => tag.trim())
+        .filter((tag) => tag !== '');
+      this.subService
+        .updateSubCategory(this.editForm._id, this.editForm)
+        .subscribe(() => {
+          this.loadSubCategories();
+          this.editDialogVisible = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: `Subcategory "${this.editForm.name}" updated`,
+          });
+        });
+    }
+  }
+
+  confirmDelete(sub: SubCategory): void {
+    if (!sub._id) return;
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete "${sub.name}"?`,
+      header: 'Confirm Delete',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.subService.deleteSubCategory(sub._id!).subscribe(() => {
+          this.loadSubCategories();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Deleted',
+            detail: `${sub.name} deleted`,
+          });
+        });
+      },
+    });
+  }
+
+  filteredSubCategories(): SubCategory[] {
     if (!this.searchTerm) return this.subCategories;
-    return this.subCategories.filter(sub =>
-      sub.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      sub.code.toLowerCase().includes(this.searchTerm.toLowerCase())
+    const term = this.searchTerm.toLowerCase();
+    return this.subCategories.filter(
+      (sub) =>
+        (sub._id && sub._id.toLowerCase().includes(term)) ||
+        (sub.name && sub.name.toLowerCase().includes(term)) ||
+        (sub.categoriesId?.name?.en &&
+          sub.categoriesId.name.en.toLowerCase().includes(term)) ||
+        (sub.categoriesId?.name?.ar &&
+          sub.categoriesId.name.ar.toLowerCase().includes(term)) ||
+        (sub.tags && sub.tags.some((tag) => tag.toLowerCase().includes(term)))
     );
   }
 }

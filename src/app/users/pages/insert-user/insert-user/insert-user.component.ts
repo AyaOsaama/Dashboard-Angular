@@ -7,7 +7,7 @@ import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { UserService } from '../../../services/user-list.service'; 
 import { Router } from '@angular/router';
-import { IEditableUser } from '../../../models/ieditableuser';
+import { IEditableUser } from '../../../model/ieditableuser';
 import { ToastModule } from 'primeng/toast';    
 
 @Component({

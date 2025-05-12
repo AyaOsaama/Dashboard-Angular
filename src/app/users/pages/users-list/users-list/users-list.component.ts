@@ -11,8 +11,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
  
-import { IUser } from '../../../models/iuser';
-import { IEditableUser } from '../../../models/ieditableuser';
+import { IUser } from '../../../model/iuser';
+import { IEditableUser } from '../../../model/ieditableuser';
 import { UserService } from '../../../services/user-list.service';
  
 @Component({

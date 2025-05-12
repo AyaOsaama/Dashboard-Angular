@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-import { SubService } from '../../services/services/subcategory.service';
-import { SubCategory } from '../../models/categories';
+import { SubService } from '../../../services/services/subcategory.service';
+import { SubCategory } from '../../../models/subcategories';
 import { RouterModule } from '@angular/router';
 
 
@@ -24,16 +24,15 @@ import { RouterModule } from '@angular/router';
 })
 //----
 export class InsertSubcategoriesListComponent {
-  newSubCategory: SubCategory = {
-    code: '',
-    name: '',
-    category: '',
-    quantity: 1,
-  };
-displayDialog: boolean = false;
-  constructor(private subService: SubService) {}
+//   newSubCategory: SubCategory = {
+//     name: '',
+//     category: '',
+//     quantity: 1,
+//   };
+// displayDialog: boolean = false;
+//   constructor(private subService: SubService) {}
 
-  addSubCategory(): void {
-    this.subService.addSubCategory({ ...this.newSubCategory });
-  }
+//   addSubCategory(): void {
+//     this.subService.addSubCategory({ ...this.newSubCategory });
+//   }
 }
