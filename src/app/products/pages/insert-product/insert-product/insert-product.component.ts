@@ -18,7 +18,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { CategoriesService } from '../../../../category/services/categories.service';
 import { ICategory } from '../../../../category/model/icategory';
 import { SelectModule } from 'primeng/select';
-import { SubService } from '../../../../subcategory/';
+import { SubService } from '../../../../subcategory/services/services/subcategory.service';
 @Component({
   selector: 'app-insert-product',
   templateUrl: './insert-product.component.html',
@@ -106,87 +106,7 @@ export class InsertProductComponent implements OnInit {
     this.prodForm.patchValue({ discountPrice: parseFloat(discountPrice.toFixed(2)) }, { emitEvent: false });
   }
 
-  // addNewProduct() {
-  //   if (this.prodForm.valid) {
-  //     const formValue = this.prodForm.value;
 
-  //     const newProduct = {
-  //       brand: formValue.brand,
-  //       categories: {
-  //         main: this.categoryId,
-  //         sub: formValue.categorySub,
-  //       },
-  //       description: {
-  //         ar: formValue.DescriptionAR,
-  //         en: formValue.DescriptionEN,
-  //       },
-  //       material: {
-  //         materialAR: formValue.materialAR,
-  //         materialEN: formValue.materialEN,
-  //       },
-  //       variants: [
-  //         {
-  //           name: {
-  //             ar: formValue.nameAR,
-  //             en: formValue.nameEN,
-  //           },
-  //           price: formValue.price,
-  //           color: {
-  //             ar: formValue.colorAR,
-  //             en: formValue.colorEN,
-  //           },
-  //           image: '', 
-  //           images: [], 
-  //           inStock: formValue.inStock,
-  //           discountPrice: formValue.discountPrice,
-  //           _id: '',
-  //         },
-  //       ],
-  //       _id: '',
-  //     };
-
-  //     // this.productApi.addNewProduct(newProduct, this.uploadedFiles).subscribe({
-  //     //   next: (res) => {
-  //     //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
-  //     //     this.router.navigate(['/products']);
-  //     //   },
-  //     //   error: (error) => {
-  //     //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add product' });
-  //     //   }
-  //     // });
-  //     this.productApi.addNewProduct(newProduct).subscribe({
-  //       next: (res) => {
-  //         this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المنتج بنجاح' });
-  //         this.router.navigate(['/products']);
-  //       },
-  //       error: (err) => {
-  //         this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل في إضافة المنتج' });
-  //         console.error(err);
-  //       }
-  //     });
-      
-  //   } else {
-  //     this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill all required fields correctly' });
-  //   }
-  // }
-
-  // onUploadMainImage(event: FileUploadEvent): void {
-  //   const files: File[] = event.files;
-  //   if (files.length > 0) {
-  //     const mainFile = files[0];
-  //     this.uploadedFiles.push(mainFile);
-  
-  //     this.mainImageUrl = URL.createObjectURL(mainFile);
-  //   }
-  // }
-  
-
-  // onUpload(event: any) {
-  //   for (let file of event.files) {
-  //     this.imageUrls.push(file.objectURL || file.name); 
-  //   }
-  // }
-  
   get brand() { return this.prodForm.get('brand'); }
   get categoryMain() { return this.prodForm.get('categoryMain'); }
   get categorySub() { return this.prodForm.get('categorySub'); }
