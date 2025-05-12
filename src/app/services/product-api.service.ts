@@ -68,14 +68,31 @@ export class ProductApiService {
     // return this.http.get<Product>(`${environment.baseURL}/products/${strID}`);
   }
 
-  addNewProduct(newProduct: Product): Observable<Product> {
+  // addNewProduct(productData: any, imageFiles: File[]): Observable<any> {
+  //   const token = localStorage.getItem('token');
+  //   const headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${token}`,
+  //   });
+
+  //   const formData = new FormData();
+  //   formData.append('name', JSON.stringify(productData.name ?? { en: '', ar: '' }));
+
+  //   imageFiles.forEach(file => {
+  //     formData.append('images', file);
+  //   });
+
+  //   return this.http.post<any>(`${environment.apiUrl}/products`, formData, { headers });
+  // }
+  addNewProduct(formData: FormData): Observable<any> {
     const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Authorization Header:", headers);
-    // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
-    return this.http.post<Product>(`${environment.apiUrl}/products`, newProduct, { headers });
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+  
+    const response= this.http.post<any>(`${environment.apiUrl}/products`, formData, { headers });
+     return response;
   }
+  
 
   updateProduct(productId: string, updatedProd: Product): Observable<Product> {
     const token = localStorage.getItem('token');

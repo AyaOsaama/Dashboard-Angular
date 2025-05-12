@@ -1,342 +1,375 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule,FormsModule } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { ProductApiService } from '../../../../services/product-api.service';
+import { Router } from '@angular/router';
+import { FileUploadEvent } from 'primeng/fileupload';
+import { CommonModule } from '@angular/common';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { FluidModule } from 'primeng/fluid';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { InputTextModule } from 'primeng/inputtext';
+import { CategoriesService } from '../../../../category/services/categories.service';
+import { ICategory } from '../../../../category/model/icategory';
 import { SelectModule } from 'primeng/select';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { InputNumber } from 'primeng/inputnumber';
-import { Fluid } from 'primeng/fluid';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { TextareaModule } from 'primeng/textarea';
-import { FloatLabel } from 'primeng/floatlabel';
-import { MessageService } from 'primeng/api';
-import { FileUpload } from 'primeng/fileupload';
-import { ToastModule } from 'primeng/toast';
-import { CommonModule } from '@angular/common';
-import { FileUploadEvent } from 'primeng/fileupload';
-
-import { FormGroup, ReactiveFormsModule, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Product } from '../../products-list/products-list/models/product';
-import { ProductApiService } from '../../../../services/product-api.service';
-// import { ProductService } from '../../products-list/products-list/services/product.service';
-import { map, Observable } from 'rxjs';
-
-interface Category {
-  name: string;
-}
-
-interface UploadEvent {
-  originalEvent: Event;
-  files: File[];
-}
-
+import { SubService } from '../../../../subcategory/service/subcategory.service';
 @Component({
   selector: 'app-insert-product',
-  imports: [
-    FormsModule,
-    InputGroupModule,
-    InputGroupAddonModule,
-    InputTextModule,
-    SelectModule,
-    InputNumberModule,
-    InputNumber,
-    Fluid,
-    FloatLabelModule,
-    FormsModule,
-    TextareaModule,
-    FloatLabel,
-    FileUpload,
-    ToastModule,
-    CommonModule,
-    ReactiveFormsModule,
-  ],
-  providers: [MessageService],
   templateUrl: './insert-product.component.html',
-  styleUrl: './insert-product.component.css'
+  styleUrls: ['./insert-product.component.css'],
+  providers: [MessageService,InputGroupModule],
+  imports: [CommonModule, ReactiveFormsModule,FloatLabelModule,InputGroupModule,InputTextModule,
+    ToastModule,ButtonModule,FileUploadModule,DropdownModule,InputNumberModule,InputNumberModule,FormsModule,
+    FluidModule,InputGroupAddonModule,SelectModule
+    
+  ],
+
 })
 export class InsertProductComponent implements OnInit {
   prodForm: FormGroup;
-  mainImageUrl: string | null = null;
-  imageUrls: string[] = [];
   uploadedFiles: File[] = [];
-  category: Category[] = [
-    { name: 'New York' },
-    { name: 'Rome' },
-    { name: 'London' },
-    { name: 'Istanbul' },
-    { name: 'Paris' },
-  ];
-  // category: Category[] = [
-  //   { _id: 'someId1', name: 'New York' },
-  //   { _id: 'someId2', name: 'Rome' },
-  //   { _id: 'someId3', name: 'London' },
-  //   // ... باقي الكاتيجوريز
-  // ];
+  category!: any[] ;
+  mainImageUrl: string = '';
+  imageUrls: string[] = [];
+  categoryId!:string;
+  subcategoryId!:string |null;
+  subcategory!: any[] ;
+  filteredSubcategories: any[] = [];
+  mainImageFile: File | null = null;
+  additionalImages: File[] = [];
 
   constructor(
     private messageService: MessageService,
-    // private productApi: ProductService,
     private productApi: ProductApiService,
     private router: Router,
-    private f_builder: FormBuilder
+    private f_builder: FormBuilder,
+    private categoeryService: CategoriesService,
+    private subcategoeryService: SubService
   ) {
     this.prodForm = this.f_builder.group({
-      // code: ['', Validators.required],
-      // inStock: [0,
-      //   [
-      //     // Validators.required,
-      //     // Validators.min(0)
-      //   ]],
-      // // image: ['', Validators.required],
-      // nameEN: ['',
-      //   // Validators.required
-      // ],
-      // nameAR: ['',
-      //   // Validators.required
-      // ],
-      // // images: [[], Validators.required],
-      // price: [null,
-      //   [
-      //     // Validators.required,
-      //     // Validators.min(0)
-      //   ]],
-      // discount: [null,
-      //   [
-      //     // Validators.required,
-      //     // Validators.min(0),
-      //     // Validators.max(100)
-      //   ]],
-      // discountPrice: [
-      //   null,
-      //   [
-      //     // Validators.required,
-      //     // Validators.min(0)
-      //   ]],
-      // colorEN: [
-      //   '',
-      //   // Validators.required
-      // ],
-      // colorAR: [
-      //   '',
-      //   // Validators.required
-      // ],
-      brand: [
-        '',
-        // Validators.required
-      ],
-      // categoryMain: [
-      //   '',
-      //   // Validators.required
-      // ],
-      // categorySub: [
-      //   '',
-      //   // Validators.required
-      // ],
-      // DescriptionEN: [
-      //   '',
-      //   [
-      //     // Validators.required,
-      //     // Validators.minLength(10)
-      //   ]],
-      // DescriptionAR: [
-      //   '',
-      //   [
-      //     // Validators.required,
-      //     // Validators.minLength(10)
-      //   ]],
-      // materialEN: [
-      //   '',
-      //   // Validators.required
-      // ],
-      // materialAR: [
-      //   '',
-      //   // Validators.required
-      // ],
+      brand: [''],
+      categoryMain: [null],
+      categorySub: [null],
+      inStock: [0, Validators.min(0)],
+      nameEN: [''],
+      nameAR: [''],
+      price: [0, Validators.min(0)],
+      discount: [0, [Validators.min(0), Validators.max(100)]],
+      discountPrice: [{ value: 0}],
+      colorEN: [''],
+      colorAR: [''],
+      DescriptionEN: [''],
+      DescriptionAR: [''],
+      materialEN: [''],
+      materialAR: [''],
+      image: [''],
+      images: [[]]
     });
+    
   }
 
   ngOnInit(): void {
-    if (this.prodForm.controls['price']) {
-      this.prodForm.controls['price'].valueChanges.subscribe(price => {
-        const discount = this.prodForm.controls['discount']?.value;
-        if (price !== null && discount !== null) {
-          const discountedPrice = price * (1 - (discount / 100));
-          this.prodForm.patchValue({ discountPrice: discountedPrice }, { emitEvent: false });
-        } else {
-          this.prodForm.patchValue({ discountPrice: null }, { emitEvent: false });
-        }
-      });
-    }
+    this.prodForm.get('price')?.valueChanges.subscribe(() => this.updateDiscountPrice());
+    this.prodForm.get('discount')?.valueChanges.subscribe(() => this.updateDiscountPrice());
+    this.fetchCategories();
+    this.fetchSubcategories();
 
-    if (this.prodForm.controls['discount']) {
-      this.prodForm.controls['discount'].valueChanges.subscribe(discount => {
-        const price = this.prodForm.controls['price']?.value;
-        if (price !== null && discount !== null) {
-          const discountedPrice = price * (1 - (discount / 100));
-          this.prodForm.patchValue({ discountPrice: discountedPrice }, { emitEvent: false });
-        } else {
-          this.prodForm.patchValue({ discountPrice: null }, { emitEvent: false });
-        }
-      });
-    }
+  }
+  onCategoryChange(event: any) {
+    this.categoryId = event.value;
+  
+    this.filteredSubcategories = this.subcategory.filter(sub =>
+      sub.categoriesId && sub.categoriesId._id === this.categoryId
+    );
+  
+    this.subcategoryId = null;
+  
+    console.log('Category ID:', this.categoryId);
+  }
+  
+  onSubcategoryChange(event: any) {
+    this.subcategoryId = event.value;
+    console.log('Selected Subcategory ID:', this.subcategoryId);
+  }
+  
+  updateDiscountPrice(): void {
+    const price = this.prodForm.get('price')?.value || 0;
+    const discount = this.prodForm.get('discount')?.value || 0;
+    const discountPrice = price - (price * discount / 100);
+  
+    this.prodForm.patchValue({ discountPrice: parseFloat(discountPrice.toFixed(2)) }, { emitEvent: false });
   }
 
-  // get code() {
-  //   return this.prodForm.get('code');
+  // addNewProduct() {
+  //   if (this.prodForm.valid) {
+  //     const formValue = this.prodForm.value;
+
+  //     const newProduct = {
+  //       brand: formValue.brand,
+  //       categories: {
+  //         main: this.categoryId,
+  //         sub: formValue.categorySub,
+  //       },
+  //       description: {
+  //         ar: formValue.DescriptionAR,
+  //         en: formValue.DescriptionEN,
+  //       },
+  //       material: {
+  //         materialAR: formValue.materialAR,
+  //         materialEN: formValue.materialEN,
+  //       },
+  //       variants: [
+  //         {
+  //           name: {
+  //             ar: formValue.nameAR,
+  //             en: formValue.nameEN,
+  //           },
+  //           price: formValue.price,
+  //           color: {
+  //             ar: formValue.colorAR,
+  //             en: formValue.colorEN,
+  //           },
+  //           image: '', 
+  //           images: [], 
+  //           inStock: formValue.inStock,
+  //           discountPrice: formValue.discountPrice,
+  //           _id: '',
+  //         },
+  //       ],
+  //       _id: '',
+  //     };
+
+  //     // this.productApi.addNewProduct(newProduct, this.uploadedFiles).subscribe({
+  //     //   next: (res) => {
+  //     //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
+  //     //     this.router.navigate(['/products']);
+  //     //   },
+  //     //   error: (error) => {
+  //     //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add product' });
+  //     //   }
+  //     // });
+  //     this.productApi.addNewProduct(newProduct).subscribe({
+  //       next: (res) => {
+  //         this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المنتج بنجاح' });
+  //         this.router.navigate(['/products']);
+  //       },
+  //       error: (err) => {
+  //         this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل في إضافة المنتج' });
+  //         console.error(err);
+  //       }
+  //     });
+      
+  //   } else {
+  //     this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill all required fields correctly' });
+  //   }
   // }
 
-  // get inStock() {
-  //   return this.prodForm.get('inStock');
+  // onUploadMainImage(event: FileUploadEvent): void {
+  //   const files: File[] = event.files;
+  //   if (files.length > 0) {
+  //     const mainFile = files[0];
+  //     this.uploadedFiles.push(mainFile);
+  
+  //     this.mainImageUrl = URL.createObjectURL(mainFile);
+  //   }
   // }
+  
 
-  // get image() {
-  //   return this.prodForm.get('image');
+  // onUpload(event: any) {
+  //   for (let file of event.files) {
+  //     this.imageUrls.push(file.objectURL || file.name); 
+  //   }
   // }
+  
+  get brand() { return this.prodForm.get('brand'); }
+  get categoryMain() { return this.prodForm.get('categoryMain'); }
+  get categorySub() { return this.prodForm.get('categorySub'); }
+  get nameEN() { return this.prodForm.get('nameEN'); }
+  get nameAR() { return this.prodForm.get('nameAR'); }
+  get price() { return this.prodForm.get('price'); }
+  get discount() { return this.prodForm.get('discount'); }
+  get discountPrice() { return this.prodForm.get('discountPrice'); }
+  get colorEN() { return this.prodForm.get('colorEN'); }
+  get colorAR() { return this.prodForm.get('colorAR'); }
+  get DescriptionEN() { return this.prodForm.get('DescriptionEN'); }
+  get DescriptionAR() { return this.prodForm.get('DescriptionAR'); }
+  get materialEN() { return this.prodForm.get('materialEN'); }
+  get materialAR() { return this.prodForm.get('materialAR'); }
+  get image() { return this.prodForm.get('image'); }
+  get images() { return this.prodForm.get('images'); }
+  get inStock() { return this.prodForm.get('inStock'); }
 
-  // get nameEN() {
-  //   return this.prodForm.get('nameEN');
-  // }
-
-  // get nameAR() {
-  //   return this.prodForm.get('nameAR');
-  // }
-
-  // get images() {
-  //   return this.prodForm.get('images');
-  // }
-
-  // get price() {
-  //   return this.prodForm.get('price');
-  // }
-
-  // get discount() {
-  //   return this.prodForm.get('discount');
-  // }
-  // get discountPrice() {
-  //   return this.prodForm.get('discountPrice');
-  // }
-
-  // get colorEN() {
-  //   return this.prodForm.get('colorEN');
-  // }
-
-  // get colorAR() {
-  //   return this.prodForm.get('colorAR');
-  // }
-
-  get brand() {
-    return this.prodForm.get('brand');
+  fetchCategories() {
+    this.categoeryService.getAllCategory().subscribe({
+      
+      next: (res) => {
+        this.category = res.categories;
+       console.log('====================================');
+       console.log(res.categories);
+       console.log('====================================');
+      },
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' }),
+    });
   }
-
-  // get categoryMain() {
-  //   return this.prodForm.get('categoryMain');
+  fetchSubcategories(){
+    this.subcategoeryService.getSubCategories().subscribe({
+      next: (res) => {
+        this.subcategory = res.subcategories;
+        console.log('====================================');
+        console.log(res.subcategories);
+        console.log('====================================');
+      },
+      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' }),
+    });
+  }
+  // onSelectMainImage(event: any) {
+  //   const file = event.files[0];
+  //   this.uploadedFiles[0] = file; 
   // }
-
-  // get categorySub() {
-  //   return this.prodForm.get('categorySub');
+  
+  // onSelectImages(event: any) {
+  //   for (let file of event.files) {
+  //     this.uploadedFiles.push(file); 
+  //     }
   // }
-
-  // get DescriptionEN() {
-  //   return this.prodForm.get('DescriptionEN');
-  // }
-
-  // get DescriptionAR() {
-  //   return this.prodForm.get('DescriptionAR');
-  // }
-
-  // get materialEN() {
-  //   return this.prodForm.get('materialEN');
-  // }
-
-  // get materialAR() {
-  //   return this.prodForm.get('materialAR');
-  // }
-
-  addNewProduct() {
-    console.log('addNewProduct called');
-    console.log('Form valid:', this.prodForm.valid);
-    console.log('Form values:', this.prodForm.value);
-
-    // إضافة الـ console.log لفحص قيم الـ categoryMain و categorySub
-    console.log('Category Main Value:', this.prodForm.value.categoryMain);
-    console.log('Category Sub Value:', this.prodForm.value.categorySub);
-
-    if (this.prodForm.valid) {
-      const formValue = this.prodForm.value;
-      const newProduct = {
-        brand: formValue.brand,
-        categories: {
-          main: 'someRealObjectIdLikeString', // استبدل ده بـ ObjectId حقيقي لو متاح أو سترينج شكله بالظبط
-          sub: 'someRealObjectIdLikeString',   // استبدل ده بـ ObjectId حقيقي لو متاح أو سترينج شكله بالظبط (لو مطلوب)
-        },
-        description: {
-          ar: 'وصف وهمي بالعربي',
-          en: 'Dummy description in English',
-        },
-        material: {
-          ar: 'مادة وهمية بالعربي',
-          en: 'Dummy material in English',
-        },
-        variants: [
-          {
-            name: { ar: 'اسم وهمي عربي', en: 'Dummy name English' },
-            price: 100,
-            color: { ar: 'لون وهمي عربي', en: 'Dummy color English' },
-            image: this.mainImageUrl || 'dummyImageUrl', // تأكد إن ده ليه قيمة، ولو مفيش ممكن تبعت قيمة وهمية مؤقتة
-            images: this.imageUrls,
-            inStock: 10,
-            discountPrice: 90,
-            _id: '',
-          }
-        ],
-        _id: '', // شيلنا حقل الـ _id خالص
-      };
-
-      console.log('Product data to add:', newProduct);
-      this.productApi.addNewProduct(newProduct).subscribe({
-        next: (response) => {
-          console.log('next block executed');
-          console.log('Product added successfully:', response);
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
-          this.router.navigate(['/products']);
-        },
-        error: (error) => {
-          console.log('error block executed');
-          console.error('Error adding product:', error);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add product' });
-        }
-      });
-    } else {
-      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill all required fields correctly' });
+  onSelectMainImage(event: any): void {
+    const file = event.files[0];
+    if (file) {
+      this.mainImageFile = file;
+      this.mainImageUrl = URL.createObjectURL(file);
     }
   }
-
-
-
-  onUploadMainImage(event: FileUploadEvent) {
-    if (event.files && event.files.length > 0) {
-      const file = event.files[0];
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.mainImageUrl = e.target.result;
-        this.prodForm.patchValue({ image: this.mainImageUrl });
-        this.prodForm.get('image')?.markAsTouched();
-      };
-      reader.readAsDataURL(file);
+  onSelectImages(event: any): void {
+    for (let file of event.files) {
+      this.additionalImages.push(file);
+      this.imageUrls.push(URL.createObjectURL(file));
     }
   }
+  
+  // addNewProduct() {
+  //   if (this.prodForm.valid) {
+  //     const formValue = this.prodForm.value;
+  //     const formData = new FormData();
+  
+  //     formData.append('brand', formValue.brand);
+  //     formData.append('categories', JSON.stringify({
+  //       main: this.categoryId,
+  //       sub: this.subcategoryId ?? ''
+  //     }));
+  //     formData.append('description', JSON.stringify({
+  //       en: formValue.DescriptionEN,
+  //       ar: formValue.DescriptionAR
+  //     }));
+  //     formData.append('material', JSON.stringify({
+  //       en: formValue.materialEN,
+  //       ar: formValue.materialAR
+  //     }));
+  
+  //     const mainVariant: any = {
+  //       name: {
+  //         en: formValue.nameEN,
+  //         ar: formValue.nameAR
+  //       },
+  //       price: formValue.price,
+  //       discountPrice: formValue.discountPrice,
+  //       inStock: formValue.inStock,
+  //       color: {
+  //         en: formValue.colorEN,
+  //         ar: formValue.colorAR
+  //       }
+  //     };
+  
+  //     if (this.uploadedFiles.length > 0) {
+  //       formData.append('image', this.uploadedFiles[0]);
+  
+  //       mainVariant.images = []; 
+  //       for (let i = 0; i < this.uploadedFiles.length; i++) {
+  //         formData.append('variantsImages', this.uploadedFiles[i]); 
+  //       }
+  //     }
+  
+  //     formData.append('variants', JSON.stringify([mainVariant]));
+  
+  //     this.productApi.addNewProduct(formData).subscribe({
+  //       next: () => {
+  //         this.messageService.add({ severity: 'success', summary: 'تم', detail: 'تمت إضافة المنتج بنجاح' });
+  //         this.router.navigate(['/products']);
+  //       },
+  //       error: (err) => {
+  //         this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'فشل في إضافة المنتج' });
+  //         console.error(err);
+  //       }
+  //     });
+  //   } else {
+  //     this.messageService.add({ severity: 'warn', summary: 'تحذير', detail: 'يرجى ملء جميع الحقول المطلوبة بشكل صحيح' });
+  //   }
+  // }
 
-  onUpload(event: FileUploadEvent) {
-    if (event.files) {
-      this.imageUrls = [];
-      for (let file of event.files) {
-        this.imageUrls.push('URL_' + file.name);
-        this.uploadedFiles.push(file);
+ addNewProduct() {
+  if (this.prodForm.valid && this.mainImageFile) {
+    const formValue = this.prodForm.value;
+    const formData = new FormData();
+
+    formData.append('brand', formValue.brand);
+    formData.append('categories', JSON.stringify({
+      main: this.categoryId,
+      sub: this.subcategoryId ?? ''
+    }));
+    formData.append('description', JSON.stringify({
+      en: formValue.DescriptionEN,
+      ar: formValue.DescriptionAR
+    }));
+    formData.append('material', JSON.stringify({
+      en: formValue.materialEN,
+      ar: formValue.materialAR
+    }));
+
+    // Variants
+    const variants = [
+      {
+        name: { en: formValue.nameEN, ar: formValue.nameAR },
+        color: { en: formValue.colorEN, ar: formValue.colorAR }, 
+        price: formValue.price,
+        discountPrice: formValue.discountPrice,
+        inStock: formValue.inStock,
       }
-      this.prodForm.patchValue({ images: this.imageUrls });
-      this.prodForm.get('images')?.markAsTouched();
+    ];
+    formData.append('variants', JSON.stringify(variants));
+
+    // Variant images
+    formData.append('variantImage', this.mainImageFile);
+    this.additionalImages.forEach((file) => {
+      formData.append('variantImages', file);
+    });
+
+    this.productApi.addNewProduct(formData).subscribe({
+      next: (res) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
+        this.router.navigate(['/products']);
+      console.log('====================================');
+      console.log(res);
+      console.log('====================================');
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the product' });
+        console.error(err);
+      }
+    });
+    
+    } else {
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly' });
     }
-  }
+    
+}
+
+  
+  
+  
+  
 }
