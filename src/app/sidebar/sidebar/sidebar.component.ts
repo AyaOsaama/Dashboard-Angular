@@ -71,6 +71,12 @@ export class SidebarComponent {
       icon: 'pi pi-shopping-cart',
       routerLink: ['/orders'] 
     },
+   {
+  label: 'Logout',
+  icon: 'pi pi-sign-out',
+  command: () => this.onLogout()
+}
+
   ];
   
   ngOnInit() {
@@ -86,5 +92,10 @@ export class SidebarComponent {
       console.warn("No user data found in localStorage");
     }
   }  
+onLogout() {
+  localStorage.removeItem('user');
+  localStorage.removeItem('token');
+  window.location.href = '/login';
+}
 
 }
