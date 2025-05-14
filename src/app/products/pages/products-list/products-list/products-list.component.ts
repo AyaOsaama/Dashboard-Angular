@@ -16,7 +16,7 @@ import { RippleModule } from 'primeng/ripple';
 import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-
+import { ProductApiService } from '../../../services/product-api.service';
 
 @Component({
   selector: 'app-products-list',
@@ -41,12 +41,13 @@ import { ToastModule } from 'primeng/toast';
 export class ProductsListComponent implements OnInit {
   products!: Product[];  // products array to hold the list of products
   clonedProducts: { [s: string]: Product; } = {};  // copy of products for editing
-
+  productApi!:Product[];
   constructor(
     private productService: ProductService,
     private router: Router,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private productApiservice :ProductApiService
   ) { }
 
   ngOnInit() {
@@ -117,5 +118,20 @@ export class ProductsListComponent implements OnInit {
     } else {
       return 'info';
     }
+  }
+  loadProduct(){
+  this.productApiservice.getAllProducts().subscribe({
+    next: res => {
+      console.log('====================================');
+      console.log(res);
+      console.log('====================================');
+    },
+    error: (err) => 
+      { 
+    console.log('====================================');
+    console.log(err);
+    console.log('====================================');
+    }
+  })
   }
 }

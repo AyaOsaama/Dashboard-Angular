@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { SubCategory } from '../../models/subcategories';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SubService {
-  private apiUrl =
-    'https://furniture-backend-production-8726.up.railway.app/subcategories';
+  private apiUrl =`${environment.apiUrl}/subcategories`
 
   constructor(private http: HttpClient) {}
 

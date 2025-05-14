@@ -11,10 +11,18 @@
   >
     <div class="flex flex-col gap-4 p-4">
       <div class="flex gap-4 items-center">
-        <label class="w-32 font-medium text-gray-700">Name:</label>
+        <label class="w-32 font-medium text-gray-700">Name EN:</label>
         <input
           pInputText
-          [(ngModel)]="editForm.name"
+          [(ngModel)]="editForm.name.en"
+          class="flex-1 p-inputtext-sm"
+        />
+      </div>
+         <div class="flex gap-4 items-center">
+        <label class="w-32 font-medium text-gray-700">Name AR:</label>
+        <input
+          pInputText
+          [(ngModel)]="editForm.name.ar"
           class="flex-1 p-inputtext-sm"
         />
       </div>
@@ -58,7 +66,8 @@
             <ng-template pTemplate="header">
               <tr class="bg-gray-50 text-gray-700">
                 <th class="text-left p-3">ID</th>
-                <th class="text-left p-3">Name</th>
+                <th class="text-left p-3">Name EN</th>
+                <th class="text-left p-3">Name AR</th>
                 <th class="text-left p-3">Tags</th>
                 <th class="text-left p-3">Category EN</th>
                 <th class="text-left p-3">Category AR</th>
@@ -69,10 +78,10 @@
             <ng-template pTemplate="body" let-sub>
               <tr>
                 <td class="p-3">{{ sub._id }}</td>
-                <td class="p-3">{{ sub.name }}</td>
+                <td class="p-3">{{ sub.name.en}}</td>
+                <td class="p-3">{{ sub.name.ar}}</td>
                 <td class="p-3">{{ sub.tags?.join(", ") }}</td>
                 <td class="p-3">{{ sub.categoriesId?.name?.en }}</td>
-             
                 <td class="p-3">{{ sub.categoriesId?.name?.ar }}</td>
               
                 <td class="p-3 flex gap-2 actions">
@@ -116,7 +125,8 @@
       <ng-template pTemplate="header">
         <tr class="bg-gray-50 text-gray-700">
           <th class="text-left p-3">ID</th>
-          <th class="text-left p-3">Name</th>
+          <th class="text-left p-3">Name EN</th>
+          <th class="text-left p-3">Name AR</th>
           <th class="text-left p-3">Tags</th>
           <th class="text-left p-3">Category EN</th>
           <th class="text-left p-3">Category AR</th>
@@ -127,7 +137,8 @@
       <ng-template pTemplate="body" let-sub>
         <tr>
           <td class="p-3">{{ sub._id }}</td>
-          <td class="p-3">{{ sub.name }}</td>
+          <td class="p-3">{{ sub.name.en }}</td>
+          <td class="p-3">{{ sub.name.ar }}</td>
           <td class="p-3">{{ sub.tags?.join(", ") }}</td>
           <td class="p-3">{{ sub.categoriesId?.name?.en }}</td>
           <td class="p-3">{{ sub.categoriesId?.name?.ar }}</td>

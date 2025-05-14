@@ -32,9 +32,9 @@ export class SubCategoriesListComponent implements OnInit {
   searchTerm = '';
   addDialogVisible = false;
   editDialogVisible = false;
-  editForm: SubCategory = { name: '' };
+  editForm: SubCategory = { name: {en:'',ar:''} };
   editTags: string = '';
-  newSubCategory: SubCategory = { name: '' };
+  newSubCategory: SubCategory = { name: {en:'',ar:''} };
 
   constructor(
     private subService: SubService,
@@ -49,7 +49,12 @@ export class SubCategoriesListComponent implements OnInit {
 
   loadSubCategories(): void {
     this.subService.getSubCategories().subscribe({
-      next: (data) => (this.subCategories = data.subcategories ?? []),
+      next: (data) => {       
+        this.subCategories = data.subcategories
+        console.log('====================================');
+        console.log(data.subcategories);
+        console.log('====================================');
+      },
       error: (err) => console.error(err),
     });
   }
@@ -87,7 +92,7 @@ export class SubCategoriesListComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Updated',
-            detail: `Subcategory "${this.editForm.name}" updated`,
+            detail: `Subcategory "${this.editForm.name.en}" updated`,
           });
         });
     }
@@ -96,7 +101,7 @@ export class SubCategoriesListComponent implements OnInit {
   confirmDelete(sub: SubCategory): void {
     if (!sub._id) return;
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete "${sub.name}"?`,
+      message: `Are you sure you want to delete "${sub.name.en}"?`,
       header: 'Confirm Delete',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -105,7 +110,7 @@ export class SubCategoriesListComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Deleted',
-            detail: `${sub.name} deleted`,
+            detail: `${sub.name.en} deleted`,
           });
         });
       },
@@ -118,7 +123,7 @@ export class SubCategoriesListComponent implements OnInit {
     return this.subCategories.filter(
       (sub) =>
         (sub._id && sub._id.toLowerCase().includes(term)) ||
-        (sub.name && sub.name.toLowerCase().includes(term)) ||
+        (sub.name && sub.name.en.toLowerCase().includes(term)) ||
         (sub.categoriesId?.name?.en &&
           sub.categoriesId.name.en.toLowerCase().includes(term)) ||
         (sub.categoriesId?.name?.ar &&

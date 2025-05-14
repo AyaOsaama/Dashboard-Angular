@@ -47,6 +47,8 @@ export class CategoriesListComponent {
     image: '',
     subcategoriesId: []
   };
+  selectedImageFile: File | null = null;
+
   
   editCategoryDialog: boolean = false;
   constructor(
@@ -77,20 +79,49 @@ export class CategoriesListComponent {
     this.editedCategory = { ...category }; 
     this.editCategoryDialog = true;
   }
-  
-  onSaveCategory() {
-    if (this.editedCategory._id) {
-      this.categoryService.updateCategory(this.editedCategory._id, this.editedCategory).subscribe({
-        next: (updatedCat) => {
-          console.log('Category updated', updatedCat);
-          this.editCategoryDialog = false;
-        },
-        error: (err) => {
-          console.error('Update error', err);
-        }
-      });
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImageFile = file;
     }
   }
+  
+  
+  onSaveCategory() {
+    const formData = new FormData();
+   formData.append('name', JSON.stringify(this.editedCategory.name));
+   formData.append('description', JSON.stringify(this.editedCategory.description));
+
+    if (this.selectedImageFile) {
+      formData.append('image', this.selectedImageFile);
+    }
+  
+    if (this.editedCategory._id) {
+  this.categoryService.updateCategory(this.editedCategory._id, formData).subscribe({
+    next: (updatedCat) => {
+      console.log('Category updated', updatedCat);
+      this.editCategoryDialog = false;
+      this.loadCategories();
+
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Category updated successfully'
+      });
+    },
+    error: (err) => {
+      console.error('Update error', err);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to update category'
+      });
+    }
+  });
+}
+
+  }
+  
 
   onDeleteCategory(category: ICategory) {
     this.confirmationService.confirm({

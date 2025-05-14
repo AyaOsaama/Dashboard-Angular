@@ -1,67 +1,78 @@
-<!-- <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-  <button
-    pButton
-    label="Add Sub Category"
-    icon="pi pi-plus"
-    (click)="displayDialog = true"
-    class="p-button-primary"
-  ></button>
+<p-toast></p-toast>
 
-  <button
-    pButton
-    label="Back To List"
-    icon="pi pi-arrow-left"
-    [routerLink]="['/subcategories']"
-    class="p-button-warning"
-  ></button>
-</div> -->
+<div class="flex items-center justify-center min-h-screen bg-[#f9f9f9] p-4">
+  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-10 space-y-8 border border-[#ddd4c7] card">
+    <h2 class="text-4xl font-bold text-center text-[#4b3f2f]">Add Subcategory</h2>
 
-<!-- Dialog -->
-<!-- <p-dialog
-  header="Add Sub Category"
-  [(visible)]="displayDialog"
-  [modal]="true"
-  [style]="{ width: '400px' }"
-  [closable]="true"
-  [baseZIndex]="10000"
->
-  <div class="p-fluid" style="padding-top: 1rem;">
-    <div class="p-field" style="margin-bottom: 1rem;">
-      <label for="add-code" class="p-mb-1">Code </label>
-      <input id="add-code" type="text" pInputText [(ngModel)]="newSubCategory.code" />
-    </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8 form">
+      
+      <!-- Name Fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5">
+        <!-- English -->
+        <div class="space-y-2">
+         <p-floatlabel variant="on">
+       <p-iconfield>
+        <p-inputicon class="pi pi-globe" />
+        <input pInputText id="name_en" [(ngModel)]="value3" autocomplete="off" formControlName="name_en" />
+    </p-iconfield>
+    <label for="name_en">Name EN</label>
+</p-floatlabel>
+          <small *ngIf="form.controls['name_en'].invalid && form.controls['name_en'].touched" class="text-red-500">
+            English name is required
+          </small>
+        </div>
 
-    <div class="p-field" style="margin-bottom: 1rem;">
-      <label for="add-name" class="p-mb-1">Name </label>
-      <input id="add-name" type="text" pInputText [(ngModel)]="newSubCategory.name" />
-    </div>
+        <!-- Arabic -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-[#5e4f3a]">
+            <i class="pi pi-language mr-1 text-[#c0a97f]"></i> Name (Arabic)
+          </label>
+          <input pInputText formControlName="name_ar" placeholder="مثال: كراسي" class="w-full text-right p-2" />
+          <small *ngIf="form.controls['name_ar'].invalid && form.controls['name_ar'].touched" class="text-red-500">
+            Arabic name is required
+          </small>
+        </div>
+      </div>
 
-    <div class="p-field" style="margin-bottom: 1rem;">
-      <label for="add-category" class="p-mb-1">Category </label>
-      <input id="add-category" type="text" pInputText [(ngModel)]="newSubCategory.category" />
-    </div>
+      <!-- Tags -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-[#5e4f3a]">
+          <i class="pi pi-tags mr-1 text-[#c0a97f]"></i> Tags
+        </label>
+        <input pInputText formControlName="tags" placeholder="e.g. modern, stylish" class="w-full p-2" />
+      </div>
 
-    <div class="p-field" style="margin-bottom: 1rem;">
-      <label for="add-quantity" class="p-mb-1">Quantity </label>
-      <input id="add-quantity" type="number" pInputText [(ngModel)]="newSubCategory.quantity" />
-    </div>
+      <!-- Category Select -->
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-[#5e4f3a]">
+          <i class="pi pi-sitemap mr-1 text-[#c0a97f]"></i> Category
+        </label>
+        <p-inputgroup class="w-full">
+          <p-inputgroup-addon class="bg-[#c0a97f] text-white">
+            <i class="pi pi-th-large"></i>
+          </p-inputgroup-addon>
+          <p-select
+            [options]="category"
+            formControlName="categoryId"
+            optionValue="_id"
+            optionLabel="name.en"
+            placeholder="Select a category"
+            class="w-full"
+          ></p-select>
+        </p-inputgroup>
+      </div>
 
-    <div style="text-align: right; margin-top: 1.5rem;">
-      <button
-        pButton
-        label="Add"
-        icon="pi pi-check"
-        (click)="addSubCategory(); displayDialog = false"
-        class="p-button-success"
-      ></button>
-      <button
-        pButton
-        label="Cancel"
-        icon="pi pi-times"
-        (click)="displayDialog = false"
-        class="p-button-secondary"
-        style="margin-left: 0.5rem;"
-      ></button>
-    </div>
+      <!-- Submit Button -->
+      <div class="pt-6">
+        <button
+          pButton
+          type="submit"
+          label="Add Subcategory"
+          class="w-full p-button-raised p-button-text text-lg"
+          style="background-color: #c0a97f; color: white"
+          [disabled]="form.invalid || loading"
+        ></button>
+      </div>
+    </form>
   </div>
-</p-dialog> -->
+</div>

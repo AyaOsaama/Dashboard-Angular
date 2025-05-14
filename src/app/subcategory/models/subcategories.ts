@@ -1,6 +1,9 @@
 export interface SubCategory {
   _id?: string;
-  name: string;
+ name: {
+    en: string;
+    ar: string;
+  };
   categoriesId?: {
     name: {
       en: string;
@@ -9,3 +12,4 @@ export interface SubCategory {
   };
   tags?: string[];
 }
+

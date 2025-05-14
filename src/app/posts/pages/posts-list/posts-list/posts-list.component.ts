@@ -15,15 +15,14 @@ import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 
 
+
 @Component({
   selector: 'app-posts-list',
-  imports: [CardModule, ButtonModule, CommonModule, DialogModule, ConfirmDialogModule, FormsModule,    
-    ButtonModule,
-    CommonModule,
-    DialogModule,
-    ConfirmDialogModule,
-    FormsModule,InputIcon, IconField, InputTextModule,
-  ],
+  imports: [
+    CardModule, ButtonModule, CommonModule, DialogModule, 
+    ConfirmDialogModule, FormsModule, InputIcon, 
+    IconField, InputTextModule
+  ],  
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.css',
   providers: [ConfirmationService, MessageService]  
@@ -70,8 +69,14 @@ export class PostsListComponent {
   loadPosts(){
     this.postService.getAllPosts().subscribe({
       next: (res) => {
+        console.log('====================================');
+        console.log(res);
+        console.log('====================================');
         this.posts = res.posts; 
         this.filteredPosts=res.posts;
+        console.log('====================================');
+        console.log(res.posts);
+        console.log('====================================');
         this.loading = false;
       },
       error: (err) => {
@@ -80,7 +85,7 @@ export class PostsListComponent {
       }
     });
   }
-  filterPosts(postTitle: String):Ieditpost[]{
+  filterPosts(postTitle: string):Ieditpost[]{
     if(postTitle){}
     return this.filteredPosts= this.posts.filter((post:Ieditpost)=>{
       return post.title.en.toLowerCase().includes(postTitle.toLowerCase()) ||
@@ -88,17 +93,18 @@ export class PostsListComponent {
           
     })
   }
-  openLikesDialog(post: any) {
+  openLikesDialog(post: Ipost) {
     this.selectedPost = post;
     this.likesDialogVisible = true;
   }
-
-  openCommentsDialog(post: any) {
+  
+  openCommentsDialog(post: Ipost) {
     this.selectedPost = post;
     this.commentsDialogVisible = true;
   }
+  
 
-  onDeletePost(post: any) {
+  onDeletePost(post: Ipost) {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete post "${post.title.en}"?`,
       header: 'Confirm Delete',
