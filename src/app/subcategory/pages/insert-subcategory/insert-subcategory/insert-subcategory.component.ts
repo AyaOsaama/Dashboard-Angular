@@ -84,43 +84,7 @@ this.form = this.fb.group({
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' }),
     });
   }
-// onSubmit() {
-//   if (this.form.invalid) return;
 
-//   this.loading = true;
-
-// const subCategoryData = {
-//   name: {
-//     en: this.form.value.name_en,
-//     ar: this.form.value.name_ar,
-//   },
-//   tags: this.form.value.tags
-//     ? this.form.value.tags.split(',').map((tag: string) => tag.trim())
-//     : [],
-//   categoriesId: this.form.value.categoryId, 
-// };
-
-
-//   this.subService.addSubCategory(subCategoryData).subscribe({
-//     next: () => {
-//       this.messageService.add({
-//         severity: 'success',
-//         summary: 'Success',
-//         detail: 'Subcategory added successfully',
-//       });
-//       this.router.navigate(['/subcategories']);
-//     },
-//     error: (err) => {
-//       console.error('Add Error:', err);
-//       this.messageService.add({
-//         severity: 'error',
-//         summary: 'Error',
-//         detail: 'Failed to add subcategory',
-//       });
-//     },
-//     complete: () => (this.loading = false),
-//   });
-// }
 
 onSubmit() {
   if (this.form.invalid) return;
@@ -135,7 +99,7 @@ onSubmit() {
     tags: this.form.value.tags
       ? this.form.value.tags.split(',').map((tag: string) => tag.trim())
       : [],
-    categoriesId: this.form.value.categoryId,
+    categoryId: this.form.value.categoryId,
   };
 
   this.subService.addSubCategory(subCategoryData).subscribe({
@@ -161,4 +125,3 @@ onSubmit() {
 
 
 }
-

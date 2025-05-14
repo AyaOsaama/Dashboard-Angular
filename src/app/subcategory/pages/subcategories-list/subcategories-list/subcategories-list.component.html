@@ -69,8 +69,8 @@
                 <th class="text-left p-3">Name EN</th>
                 <th class="text-left p-3">Name AR</th>
                 <th class="text-left p-3">Tags</th>
-                <th class="text-left p-3">Category EN</th>
-                <th class="text-left p-3">Category AR</th>
+                <th class="text-left p-3">Parent Category EN</th>
+                <th class="text-left p-3">Parent Category AR</th>
                 <th class="text-left p-3">Actions</th>
               </tr>
             </ng-template>
@@ -81,8 +81,8 @@
                 <td class="p-3">{{ sub.name.en}}</td>
                 <td class="p-3">{{ sub.name.ar}}</td>
                 <td class="p-3">{{ sub.tags?.join(", ") }}</td>
-                <td class="p-3">{{ sub.categoriesId?.name?.en }}</td>
-                <td class="p-3">{{ sub.categoriesId?.name?.ar }}</td>
+                <td class="p-3">{{ sub.categoryId?.name?.en }}</td>
+                <td class="p-3">{{ sub.categoryId?.name?.ar }}</td>
               
                 <td class="p-3 flex gap-2 actions">
                   <button
@@ -128,8 +128,8 @@
           <th class="text-left p-3">Name EN</th>
           <th class="text-left p-3">Name AR</th>
           <th class="text-left p-3">Tags</th>
-          <th class="text-left p-3">Category EN</th>
-          <th class="text-left p-3">Category AR</th>
+          <th class="text-left p-3">Parent Category EN</th>
+          <th class="text-left p-3">Parent Category AR</th>
           <th class="text-left p-3">Actions</th>
         </tr>
       </ng-template>
@@ -140,8 +140,8 @@
           <td class="p-3">{{ sub.name.en }}</td>
           <td class="p-3">{{ sub.name.ar }}</td>
           <td class="p-3">{{ sub.tags?.join(", ") }}</td>
-          <td class="p-3">{{ sub.categoriesId?.name?.en }}</td>
-          <td class="p-3">{{ sub.categoriesId?.name?.ar }}</td>
+          <td class="p-3">{{ sub.categoryId?.name?.en }}</td>
+          <td class="p-3">{{ sub.categoryId?.name?.ar }}</td>
           <td class="p-3 flex gap-2 actions">
             <button
               pButton

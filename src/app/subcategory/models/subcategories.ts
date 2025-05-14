@@ -4,7 +4,8 @@ export interface SubCategory {
     en: string;
     ar: string;
   };
-  categoriesId?: {
+  categoryId?:
+   {
     name: {
       en: string;
       ar: string;

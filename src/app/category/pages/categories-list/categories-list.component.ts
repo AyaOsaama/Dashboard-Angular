@@ -154,7 +154,7 @@ export class CategoriesListComponent {
   }
   getSubcategoriesNames(subcategories: any[]): string {
     return subcategories
-      .map((sub, index) => `${index + 1}. ${sub.name}`)
+      .map((sub, index) => `${index + 1}. ${sub.name.en}`)
       .join('\n');   }
   
 }

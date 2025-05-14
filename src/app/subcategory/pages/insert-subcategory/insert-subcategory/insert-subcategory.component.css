@@ -4,3 +4,11 @@
 .form{
     padding: 20px;
 }
+.screen {
+  height:calc(100vh - 120px)  !important;
+  /* height:2000px ; */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+ 
+}

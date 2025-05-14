@@ -124,10 +124,10 @@ export class SubCategoriesListComponent implements OnInit {
       (sub) =>
         (sub._id && sub._id.toLowerCase().includes(term)) ||
         (sub.name && sub.name.en.toLowerCase().includes(term)) ||
-        (sub.categoriesId?.name?.en &&
-          sub.categoriesId.name.en.toLowerCase().includes(term)) ||
-        (sub.categoriesId?.name?.ar &&
-          sub.categoriesId.name.ar.toLowerCase().includes(term)) ||
+        (sub.categoryId?.name?.en &&
+          sub.categoryId.name.en.toLowerCase().includes(term)) ||
+        (sub.categoryId?.name?.ar &&
+          sub.categoryId.name.ar.toLowerCase().includes(term)) ||
         (sub.tags && sub.tags.some((tag) => tag.toLowerCase().includes(term)))
     );
   }
