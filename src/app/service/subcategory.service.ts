@@ -41,9 +41,9 @@ export class SubCategoryServiceApi {
   }
 
   // الدالة الجديدة لجلب السب كاتيجوري بناءً على categoryId
-  // getSubCategoriesByCategoryId(categoryId: string): Observable<{ subcategories: SubCategory[] }> {
-  //   const token = localStorage.getItem('token');
-  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-  //   return this.http.get<{ subcategories: SubCategory[] }>(`${environment.apiUrl}/categories/${categoryId}/subcategories`, { headers });
-  // }
+  getSubCategoriesByCategoryId(categoryId: string): Observable<{ subcategories: SubCategory[] }> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<{ subcategories: SubCategory[] }>(`${environment.apiUrl}/categories/${categoryId}/subcategories`, { headers });
+  }
 }

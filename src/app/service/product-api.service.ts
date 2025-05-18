@@ -121,13 +121,35 @@ export class ProductApiService {
   }
 
 
+  // getAllIDs(): Observable<string[]> {
+  //   // const token = localStorage.getItem('token');
+  //   // console.log('Token sent:', token);
+  //   // const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   // console.log("Authorization Header:", headers);
+  //   // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
+  //   return this.getAllProducts().pipe(map((prds) => prds.map((prd) => prd._id)))
+  // }
+
+  getAllCategories(): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<any>(`${environment.apiUrl}/categories`, { headers });
+  }
+
   getAllIDs(): Observable<string[]> {
-    // const token = localStorage.getItem('token');
-    // console.log('Token sent:', token);
-    // const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    // console.log("Authorization Header:", headers);
-    // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
-    return this.getAllProducts().pipe(map((prds) => prds.map((prd) => prd._id)))
+    return this.getAllProducts().pipe(
+      map((prds) =>
+        prds
+          .map((prd) => prd._id)
+          .filter((id): id is string => id !== undefined)
+      )
+    );
+  }
+
+  getCategoryById(categoryId: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<any>(`${environment.apiUrl}/categories/${categoryId}`, { headers });
   }
 
   //query string here if the backEnd handle as query string

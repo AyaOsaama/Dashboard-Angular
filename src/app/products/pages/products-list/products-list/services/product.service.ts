@@ -7,709 +7,709 @@ import { Product } from '../models/product';
 })
 export class ProductService {
 
-  productListService: Product[];
+  // productListService: Product[];
   searching!: string;
 
   //we will need the constructor in future if we need get the data from api M.kabil
   constructor() {
     //here we prepare the data for the api and search
-    this.productListService = [
-      {
-        "_id": "LW-1001",
-        "code": "LW-1001-BR",
-        "rating": 4.3,
-        "variants": [
-          {
-            "name": { "en": "Classic Leather Wallet - Brown", "ar": "محفظة جلد كلاسيكية - بني" },
-            "price": 55.00,
-            "discountPrice": 49.99,
-            "color": { "en": "Brown", "ar": "بني", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 180,
-            "description": { "en": "Genuine brown leather wallet with multiple compartments.", "ar": "محفظة جلد بني أصلي مع عدة أقسام." },
-            "material": { "en": "Leather", "ar": "جلد" }
-          }
-        ],
-        "brand": "CraftLeather",
-        "categories": { "main": "Accessories", "sub": "Wallets" },
-        "orderId": [],
-        "nameEn": "Classic Leather Wallet",
-        "nameAr": "محفظة جلد كلاسيكية",
-        "price": 55.00,
-        "discountPrice": 49.99,
-        "colorEn": "Brown",
-        "colorAr": "بني",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 180
-      },
-      {
-        "_id": "ER-2005",
-        "code": "ER-2005-SL",
-        "rating": 4.7,
-        "variants": [
-          {
-            "name": { "en": "Sterling Silver Earrings - Leaf Design", "ar": "أقراط فضة استرليني - تصميم ورقة" },
-            "price": 39.95,
-            "discountPrice": 35.95,
-            "color": { "en": "Silver", "ar": "فضي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 150,
-            "description": { "en": "Elegant sterling silver earrings with a delicate leaf design.", "ar": "أقراط فضة استرليني أنيقة بتصميم ورقة رقيق." },
-            "material": { "en": "Sterling Silver", "ar": "فضة استرليني" }
-          }
-        ],
-        "brand": "SilverCraft",
-        "categories": { "main": "Accessories", "sub": "Jewelry" },
-        "orderId": [],
-        "nameEn": "Sterling Silver Earrings",
-        "nameAr": "أقراط فضة استرليني",
-        "price": 39.95,
-        "discountPrice": 35.95,
-        "colorEn": "Silver",
-        "colorAr": "فضي",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 150
-      },
-      {
-        "_id": "TB-3010",
-        "code": "TB-3010-RD",
-        "rating": 4.5,
-        "variants": [
-          {
-            "name": { "en": "Cotton Blend Trousers - Red", "ar": "بنطلون قطن مخلوط - أحمر" },
-            "price": 45.00,
-            "discountPrice": 39.99,
-            "color": { "en": "Red", "ar": "أحمر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 120,
-            "description": { "en": "Comfortable red cotton blend trousers for casual wear.", "ar": "بنطلون قطن مخلوط أحمر مريح للارتداء اليومي." },
-            "material": { "en": "Cotton Blend", "ar": "مزيج القطن" }
-          }
-        ],
-        "brand": "UrbanStyle",
-        "categories": { "main": "Apparel", "sub": "Pants" },
-        "orderId": [],
-        "nameEn": "Cotton Blend Trousers",
-        "nameAr": "بنطلون قطن مخلوط",
-        "price": 45.00,
-        "discountPrice": 39.99,
-        "colorEn": "Red",
-        "colorAr": "أحمر",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 120
-      },
-      {
-        "_id": "GC-4015",
-        "code": "GC-4015-WH",
-        "rating": 4.8,
-        "variants": [
-          {
-            "name": { "en": "Wireless Gaming Controller - White", "ar": "وحدة تحكم ألعاب لاسلكية - أبيض" },
-            "price": 69.00,
-            "discountPrice": 62.99,
-            "color": { "en": "White", "ar": "أبيض", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 95,
-            "description": { "en": "Ergonomic white wireless gaming controller with responsive buttons.", "ar": "وحدة تحكم ألعاب لاسلكية بيضاء مريحة مع أزرار سريعة الاستجابة." },
-            "material": { "en": "Plastic", "ar": "بلاستيك" }
-          }
-        ],
-        "brand": "GameOn",
-        "categories": { "main": "Electronics", "sub": "Controllers" },
-        "orderId": [],
-        "nameEn": "Wireless Gaming Controller",
-        "nameAr": "وحدة تحكم ألعاب لاسلكية",
-        "price": 69.00,
-        "discountPrice": 62.99,
-        "colorEn": "White",
-        "colorAr": "أبيض",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 95
-      },
-      {
-        "_id": "HB-5002",
-        "code": "HB-5002-BL",
-        "rating": 4.2,
-        "variants": [
-          {
-            "name": { "en": "Hardcover Book - Mystery Thriller", "ar": "كتاب بغلاف مقوى - إثارة وغموض" },
-            "price": 18.50,
-            "discountPrice": 16.99,
-            "color": { "en": "Blue", "ar": "أزرق", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 220,
-            "description": { "en": "A gripping mystery thriller that will keep you guessing until the end.", "ar": "قصة إثارة وغموض مشوقة ستبقيك تخمن حتى النهاية." },
-            "material": { "en": "Paper, Cardboard", "ar": "ورق، كرتون" }
-          }
-        ],
-        "brand": "PageTurner",
-        "categories": { "main": "Books", "sub": "Mystery" },
-        "orderId": [],
-        "nameEn": "Mystery Thriller Book",
-        "nameAr": "كتاب إثارة وغموض",
-        "price": 18.50,
-        "discountPrice": 16.99,
-        "colorEn": "Blue",
-        "colorAr": "أزرق",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 220
-      },
-      {
-        "_id": "SN-6008",
-        "code": "SN-6008-GR",
-        "rating": 4.4,
-        "variants": [
-          {
-            "name": { "en": "Unisex Sneakers - Grey", "ar": "حذاء رياضي للجنسين - رمادي" },
-            "price": 65.00,
-            "discountPrice": 59.99,
-            "color": { "en": "Grey", "ar": "رمادي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 140,
-            "description": { "en": "Comfortable and stylish grey unisex sneakers.", "ar": "حذاء رياضي رمادي مريح وأنيق للجنسين." },
-            "material": { "en": "Canvas, Rubber", "ar": "قماش، مطاط" }
-          }
-        ],
-        "brand": "EasyWalk",
-        "categories": { "main": "Shoes", "sub": "Casual" },
-        "orderId": [],
-        "nameEn": "Unisex Sneakers",
-        "nameAr": "حذاء رياضي للجنسين",
-        "price": 65.00,
-        "discountPrice": 59.99,
-        "colorEn": "Grey",
-        "colorAr": "رمادي",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 140
-      },
-      {
-        "_id": "LW-1001",
-        "code": "LW-1001-BR",
-        "rating": 4.3,
-        "variants": [
-          {
-            "name": { "en": "Classic Leather Wallet - Brown", "ar": "محفظة جلد كلاسيكية - بني" },
-            "price": 55.00,
-            "discountPrice": 49.99,
-            "color": { "en": "Brown", "ar": "بني", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 180,
-            "description": { "en": "Genuine brown leather wallet with multiple compartments.", "ar": "محفظة جلد بني أصلي مع عدة أقسام." },
-            "material": { "en": "Leather", "ar": "جلد" }
-          }
-        ],
-        "brand": "CraftLeather",
-        "categories": { "main": "Accessories", "sub": "Wallets" },
-        "orderId": [],
-        "nameEn": "Classic Leather Wallet",
-        "nameAr": "محفظة جلد كلاسيكية",
-        "price": 55.00,
-        "discountPrice": 49.99,
-        "colorEn": "Brown",
-        "colorAr": "بني",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 180
-      },
-      {
-        "_id": "ER-2005",
-        "code": "ER-2005-SL",
-        "rating": 4.7,
-        "variants": [
-          {
-            "name": { "en": "Sterling Silver Earrings - Leaf Design", "ar": "أقراط فضة استرليني - تصميم ورقة" },
-            "price": 39.95,
-            "discountPrice": 35.95,
-            "color": { "en": "Silver", "ar": "فضي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 150,
-            "description": { "en": "Elegant sterling silver earrings with a delicate leaf design.", "ar": "أقراط فضة استرليني أنيقة بتصميم ورقة رقيق." },
-            "material": { "en": "Sterling Silver", "ar": "فضة استرليني" }
-          }
-        ],
-        "brand": "SilverCraft",
-        "categories": { "main": "Accessories", "sub": "Jewelry" },
-        "orderId": [],
-        "nameEn": "Sterling Silver Earrings",
-        "nameAr": "أقراط فضة استرليني",
-        "price": 39.95,
-        "discountPrice": 35.95,
-        "colorEn": "Silver",
-        "colorAr": "فضي",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 150
-      },
-      {
-        "_id": "TB-3010",
-        "code": "TB-3010-RD",
-        "rating": 4.5,
-        "variants": [
-          {
-            "name": { "en": "Cotton Blend Trousers - Red", "ar": "بنطلون قطن مخلوط - أحمر" },
-            "price": 45.00,
-            "discountPrice": 39.99,
-            "color": { "en": "Red", "ar": "أحمر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 120,
-            "description": { "en": "Comfortable red cotton blend trousers for casual wear.", "ar": "بنطلون قطن مخلوط أحمر مريح للارتداء اليومي." },
-            "material": { "en": "Cotton Blend", "ar": "مزيج القطن" }
-          }
-        ],
-        "brand": "UrbanStyle",
-        "categories": { "main": "Apparel", "sub": "Pants" },
-        "orderId": [],
-        "nameEn": "Cotton Blend Trousers",
-        "nameAr": "بنطلون قطن مخلوط",
-        "price": 45.00,
-        "discountPrice": 39.99,
-        "colorEn": "Red",
-        "colorAr": "أحمر",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 120
-      },
-      {
-        "_id": "GC-4015",
-        "code": "GC-4015-WH",
-        "rating": 4.8,
-        "variants": [
-          {
-            "name": { "en": "Wireless Gaming Controller - White", "ar": "وحدة تحكم ألعاب لاسلكية - أبيض" },
-            "price": 69.00,
-            "discountPrice": 62.99,
-            "color": { "en": "White", "ar": "أبيض", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 95,
-            "description": { "en": "Ergonomic white wireless gaming controller with responsive buttons.", "ar": "وحدة تحكم ألعاب لاسلكية بيضاء مريحة مع أزرار سريعة الاستجابة." },
-            "material": { "en": "Plastic", "ar": "بلاستيك" }
-          }
-        ],
-        "brand": "GameOn",
-        "categories": { "main": "Electronics", "sub": "Controllers" },
-        "orderId": [],
-        "nameEn": "Wireless Gaming Controller",
-        "nameAr": "وحدة تحكم ألعاب لاسلكية",
-        "price": 69.00,
-        "discountPrice": 62.99,
-        "colorEn": "White",
-        "colorAr": "أبيض",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 95
-      },
-      {
-        "_id": "HB-5002",
-        "code": "HB-5002-BL",
-        "rating": 4.2,
-        "variants": [
-          {
-            "name": { "en": "Hardcover Book - Mystery Thriller", "ar": "كتاب بغلاف مقوى - إثارة وغموض" },
-            "price": 18.50,
-            "discountPrice": 16.99,
-            "color": { "en": "Blue", "ar": "أزرق", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 220,
-            "description": { "en": "A gripping mystery thriller that will keep you guessing until the end.", "ar": "قصة إثارة وغموض مشوقة ستبقيك تخمن حتى النهاية." },
-            "material": { "en": "Paper, Cardboard", "ar": "ورق، كرتون" }
-          }
-        ],
-        "brand": "PageTurner",
-        "categories": { "main": "Books", "sub": "Mystery" },
-        "orderId": [],
-        "nameEn": "Mystery Thriller Book",
-        "nameAr": "كتاب إثارة وغموض",
-        "price": 18.50,
-        "discountPrice": 16.99,
-        "colorEn": "Blue",
-        "colorAr": "أزرق",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 220
-      },
-      {
-        "_id": "SN-6008",
-        "code": "SN-6008-GR",
-        "rating": 4.4,
-        "variants": [
-          {
-            "name": { "en": "Unisex Sneakers - Grey", "ar": "حذاء رياضي للجنسين - رمادي" },
-            "price": 65.00,
-            "discountPrice": 59.99,
-            "color": { "en": "Grey", "ar": "رمادي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 140,
-            "description": { "en": "Comfortable and stylish grey unisex sneakers.", "ar": "حذاء رياضي رمادي مريح وأنيق للجنسين." },
-            "material": { "en": "Canvas, Rubber", "ar": "قماش، مطاط" }
-          }
-        ],
-        "brand": "EasyWalk",
-        "categories": { "main": "Shoes", "sub": "Casual" },
-        "orderId": [],
-        "nameEn": "Unisex Sneakers",
-        "nameAr": "حذاء رياضي للجنسين",
-        "price": 65.00,
-        "discountPrice": 59.99,
-        "colorEn": "Grey",
-        "colorAr": "رمادي",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 140
-      },
+    // this.productListService = [
+    //   {
+    //     "_id": "LW-1001",
+    //     "code": "LW-1001-BR",
+    //     "rating": 4.3,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Classic Leather Wallet - Brown", "ar": "محفظة جلد كلاسيكية - بني" },
+    //         "price": 55.00,
+    //         "discountPrice": 49.99,
+    //         "color": { "en": "Brown", "ar": "بني", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 180,
+    //         "description": { "en": "Genuine brown leather wallet with multiple compartments.", "ar": "محفظة جلد بني أصلي مع عدة أقسام." },
+    //         "material": { "en": "Leather", "ar": "جلد" }
+    //       }
+    //     ],
+    //     "brand": "CraftLeather",
+    //     "categories": { "main": "Accessories", "sub": "Wallets" },
+    //     "orderId": [],
+    //     "nameEn": "Classic Leather Wallet",
+    //     "nameAr": "محفظة جلد كلاسيكية",
+    //     "price": 55.00,
+    //     "discountPrice": 49.99,
+    //     "colorEn": "Brown",
+    //     "colorAr": "بني",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 180
+    //   },
+    //   {
+    //     "_id": "ER-2005",
+    //     "code": "ER-2005-SL",
+    //     "rating": 4.7,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Sterling Silver Earrings - Leaf Design", "ar": "أقراط فضة استرليني - تصميم ورقة" },
+    //         "price": 39.95,
+    //         "discountPrice": 35.95,
+    //         "color": { "en": "Silver", "ar": "فضي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 150,
+    //         "description": { "en": "Elegant sterling silver earrings with a delicate leaf design.", "ar": "أقراط فضة استرليني أنيقة بتصميم ورقة رقيق." },
+    //         "material": { "en": "Sterling Silver", "ar": "فضة استرليني" }
+    //       }
+    //     ],
+    //     "brand": "SilverCraft",
+    //     "categories": { "main": "Accessories", "sub": "Jewelry" },
+    //     "orderId": [],
+    //     "nameEn": "Sterling Silver Earrings",
+    //     "nameAr": "أقراط فضة استرليني",
+    //     "price": 39.95,
+    //     "discountPrice": 35.95,
+    //     "colorEn": "Silver",
+    //     "colorAr": "فضي",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 150
+    //   },
+    //   {
+    //     "_id": "TB-3010",
+    //     "code": "TB-3010-RD",
+    //     "rating": 4.5,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Cotton Blend Trousers - Red", "ar": "بنطلون قطن مخلوط - أحمر" },
+    //         "price": 45.00,
+    //         "discountPrice": 39.99,
+    //         "color": { "en": "Red", "ar": "أحمر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 120,
+    //         "description": { "en": "Comfortable red cotton blend trousers for casual wear.", "ar": "بنطلون قطن مخلوط أحمر مريح للارتداء اليومي." },
+    //         "material": { "en": "Cotton Blend", "ar": "مزيج القطن" }
+    //       }
+    //     ],
+    //     "brand": "UrbanStyle",
+    //     "categories": { "main": "Apparel", "sub": "Pants" },
+    //     "orderId": [],
+    //     "nameEn": "Cotton Blend Trousers",
+    //     "nameAr": "بنطلون قطن مخلوط",
+    //     "price": 45.00,
+    //     "discountPrice": 39.99,
+    //     "colorEn": "Red",
+    //     "colorAr": "أحمر",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 120
+    //   },
+    //   {
+    //     "_id": "GC-4015",
+    //     "code": "GC-4015-WH",
+    //     "rating": 4.8,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Wireless Gaming Controller - White", "ar": "وحدة تحكم ألعاب لاسلكية - أبيض" },
+    //         "price": 69.00,
+    //         "discountPrice": 62.99,
+    //         "color": { "en": "White", "ar": "أبيض", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 95,
+    //         "description": { "en": "Ergonomic white wireless gaming controller with responsive buttons.", "ar": "وحدة تحكم ألعاب لاسلكية بيضاء مريحة مع أزرار سريعة الاستجابة." },
+    //         "material": { "en": "Plastic", "ar": "بلاستيك" }
+    //       }
+    //     ],
+    //     "brand": "GameOn",
+    //     "categories": { "main": "Electronics", "sub": "Controllers" },
+    //     "orderId": [],
+    //     "nameEn": "Wireless Gaming Controller",
+    //     "nameAr": "وحدة تحكم ألعاب لاسلكية",
+    //     "price": 69.00,
+    //     "discountPrice": 62.99,
+    //     "colorEn": "White",
+    //     "colorAr": "أبيض",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 95
+    //   },
+    //   {
+    //     "_id": "HB-5002",
+    //     "code": "HB-5002-BL",
+    //     "rating": 4.2,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Hardcover Book - Mystery Thriller", "ar": "كتاب بغلاف مقوى - إثارة وغموض" },
+    //         "price": 18.50,
+    //         "discountPrice": 16.99,
+    //         "color": { "en": "Blue", "ar": "أزرق", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 220,
+    //         "description": { "en": "A gripping mystery thriller that will keep you guessing until the end.", "ar": "قصة إثارة وغموض مشوقة ستبقيك تخمن حتى النهاية." },
+    //         "material": { "en": "Paper, Cardboard", "ar": "ورق، كرتون" }
+    //       }
+    //     ],
+    //     "brand": "PageTurner",
+    //     "categories": { "main": "Books", "sub": "Mystery" },
+    //     "orderId": [],
+    //     "nameEn": "Mystery Thriller Book",
+    //     "nameAr": "كتاب إثارة وغموض",
+    //     "price": 18.50,
+    //     "discountPrice": 16.99,
+    //     "colorEn": "Blue",
+    //     "colorAr": "أزرق",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 220
+    //   },
+    //   {
+    //     "_id": "SN-6008",
+    //     "code": "SN-6008-GR",
+    //     "rating": 4.4,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Unisex Sneakers - Grey", "ar": "حذاء رياضي للجنسين - رمادي" },
+    //         "price": 65.00,
+    //         "discountPrice": 59.99,
+    //         "color": { "en": "Grey", "ar": "رمادي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 140,
+    //         "description": { "en": "Comfortable and stylish grey unisex sneakers.", "ar": "حذاء رياضي رمادي مريح وأنيق للجنسين." },
+    //         "material": { "en": "Canvas, Rubber", "ar": "قماش، مطاط" }
+    //       }
+    //     ],
+    //     "brand": "EasyWalk",
+    //     "categories": { "main": "Shoes", "sub": "Casual" },
+    //     "orderId": [],
+    //     "nameEn": "Unisex Sneakers",
+    //     "nameAr": "حذاء رياضي للجنسين",
+    //     "price": 65.00,
+    //     "discountPrice": 59.99,
+    //     "colorEn": "Grey",
+    //     "colorAr": "رمادي",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 140
+    //   },
+    //   {
+    //     "_id": "LW-1001",
+    //     "code": "LW-1001-BR",
+    //     "rating": 4.3,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Classic Leather Wallet - Brown", "ar": "محفظة جلد كلاسيكية - بني" },
+    //         "price": 55.00,
+    //         "discountPrice": 49.99,
+    //         "color": { "en": "Brown", "ar": "بني", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 180,
+    //         "description": { "en": "Genuine brown leather wallet with multiple compartments.", "ar": "محفظة جلد بني أصلي مع عدة أقسام." },
+    //         "material": { "en": "Leather", "ar": "جلد" }
+    //       }
+    //     ],
+    //     "brand": "CraftLeather",
+    //     "categories": { "main": "Accessories", "sub": "Wallets" },
+    //     "orderId": [],
+    //     "nameEn": "Classic Leather Wallet",
+    //     "nameAr": "محفظة جلد كلاسيكية",
+    //     "price": 55.00,
+    //     "discountPrice": 49.99,
+    //     "colorEn": "Brown",
+    //     "colorAr": "بني",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 180
+    //   },
+    //   {
+    //     "_id": "ER-2005",
+    //     "code": "ER-2005-SL",
+    //     "rating": 4.7,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Sterling Silver Earrings - Leaf Design", "ar": "أقراط فضة استرليني - تصميم ورقة" },
+    //         "price": 39.95,
+    //         "discountPrice": 35.95,
+    //         "color": { "en": "Silver", "ar": "فضي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 150,
+    //         "description": { "en": "Elegant sterling silver earrings with a delicate leaf design.", "ar": "أقراط فضة استرليني أنيقة بتصميم ورقة رقيق." },
+    //         "material": { "en": "Sterling Silver", "ar": "فضة استرليني" }
+    //       }
+    //     ],
+    //     "brand": "SilverCraft",
+    //     "categories": { "main": "Accessories", "sub": "Jewelry" },
+    //     "orderId": [],
+    //     "nameEn": "Sterling Silver Earrings",
+    //     "nameAr": "أقراط فضة استرليني",
+    //     "price": 39.95,
+    //     "discountPrice": 35.95,
+    //     "colorEn": "Silver",
+    //     "colorAr": "فضي",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 150
+    //   },
+    //   {
+    //     "_id": "TB-3010",
+    //     "code": "TB-3010-RD",
+    //     "rating": 4.5,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Cotton Blend Trousers - Red", "ar": "بنطلون قطن مخلوط - أحمر" },
+    //         "price": 45.00,
+    //         "discountPrice": 39.99,
+    //         "color": { "en": "Red", "ar": "أحمر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 120,
+    //         "description": { "en": "Comfortable red cotton blend trousers for casual wear.", "ar": "بنطلون قطن مخلوط أحمر مريح للارتداء اليومي." },
+    //         "material": { "en": "Cotton Blend", "ar": "مزيج القطن" }
+    //       }
+    //     ],
+    //     "brand": "UrbanStyle",
+    //     "categories": { "main": "Apparel", "sub": "Pants" },
+    //     "orderId": [],
+    //     "nameEn": "Cotton Blend Trousers",
+    //     "nameAr": "بنطلون قطن مخلوط",
+    //     "price": 45.00,
+    //     "discountPrice": 39.99,
+    //     "colorEn": "Red",
+    //     "colorAr": "أحمر",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 120
+    //   },
+    //   {
+    //     "_id": "GC-4015",
+    //     "code": "GC-4015-WH",
+    //     "rating": 4.8,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Wireless Gaming Controller - White", "ar": "وحدة تحكم ألعاب لاسلكية - أبيض" },
+    //         "price": 69.00,
+    //         "discountPrice": 62.99,
+    //         "color": { "en": "White", "ar": "أبيض", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 95,
+    //         "description": { "en": "Ergonomic white wireless gaming controller with responsive buttons.", "ar": "وحدة تحكم ألعاب لاسلكية بيضاء مريحة مع أزرار سريعة الاستجابة." },
+    //         "material": { "en": "Plastic", "ar": "بلاستيك" }
+    //       }
+    //     ],
+    //     "brand": "GameOn",
+    //     "categories": { "main": "Electronics", "sub": "Controllers" },
+    //     "orderId": [],
+    //     "nameEn": "Wireless Gaming Controller",
+    //     "nameAr": "وحدة تحكم ألعاب لاسلكية",
+    //     "price": 69.00,
+    //     "discountPrice": 62.99,
+    //     "colorEn": "White",
+    //     "colorAr": "أبيض",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 95
+    //   },
+    //   {
+    //     "_id": "HB-5002",
+    //     "code": "HB-5002-BL",
+    //     "rating": 4.2,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Hardcover Book - Mystery Thriller", "ar": "كتاب بغلاف مقوى - إثارة وغموض" },
+    //         "price": 18.50,
+    //         "discountPrice": 16.99,
+    //         "color": { "en": "Blue", "ar": "أزرق", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 220,
+    //         "description": { "en": "A gripping mystery thriller that will keep you guessing until the end.", "ar": "قصة إثارة وغموض مشوقة ستبقيك تخمن حتى النهاية." },
+    //         "material": { "en": "Paper, Cardboard", "ar": "ورق، كرتون" }
+    //       }
+    //     ],
+    //     "brand": "PageTurner",
+    //     "categories": { "main": "Books", "sub": "Mystery" },
+    //     "orderId": [],
+    //     "nameEn": "Mystery Thriller Book",
+    //     "nameAr": "كتاب إثارة وغموض",
+    //     "price": 18.50,
+    //     "discountPrice": 16.99,
+    //     "colorEn": "Blue",
+    //     "colorAr": "أزرق",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 220
+    //   },
+    //   {
+    //     "_id": "SN-6008",
+    //     "code": "SN-6008-GR",
+    //     "rating": 4.4,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Unisex Sneakers - Grey", "ar": "حذاء رياضي للجنسين - رمادي" },
+    //         "price": 65.00,
+    //         "discountPrice": 59.99,
+    //         "color": { "en": "Grey", "ar": "رمادي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 140,
+    //         "description": { "en": "Comfortable and stylish grey unisex sneakers.", "ar": "حذاء رياضي رمادي مريح وأنيق للجنسين." },
+    //         "material": { "en": "Canvas, Rubber", "ar": "قماش، مطاط" }
+    //       }
+    //     ],
+    //     "brand": "EasyWalk",
+    //     "categories": { "main": "Shoes", "sub": "Casual" },
+    //     "orderId": [],
+    //     "nameEn": "Unisex Sneakers",
+    //     "nameAr": "حذاء رياضي للجنسين",
+    //     "price": 65.00,
+    //     "discountPrice": 59.99,
+    //     "colorEn": "Grey",
+    //     "colorAr": "رمادي",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 140
+    //   },
 
-      {
-        "_id": "TB-8012",
-        "code": "TB-8012-GN",
-        "rating": 4.1,
-        "variants": [
-          {
-            "name": { "en": "Slim Fit Chinos - Green", "ar": "بنطلون تشينو ضيق - أخضر" },
-            "price": 49.50,
-            "discountPrice": 44.50,
-            "color": { "en": "Green", "ar": "أخضر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 165,
-            "description": { "en": "Stylish slim fit green chinos for a smart casual look.", "ar": "بنطلون تشينو أخضر ضيق أنيق لمظهر كاجوال أنيق." },
-            "material": { "en": "Cotton, Spandex", "ar": "قطن، سباندكس" }
-          }
-        ],
-        "brand": "SmartLook",
-        "categories": { "main": "Apparel", "sub": "Pants" },
-        "orderId": [],
-        "nameEn": "Slim Fit Chinos",
-        "nameAr": "بنطلون تشينو ضيق",
-        "price": 49.50,
-        "discountPrice": 44.50,
-        "colorEn": "Green",
-        "colorAr": "أخضر",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 165
-      },
-      {
-        "_id": "MS-9005",
-        "code": "MS-9005-BK",
-        "rating": 4.6,
-        "variants": [
-          {
-            "name": { "en": "Ergonomic Wireless Mouse - Black", "ar": "فأرة لاسلكية مريحة - أسود" },
-            "price": 29.00,
-            "discountPrice": 25.99,
-            "color": { "en": "Black", "ar": "أسود", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 190,
-            "description": { "en": "Comfortable black wireless mouse for office and home use.", "ar": "فأرة لاسلكية سوداء مريحة للاستخدام المكتبي والمنزلي." },
-            "material": { "en": "Plastic", "ar": "بلاستيك" }
-          }
-        ],
-        "brand": "OfficePro",
-        "categories": { "main": "Electronics", "sub": "Mice" },
-        "orderId": [],
-        "nameEn": "Ergonomic Wireless Mouse",
-        "nameAr": "فأرة لاسلكية مريحة",
-        "price": 29.00,
-        "discountPrice": 25.99,
-        "colorEn": "Black",
-        "colorAr": "أسود",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 190
-      },
-      {
-        "_id": "SC-1001",
-        "code": "SC-1001-PK",
-        "rating": 4.0,
-        "variants": [
-          {
-            "name": { "en": "Silk Scarf - Pink Floral", "ar": "وشاح حريري - زهري" },
-            "price": 65.00,
-            "discountPrice": 58.50,
-            "color": { "en": "Pink", "ar": "زهري", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 130,
-            "description": { "en": "Elegant pink silk scarf with a beautiful floral pattern.", "ar": "وشاح حريري زهري أنيق بنقشة زهور جميلة." },
-            "material": { "en": "Silk", "ar": "حرير" }
-          }
-        ],
-        "brand": "SilkStyle",
-        "categories": { "main": "Accessories", "sub": "Scarves" },
-        "orderId": [],
-        "nameEn": "Silk Scarf - Pink Floral",
-        "nameAr": "وشاح حريري - زهري",
-        "price": 65.00,
-        "discountPrice": 58.50,
-        "colorEn": "Pink",
-        "colorAr": "زهري",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 130
-      },
-      {
-        "_id": "BP-1102",
-        "code": "BP-1102-NV",
-        "rating": 4.7,
-        "variants": [
-          {
-            "name": { "en": "Durable Backpack - Navy Blue", "ar": "حقيبة ظهر متينة - كحلي" },
-            "price": 75.00,
-            "discountPrice": 69.00,
-            "color": { "en": "Navy Blue", "ar": "كحلي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 105,
-            "description": { "en": "Water-resistant navy blue backpack with multiple compartments.", "ar": "حقيبة ظهر كحلية مقاومة للماء مع عدة أقسام." },
-            "material": { "en": "Nylon", "ar": "نايلون" }
-          }
-        ],
-        "brand": "TravelMate",
-        "categories": { "main": "Accessories", "sub": "Bags" },
-        "orderId": [],
-        "nameEn": "Durable Backpack",
-        "nameAr": "حقيبة ظهر متينة",
-        "price": 75.00,
-        "discountPrice": 69.00,
-        "colorEn": "Navy Blue",
-        "colorAr": "كحلي",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 105
-      },
-      {
-        "_id": "LT-1201",
-        "code": "LT-1201-WH",
-        "rating": 4.3,
-        "variants": [
-          {
-            "name": { "en": "LED Desk Lamp - White", "ar": "مصباح مكتب LED - أبيض" },
-            "price": 32.00,
-            "discountPrice": 28.99,
-            "color": { "en": "White", "ar": "أبيض", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 170,
-            "description": { "en": "Adjustable white LED desk lamp with multiple brightness levels.", "ar": "مصباح مكتب LED أبيض قابل للتعديل مع مستويات سطوع متعددة." },
-            "material": { "en": "Plastic, Metal", "ar": "بلاستيك، معدن" }
-          }
-        ],
-        "brand": "BrightLight",
-        "categories": { "main": "Home & Office", "sub": "Lighting" },
-        "orderId": [],
-        "nameEn": "LED Desk Lamp",
-        "nameAr": "مصباح مكتب LED",
-        "price": 32.00,
-        "discountPrice": 28.99,
-        "colorEn": "White",
-        "colorAr": "أبيض",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 170
-      },
-      {
-        "_id": "CK-1301",
-        "code": "CK-1301-RD",
-        "rating": 4.5,
-        "variants": [
-          {
-            "name": { "en": "Ceramic Coffee Mug - Red", "ar": "كوب قهوة سيراميك - أحمر" },
-            "price": 12.50,
-            "discountPrice": 10.99,
-            "color": { "en": "Red", "ar": "أحمر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
-            "images": [
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-              "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-            ],
-            "inStock": 250,
-            "description": { "en": "Classic red ceramic coffee mug, perfect for your morning coffee.", "ar": "كوب قهوة سيراميك أحمر كلاسيكي، مثالي لقهوة الصباح." },
-            "material": { "en": "Ceramic", "ar": "سيراميك" }
-          }
-        ],
-        "brand": "HomeEssentials",
-        "categories": { "main": "Home & Office", "sub": "Kitchenware" },
-        "orderId": [],
-        "nameEn": "Ceramic Coffee Mug",
-        "nameAr": "كوب قهوة سيراميك",
-        "price": 12.50,
-        "discountPrice": 10.99,
-        "colorEn": "Red",
-        "colorAr": "أحمر",
-        "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "images": [
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-          "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
-        ],
-        "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
-        "inStock": 250
-      },
+    //   {
+    //     "_id": "TB-8012",
+    //     "code": "TB-8012-GN",
+    //     "rating": 4.1,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Slim Fit Chinos - Green", "ar": "بنطلون تشينو ضيق - أخضر" },
+    //         "price": 49.50,
+    //         "discountPrice": 44.50,
+    //         "color": { "en": "Green", "ar": "أخضر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 165,
+    //         "description": { "en": "Stylish slim fit green chinos for a smart casual look.", "ar": "بنطلون تشينو أخضر ضيق أنيق لمظهر كاجوال أنيق." },
+    //         "material": { "en": "Cotton, Spandex", "ar": "قطن، سباندكس" }
+    //       }
+    //     ],
+    //     "brand": "SmartLook",
+    //     "categories": { "main": "Apparel", "sub": "Pants" },
+    //     "orderId": [],
+    //     "nameEn": "Slim Fit Chinos",
+    //     "nameAr": "بنطلون تشينو ضيق",
+    //     "price": 49.50,
+    //     "discountPrice": 44.50,
+    //     "colorEn": "Green",
+    //     "colorAr": "أخضر",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 165
+    //   },
+    //   {
+    //     "_id": "MS-9005",
+    //     "code": "MS-9005-BK",
+    //     "rating": 4.6,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Ergonomic Wireless Mouse - Black", "ar": "فأرة لاسلكية مريحة - أسود" },
+    //         "price": 29.00,
+    //         "discountPrice": 25.99,
+    //         "color": { "en": "Black", "ar": "أسود", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 190,
+    //         "description": { "en": "Comfortable black wireless mouse for office and home use.", "ar": "فأرة لاسلكية سوداء مريحة للاستخدام المكتبي والمنزلي." },
+    //         "material": { "en": "Plastic", "ar": "بلاستيك" }
+    //       }
+    //     ],
+    //     "brand": "OfficePro",
+    //     "categories": { "main": "Electronics", "sub": "Mice" },
+    //     "orderId": [],
+    //     "nameEn": "Ergonomic Wireless Mouse",
+    //     "nameAr": "فأرة لاسلكية مريحة",
+    //     "price": 29.00,
+    //     "discountPrice": 25.99,
+    //     "colorEn": "Black",
+    //     "colorAr": "أسود",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 190
+    //   },
+    //   {
+    //     "_id": "SC-1001",
+    //     "code": "SC-1001-PK",
+    //     "rating": 4.0,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Silk Scarf - Pink Floral", "ar": "وشاح حريري - زهري" },
+    //         "price": 65.00,
+    //         "discountPrice": 58.50,
+    //         "color": { "en": "Pink", "ar": "زهري", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 130,
+    //         "description": { "en": "Elegant pink silk scarf with a beautiful floral pattern.", "ar": "وشاح حريري زهري أنيق بنقشة زهور جميلة." },
+    //         "material": { "en": "Silk", "ar": "حرير" }
+    //       }
+    //     ],
+    //     "brand": "SilkStyle",
+    //     "categories": { "main": "Accessories", "sub": "Scarves" },
+    //     "orderId": [],
+    //     "nameEn": "Silk Scarf - Pink Floral",
+    //     "nameAr": "وشاح حريري - زهري",
+    //     "price": 65.00,
+    //     "discountPrice": 58.50,
+    //     "colorEn": "Pink",
+    //     "colorAr": "زهري",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 130
+    //   },
+    //   {
+    //     "_id": "BP-1102",
+    //     "code": "BP-1102-NV",
+    //     "rating": 4.7,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Durable Backpack - Navy Blue", "ar": "حقيبة ظهر متينة - كحلي" },
+    //         "price": 75.00,
+    //         "discountPrice": 69.00,
+    //         "color": { "en": "Navy Blue", "ar": "كحلي", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 105,
+    //         "description": { "en": "Water-resistant navy blue backpack with multiple compartments.", "ar": "حقيبة ظهر كحلية مقاومة للماء مع عدة أقسام." },
+    //         "material": { "en": "Nylon", "ar": "نايلون" }
+    //       }
+    //     ],
+    //     "brand": "TravelMate",
+    //     "categories": { "main": "Accessories", "sub": "Bags" },
+    //     "orderId": [],
+    //     "nameEn": "Durable Backpack",
+    //     "nameAr": "حقيبة ظهر متينة",
+    //     "price": 75.00,
+    //     "discountPrice": 69.00,
+    //     "colorEn": "Navy Blue",
+    //     "colorAr": "كحلي",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 105
+    //   },
+    //   {
+    //     "_id": "LT-1201",
+    //     "code": "LT-1201-WH",
+    //     "rating": 4.3,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "LED Desk Lamp - White", "ar": "مصباح مكتب LED - أبيض" },
+    //         "price": 32.00,
+    //         "discountPrice": 28.99,
+    //         "color": { "en": "White", "ar": "أبيض", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 170,
+    //         "description": { "en": "Adjustable white LED desk lamp with multiple brightness levels.", "ar": "مصباح مكتب LED أبيض قابل للتعديل مع مستويات سطوع متعددة." },
+    //         "material": { "en": "Plastic, Metal", "ar": "بلاستيك، معدن" }
+    //       }
+    //     ],
+    //     "brand": "BrightLight",
+    //     "categories": { "main": "Home & Office", "sub": "Lighting" },
+    //     "orderId": [],
+    //     "nameEn": "LED Desk Lamp",
+    //     "nameAr": "مصباح مكتب LED",
+    //     "price": 32.00,
+    //     "discountPrice": 28.99,
+    //     "colorEn": "White",
+    //     "colorAr": "أبيض",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 170
+    //   },
+    //   {
+    //     "_id": "CK-1301",
+    //     "code": "CK-1301-RD",
+    //     "rating": 4.5,
+    //     "variants": [
+    //       {
+    //         "name": { "en": "Ceramic Coffee Mug - Red", "ar": "كوب قهوة سيراميك - أحمر" },
+    //         "price": 12.50,
+    //         "discountPrice": 10.99,
+    //         "color": { "en": "Red", "ar": "أحمر", "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg" },
+    //         "images": [
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //           "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //         ],
+    //         "inStock": 250,
+    //         "description": { "en": "Classic red ceramic coffee mug, perfect for your morning coffee.", "ar": "كوب قهوة سيراميك أحمر كلاسيكي، مثالي لقهوة الصباح." },
+    //         "material": { "en": "Ceramic", "ar": "سيراميك" }
+    //       }
+    //     ],
+    //     "brand": "HomeEssentials",
+    //     "categories": { "main": "Home & Office", "sub": "Kitchenware" },
+    //     "orderId": [],
+    //     "nameEn": "Ceramic Coffee Mug",
+    //     "nameAr": "كوب قهوة سيراميك",
+    //     "price": 12.50,
+    //     "discountPrice": 10.99,
+    //     "colorEn": "Red",
+    //     "colorAr": "أحمر",
+    //     "colorImage": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "images": [
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //       "https://www2.0zz0.com/2025/04/30/23/669924012.jpg"
+    //     ],
+    //     "image": "https://www2.0zz0.com/2025/04/30/23/669924012.jpg",
+    //     "inStock": 250
+    //   },
 
-    ]
+    // ]
   }
 
   getProductsData() {
-    return this.productListService;
+    // return this.productListService;
   }
 
-  getProductsAll() {
-    return Promise.resolve(this.getProductsData().slice(0, 30));
-  }
+  // getProductsAll() {
+  //   return Promise.resolve(this.getProductsData().slice(0, 30));
+  // }
 
 
   // getProductsWithOrdersData() {
