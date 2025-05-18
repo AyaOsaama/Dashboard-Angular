@@ -113,14 +113,28 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.products = this.products.filter((p) => p !== product);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Deleted',
-          detail: 'Product deleted',
-          life: 3000,
+        console.log('Deleting product with ID:', product._id);
+        this.ProductApiService.deleteProduct(product._id).subscribe({
+          next: () => {
+            this.products = this.products.filter(p => p._id !== product._id);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Deleted',
+              detail: 'Product deleted from the database.',
+              life: 3000
+            });
+          },
+          error: (err) => {
+            console.error('Failed to delete product:', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Deletion Failed',
+              detail: 'Could not delete product from the database.',
+              life: 3000
+            });
+          }
         });
-      },
+      }
     });
   }
 
@@ -162,20 +176,18 @@ export class ProductsListComponent implements OnInit, OnDestroy {
           });
         } else {
           console.error(
-            'بيانات التصنيفات الرئيسية ليست مصفوفة أو response غير متوقع:',
+            'Un expected response The Main Categories data not Array : ',
             categoriesResponse
           );
         }
       },
       error: (err) => {
-        console.error('فشل تحميل التصنيفات الرئيسية:', err);
+        console.error(' Loading Main Categories Failed!  :', err);
       },
     });
 
-    // استدعاء الـ API الخاص بالـ Sub Categories وتعديل طريقة التعامل مع الـ response
     this.SubCategoryServiceApi.getSubCategories().subscribe({
       next: (subCategoriesResponse: any) => {
-        // الوصول لمصفوفة الـ subcategories اللي جوه الـ response
         if (
           subCategoriesResponse &&
           subCategoriesResponse.subcategories &&
@@ -186,17 +198,17 @@ export class ProductsListComponent implements OnInit, OnDestroy {
           });
         } else {
           console.error(
-            'بيانات التصنيفات الفرعية ليست مصفوفة أو response غير متوقع:',
+            'Un expected response The Sub Categories data not Array : ',
             subCategoriesResponse
           );
         }
       },
       error: (err) => {
-        console.error('فشل تحميل التصنيفات الفرعية:', err);
+        console.error(' Loading Sub Categories Failed!  :', err);
       },
     });
 
-    console.log('تم تحميل كل التصنيفات والفرعية:', this.categoriesCache);
+    console.log('All Main & Sub Categories Loaded Successfully  :', this.categoriesCache);
   }
 
   getCategoryName(
