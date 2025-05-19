@@ -19,15 +19,31 @@ import { CategoriesService } from '../../../../category/services/categories.serv
 import { ICategory } from '../../../../category/model/icategory';
 import { SelectModule } from 'primeng/select';
 import { SubService } from '../../../../subcategory/services/services/subcategory.service';
+
+
+
 @Component({
   selector: 'app-insert-product',
   templateUrl: './insert-product.component.html',
   styleUrls: ['./insert-product.component.css'],
   providers: [MessageService,InputGroupModule],
-  imports: [CommonModule, ReactiveFormsModule,FloatLabelModule,InputGroupModule,InputTextModule,
-    ToastModule,ButtonModule,FileUploadModule,DropdownModule,InputNumberModule,InputNumberModule,FormsModule,
-    FluidModule,InputGroupAddonModule,SelectModule
-    
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FloatLabelModule,
+    InputGroupModule,
+    InputTextModule,
+    ToastModule,
+    ButtonModule,
+    FileUploadModule,
+    DropdownModule,
+    InputNumberModule,
+    InputNumberModule,
+    FormsModule,
+    FluidModule,
+    InputGroupAddonModule,
+    SelectModule
+
   ],
 
 })
@@ -71,7 +87,7 @@ export class InsertProductComponent implements OnInit {
       image: [''],
       images: [[]]
     });
-    
+
   }
 
   ngOnInit(): void {
@@ -81,28 +97,29 @@ export class InsertProductComponent implements OnInit {
     this.fetchSubcategories();
 
   }
+  
   onCategoryChange(event: any) {
     this.categoryId = event.value;
-  
+
     this.filteredSubcategories = this.subcategory.filter(sub =>
       sub.categoriesId && sub.categoriesId._id === this.categoryId
     );
-  
+
     this.subcategoryId = null;
-  
+
     console.log('Category ID:', this.categoryId);
   }
-  
+
   onSubcategoryChange(event: any) {
     this.subcategoryId = event.value;
     console.log('Selected Subcategory ID:', this.subcategoryId);
   }
-  
+
   updateDiscountPrice(): void {
     const price = this.prodForm.get('price')?.value || 0;
     const discount = this.prodForm.get('discount')?.value || 0;
     const discountPrice = price - (price * discount / 100);
-  
+
     this.prodForm.patchValue({ discountPrice: parseFloat(discountPrice.toFixed(2)) }, { emitEvent: false });
   }
 
@@ -127,7 +144,7 @@ export class InsertProductComponent implements OnInit {
 
   fetchCategories() {
     this.categoeryService.getAllCategory().subscribe({
-      
+
       next: (res) => {
         this.category = res.categories;
        console.log('====================================');
@@ -148,7 +165,7 @@ export class InsertProductComponent implements OnInit {
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' }),
     });
   }
- 
+
   onSelectMainImage(event: any): void {
     const file = event.files[0];
     if (file) {
@@ -162,7 +179,7 @@ export class InsertProductComponent implements OnInit {
       this.imageUrls.push(URL.createObjectURL(file));
     }
   }
-  
+
 
 addNewProduct() {
   if (this.prodForm.invalid) {
@@ -222,7 +239,7 @@ addNewProduct() {
   });
 }
 
-  
-  
-  
+
+
+
 }

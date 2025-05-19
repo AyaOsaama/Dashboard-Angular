@@ -17,8 +17,9 @@ import { authGuard } from './Gurads/auth.guard';
 import { LoginComponent } from './auth/login/pages/login.component.js'; import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './orders/pages/order-details/order-details.component';
 import { TestComponent } from './test/test.component';
-import { ProductControlComponent } from './products/pages/product-control/product-control/product-control.component';
-import { EditProductComponent } from './products/pages/edit-product/edit-product.component';
+import { ProductControlComponent } from './products/pages/product-control/product-control.component';
+// import { ProductControlComponent } from './products/pages/product-control/product-control/product-control.component';
+// import { EditProductComponent } from './products/pages/edit-product/edit-product.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
@@ -36,8 +37,8 @@ export const routes: Routes = [
 
       { path: 'products', component: ProductsListComponent },
       { path: 'products/insert', component: InsertProductComponent },
-      // { path: 'products/product-control/:idFromURL', component: ProductControlComponent },
-      { path: 'products/edit-product/:id', component: EditProductComponent },
+      { path: 'products/product-control/:idFromURL', component: ProductControlComponent },
+      // { path: 'products/edit-product/:id', component: EditProductComponent },
 
 
       { path: 'categories', component: CategoriesListComponent },
