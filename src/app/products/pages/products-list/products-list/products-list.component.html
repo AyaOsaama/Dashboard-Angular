@@ -43,7 +43,7 @@
           <th class="text-left p-3">Color (AR)</th>
           <!-- <th class="text-left p-3">Color Image</th> -->
           <th class="text-left p-3">Main Image</th>
-          <!-- <th class="text-left p-3">Images</th> -->
+          <th class="text-left p-3">Images</th>
           <th class="text-left p-3">Brand</th>
           <th class="text-left p-3">Category (Main)</th>
           <th class="text-left p-3">Category (Sub)</th>
@@ -139,7 +139,7 @@
           </td>
 
           <!-- secondery images -->
-          <!-- <td class="p-3">
+          <td class="p-3">
             <div *ngIf="product.editMode">
               <div class="flex flex-col gap-1">
                 <input pInputText type="text" *ngFor="let i of [].constructor(3); let j = index"
@@ -151,7 +151,7 @@
               <img *ngFor="let img of product.variants[0].images" [src]="img" alt="Thumbnail"
                 class="w-12 h-12 rounded border" />
             </div>
-          </td> -->
+          </td>
 
           <!-- brand -->
           <td class="p-3">
@@ -242,10 +242,10 @@
 
           <td class="p-3 flex gap-2">
             <button *ngIf="!product.editMode" pButton type="button" icon="pi pi-pencil"
-              class="p-button-sm p-button-info" (click)="onEditProduct(product)"></button>
+              class="p-button-sm p-button-info" (click)="controlProduct(product._id)"></button>
 
-            <button *ngIf="product.editMode" pButton type="button" icon="pi pi-check"
-              class="p-button-sm p-button-success" (click)="onSaveProduct(product)"></button>
+            <!-- <button *ngIf="product.editMode" pButton type="button" icon="pi pi-check"
+              class="p-button-sm p-button-success" (click)="onSaveProduct(product)"></button> -->
 
             <button pButton type="button" icon="pi pi-trash" class="p-button-sm p-button-danger"
               (click)="onDeleteProduct(product)"></button>

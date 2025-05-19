@@ -15,24 +15,53 @@
         <input pInputText formControlName="nameAR" placeholder="اسم المنتج بالعربية" class="!w-full !p-3 !rounded-lg" />
       </div>
 
-      <div class="!grid !grid-cols-2 !gap-4">
-        <div>
-          <label class="!block !text-gray-700 !font-semibold !mb-2">Price</label>
-          <p-inputnumber formControlName="price" mode="currency" currency="USD" class="!w-full !p-2 !rounded-lg" />
-        </div>
-        <div>
-          <label class="!block !text-gray-700 !font-semibold !mb-2">Discount %</label>
-          <p-inputnumber formControlName="discount" prefix="%" class="!w-full !p-2 !rounded-lg" />
-        </div>
-        <div>
-          <label class="!block !text-gray-700 !font-semibold !mb-2">Discount Price</label>
-          <p-inputnumber formControlName="discountPrice" mode="currency" currency="USD" [disabled]="true"
-            class="!w-full !p-2 !rounded-lg" />
-        </div>
-        <div>
-          <label class="!block !text-gray-700 !font-semibold !mb-2">In Stock</label>
-          <p-inputnumber formControlName="inStock" mode="decimal" [useGrouping]="false"
-            class="!w-full !p-2 !rounded-lg" />
+      <div formGroupName="variants" class="!border !p-4 !rounded-md !shadow-sm">
+        <h3 class="!text-xl !font-semibold !mb-4">Variant Details</h3>
+        <div class="!grid !grid-cols-2 !gap-4">
+          <div>
+            <label class="!block !text-gray-700 !font-semibold !mb-2">Name (EN)</label>
+            <input pInputText formControlName="name.en" placeholder="Variant name in English"
+              class="!w-full !p-3 !rounded-lg" />
+          </div>
+
+          <div>
+            <label class="!block !text-gray-700 !font-semibold !mb-2">Name (AR)</label>
+            <input pInputText formControlName="name.ar" placeholder="اسم المنتج بالعربية"
+              class="!w-full !p-3 !rounded-lg" />
+          </div>
+
+          <div>
+            <label class="!block !text-gray-700 !font-semibold !mb-2">Color (EN)</label>
+            <input pInputText formControlName="color.en" placeholder="Color in English"
+              class="!w-full !p-3 !rounded-lg" />
+          </div>
+
+          <div>
+            <label class="!block !text-gray-700 !font-semibold !mb-2">Color (AR)</label>
+            <input pInputText formControlName="color.ar" placeholder="اللون بالعربية"
+              class="!w-full !p-3 !rounded-lg" />
+          </div>
+
+          <div class="!grid !grid-cols-2 !gap-4">
+            <div>
+              <label class="!block !text-gray-700 !font-semibold !mb-2">Price</label>
+              <p-inputnumber formControlName="price" mode="currency" currency="USD" class="!w-full !p-2 !rounded-lg" />
+            </div>
+            <div>
+              <label class="!block !text-gray-700 !font-semibold !mb-2">Discount %</label>
+              <p-inputnumber formControlName="discount" prefix="%" class="!w-full !p-2 !rounded-lg" />
+            </div>
+            <div>
+              <label class="!block !text-gray-700 !font-semibold !mb-2">Discount Price</label>
+              <p-inputnumber formControlName="discountPrice" mode="currency" currency="USD" [disabled]="true"
+                class="!w-full !p-2 !rounded-lg" />
+            </div>
+            <div>
+              <label class="!block !text-gray-700 !font-semibold !mb-2">In Stock</label>
+              <p-inputnumber formControlName="inStock" mode="decimal" [useGrouping]="false"
+                class="!w-full !p-2 !rounded-lg" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -64,7 +93,7 @@
         <input pInputText formControlName="brand" placeholder="Brand" class="!w-full !p-3 !rounded-lg" />
       </div>
 
-      <!-- <div>
+      <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Category</label>
         <p-dropdown [options]="mainCategories" formControlName="mainCategory" optionValue="_id" optionLabel="name"
           placeholder="Select a category" class="w-full md:w-56" (onChange)="onCategoryChange($event)"></p-dropdown>
@@ -73,15 +102,9 @@
 
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Subcategory</label>
-        <p-dropdown [options]="filteredSubcategories" formControlName="subCategory" optionValue="_id"
-          optionLabel="name.en" placeholder="Select a subcategory" class="w-full md:w-56"></p-dropdown>
-      </div> -->
-
-
-
-
-
-
+        <p-dropdown [options]="filteredSubcategories" formControlName="subCategory" optionValue="_id" optionLabel="name"
+          placeholder="Select a subcategory" class="w-full md:w-56"></p-dropdown>
+      </div>
 
       <div class="!grid !grid-cols-2 !gap-4">
         <div>
@@ -119,7 +142,5 @@
       <button pButton type="submit" label="Save Changes" icon="pi pi-check"
         class="p-button-success !px-5 !py-3 !text-lg !rounded-md">Save Changes</button>
     </div>
-
-
   </form>
 </div>

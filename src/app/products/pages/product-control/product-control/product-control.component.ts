@@ -53,7 +53,7 @@ export class ProductControlComponent implements OnInit {
 
   getProductIdFromRoute() {
     this.route.paramMap.subscribe(params => {
-      this.productId = params.get('id');
+      this.productId = params.get('idFromURL');
       if (this.productId) {
         this.loadProductDetails(this.productId);
       } else {
@@ -66,38 +66,58 @@ export class ProductControlComponent implements OnInit {
     this.productApiService.getProdByIdStr(id).subscribe({
       next: (data: any) => {
         this.product = data.product;
-        if (this.product) {
+        if (this.product && this.product.variants && this.product.variants.length > 0) {
+          const firstVariant = this.product.variants[0];
           this.isEditMode = true;
+
+          // حساب نسبة الخصم (لو السعر الأصلي وسعر الخصم موجودين)
+          const discountPercentage = this.calculateDiscountPercentage(
+            firstVariant.price,
+            firstVariant.discountPrice
+          );
+
           this.prodForm.patchValue({
-            nameEN: this.product.variants[0]?.name?.en,
-            nameAR: this.product.variants[0]?.name?.ar,
-            price: this.product.variants[0]?.price,
-            discount: this.product.variants[0]?.discountPrice,
-            discountPrice: this.product.variants[0]?.discountPrice,
-            inStock: this.product.variants[0]?.inStock,
-            DescriptionEN: this.product.description?.en,
-            DescriptionAR: this.product.description?.ar,
-            brand: this.product.brand,
-            materialEN: this.product.material?.en,
-            materialAR: this.product.material?.ar,
-            colorEN: this.product.variants[0]?.color?.en,
-            colorAR: this.product.variants[0]?.color?.ar,
-            mainCategory: this.product.categories?.main?._id,
-            subCategory: this.product.categories?.sub?._id
+            nameEN: firstVariant.name?.en || '',
+            nameAR: firstVariant.name?.ar || '',
+            price: firstVariant.price || 0,
+            discount: discountPercentage,
+            discountPrice: firstVariant.discountPrice || 0,
+            inStock: firstVariant.inStock || 0,
+            DescriptionEN: this.product.description?.en || '',
+            DescriptionAR: this.product.description?.ar || '',
+            brand: this.product.brand || '',
+            materialEN: this.product.material?.en || '',
+            materialAR: this.product.material?.ar || '',
+            colorEN: firstVariant.color?.en || '',
+            colorAR: firstVariant.color?.ar || '',
+            mainCategory: this.product.categories?.main?._id || '',
+            subCategory: this.product.categories?.sub?._id || '',
+            'variants.name.en': firstVariant.name?.en || '',
+            'variants.name.ar': firstVariant.name?.ar || '',
+            'variants.price': firstVariant.price || 0,
+            'variants.discountPrice': firstVariant.discountPrice || 0,
+            'variants.inStock': firstVariant.inStock || 0
           });
-          this.mainImageUrl = this.product.variants[0]?.image || '';
+          this.mainImageUrl = firstVariant.image || '';
           this.imageUrls = this.product.images || [];
           if (this.product.categories?.main?._id) {
-            this.loadSubCategories(this.product.categories.main._id); // Load subcategories on edit
+            this.loadSubCategories(this.product.categories.main._id);
           }
         } else {
-          console.warn('لم يتم العثور على بيانات المنتج لهذا ID.');
+          console.warn('لم يتم العثور على بيانات المنتج أو بيانات الـ variants غير صحيحة لهذا ID.');
         }
       },
       error: (error) => {
         console.error('فشل في تحميل تفاصيل المنتج:', error);
       }
     });
+  }
+
+  calculateDiscountPercentage(originalPrice: number | undefined, discountPrice: number | undefined): number {
+    if (originalPrice !== undefined && discountPrice !== undefined && originalPrice > 0) {
+      return ((originalPrice - discountPrice) / originalPrice) * 100;
+    }
+    return 0;
   }
 
   initializeForm() {
@@ -116,7 +136,20 @@ export class ProductControlComponent implements OnInit {
       colorEN: [''],
       colorAR: [''],
       mainCategory: [''],
-      subCategory: ['']
+      subCategory: [''],
+      variants: this.fb.group({ // تعديل: هنا هيكون Form Group
+        name: this.fb.group({
+          en: [''],
+          ar: ['']
+        }),
+        color: this.fb.group({
+          en: [''],
+          ar: ['']
+        }),
+        price: [0],
+        discountPrice: [0],
+        inStock: [0]
+      })
     });
   }
 
@@ -156,7 +189,339 @@ export class ProductControlComponent implements OnInit {
 
   // }
 
+  // saveEdit() {
+  //   if (this.prodForm.valid && this.product) {
+  //     const formData = new FormData();
+
+  //     formData.append('brand', this.prodForm.controls['brand'].value);
+  //     formData.append('categories', JSON.stringify({
+  //       main: this.prodForm.controls['mainCategory'].value,
+  //       sub: this.prodForm.controls['subCategory'].value
+  //     }));
+  //     formData.append('description', JSON.stringify({
+  //       en: this.prodForm.controls['DescriptionEN'].value,
+  //       ar: this.prodForm.controls['DescriptionAR'].value
+  //     }));
+  //     formData.append('material', JSON.stringify({
+  //       en: this.prodForm.controls['materialEN'].value,
+  //       ar: this.prodForm.controls['materialAR'].value
+  //     }));
+
+  //     const variants = [
+  //       {
+  //         name: { en: this.prodForm.controls['nameEN'].value, ar: this.prodForm.controls['nameAR'].value },
+  //         color: { en: this.prodForm.controls['colorEN'].value, ar: this.prodForm.controls['colorAR'].value },
+  //         price: this.prodForm.controls['price'].value,
+  //         discountPrice: this.prodForm.controls['discountPrice'].value,
+  //         inStock: this.prodForm.controls['inStock'].value
+  //       }
+  //     ];
+  //     formData.append('variants', JSON.stringify(variants));
+
+
+  //     if (this.mainImageFile) {
+  //       formData.append('variantImage', this.mainImageFile);
+  //     } else {
+
+  //       // formData.append('variantImage', '');
+  //     }
+
+
+  //     this.additionalImagesFiles.forEach((file) => {
+  //       formData.append('variantImages', file);
+  //     });
+
+  //     for (const pair of formData.entries()) {
+  //       console.log(pair[0] + ':', pair[1]);
+  //     }
+
+  //     this.productApiService.updateProduct(this.product._id, formData).subscribe({ // نبعت formData
+  //       next: (response) => {
+  //         console.log('تم تعديل المنتج بنجاح:', response);
+  //         this.router.navigate(['/products']);
+  //       },
+  //       error: (error) => {
+  //         console.error('فشل في تعديل المنتج:', error);
+  //       }
+  //     });
+  //   } else {
+  //     console.error('الفورم غير صالحة أو المنتج غير موجود.');
+  //   }
+  // }
+  //3
+  // saveEdit() {
+  //   if (this.prodForm.valid && this.product) {
+  //     const formData = new FormData();
+
+  //     formData.append('brand', this.prodForm.controls['brand'].value);
+  //     formData.append('categories', JSON.stringify({
+  //       main: this.prodForm.controls['mainCategory'].value,
+  //       sub: this.prodForm.controls['subCategory'].value
+  //     }));
+  //     formData.append('description', JSON.stringify({
+  //       en: this.prodForm.controls['DescriptionEN'].value,
+  //       ar: this.prodForm.controls['DescriptionAR'].value
+  //     }));
+  //     formData.append('material', JSON.stringify({
+  //       en: this.prodForm.controls['materialEN'].value,
+  //       ar: this.prodForm.controls['materialAR'].value
+  //     }));
+  //     formData.append('variants', JSON.stringify(this.prodForm.controls['variants'].value)); // *** راجع دي ***
+
+
+  //     if (this.mainImageFile) {
+  //       formData.append('variantImage', this.mainImageFile);
+  //     }
+
+  //     this.additionalImagesFiles.forEach((file) => {
+  //       formData.append('variantImages', file);
+  //     });
+
+  //     for (const pair of formData.entries()) {
+  //       console.log('Frontend FormData:', pair[0], pair[1]); // طبع قيم الـ FormData
+  //     }
+
+  //     this.productApiService.updateProduct(this.product._id, formData).subscribe({
+  //       next: (response) => {
+  //         console.log('تم تعديل المنتج بنجاح:', response);
+  //         this.router.navigate(['/products']);
+  //       },
+  //       error: (error) => {
+  //         console.error('فشل في تعديل المنتج:', error);
+  //       }
+  //     });
+  //   } else {
+  //     console.error('الفورم غير صالحة أو المنتج غير موجود.');
+  //   }
+  // }
+
+
+  //4
+  // saveEdit() {
+  //   if (this.prodForm.valid && this.product) {
+  //     const formData = new FormData();
+
+  //     formData.append('brand', this.prodForm.controls['brand'].value);
+  //     formData.append('categories', JSON.stringify({
+  //       main: this.prodForm.controls['mainCategory'].value,
+  //       sub: this.prodForm.controls['subCategory'].value
+  //     }));
+  //     formData.append('description', JSON.stringify({
+  //       en: this.prodForm.controls['DescriptionEN'].value,
+  //       ar: this.prodForm.controls['DescriptionAR'].value
+  //     }));
+  //     formData.append('material', JSON.stringify({
+  //       en: this.prodForm.controls['materialEN'].value,
+  //       ar: this.prodForm.controls['materialAR'].value
+  //     }));
+
+  //     // تجميع بيانات الـ Variant الأول
+  //     const variants = [
+  //       this.prodForm.controls['variants'].value
+  //     ];
+  //     formData.append('variants', JSON.stringify(variants));
+
+  //     if (this.mainImageFile) {
+  //       formData.append('variantImage', this.mainImageFile);
+  //     }
+
+  //     this.additionalImagesFiles.forEach((file) => {
+  //       formData.append('variantImages', file);
+  //     });
+
+  //     for (const pair of formData.entries()) {
+  //       console.log('Frontend FormData:', pair[0], pair[1]);
+  //     }
+
+  //     this.productApiService.updateProduct(this.product._id, formData).subscribe({
+  //       next: (response) => {
+  //         console.log('تم تعديل المنتج بنجاح:', response);
+  //         this.router.navigate(['/products']);
+  //       },
+  //       error: (error) => {
+  //         console.error('فشل في تعديل المنتج:', error);
+  //       }
+  //     });
+  //   } else {
+  //     console.error('الفورم غير صالحة أو المنتج غير موجود.');
+  //   }
+  // }
+
+
+  //5
+  // saveEdit() {
+  //   if (this.prodForm.valid && this.product) {
+  //     const formData = new FormData();
+
+  //     formData.append('brand', this.prodForm.controls['brand'].value);
+  //     formData.append('categories', JSON.stringify({
+  //       main: this.prodForm.controls['mainCategory'].value,
+  //       sub: this.prodForm.controls['subCategory'].value
+  //     }));
+  //     formData.append('description', JSON.stringify({
+  //       en: this.prodForm.controls['DescriptionEN'].value,
+  //       ar: this.prodForm.controls['DescriptionAR'].value
+  //     }));
+  //     formData.append('material', JSON.stringify({
+  //       en: this.prodForm.controls['materialEN'].value,
+  //       ar: this.prodForm.controls['materialAR'].value
+  //     }));
+
+  //     // تجميع بيانات الـ Variant الأول من الـ FormControls
+  //     const variants = [
+  //       {
+  //         name: { en: this.prodForm.controls['variants'].get('name.en')?.value, ar: this.prodForm.controls['variants'].get('name.ar')?.value },
+  //         color: { en: this.prodForm.controls['variants'].get('color.en')?.value, ar: this.prodForm.controls['variants'].get('color.ar')?.value },
+  //         price: this.prodForm.controls['variants'].get('price')?.value,
+  //         discountPrice: this.prodForm.controls['variants'].get('discountPrice')?.value,
+  //         inStock: this.prodForm.controls['variants'].get('inStock')?.value
+  //       }
+  //     ];
+  //     formData.append('variants', JSON.stringify(variants));
+
+  //     // ... باقي كود إرسال الفورم
+  //   }
+  // }
+
+  //6
+  // saveEdit() {
+  //   if (this.prodForm.valid && this.product) {
+  //     const formData = new FormData();
+
+  //     formData.append('brand', this.prodForm.controls['brand'].value);
+  //     formData.append('categories', JSON.stringify({
+  //       main: this.prodForm.controls['mainCategory'].value,
+  //       sub: this.prodForm.controls['subCategory'].value
+  //     }));
+  //     formData.append('description', JSON.stringify({
+  //       en: this.prodForm.controls['DescriptionEN'].value,
+  //       ar: this.prodForm.controls['DescriptionAR'].value
+  //     }));
+  //     formData.append('material', JSON.stringify({
+  //       en: this.prodForm.controls['materialEN'].value,
+  //       ar: this.prodForm.controls['materialAR'].value
+  //     }));
+
+  //     // تجميع بيانات الـ Variant الأول من الـ FormControls
+  //     const variants = [
+  //       {
+  //         name: { en: this.prodForm.get('variants.name.en')?.value || '', ar: this.prodForm.get('variants.name.ar')?.value || '' },
+  //         color: { en: this.prodForm.get('variants.color.en')?.value || '', ar: this.prodForm.get('variants.color.ar')?.value || '' },
+  //         price: this.prodForm.get('variants.price')?.value || 0,
+  //         discountPrice: this.prodForm.get('variants.discountPrice')?.value || 0,
+  //         inStock: this.prodForm.get('variants.inStock')?.value || 0
+  //       }
+  //     ];
+  //     formData.append('variants', JSON.stringify(variants));
+
+  //     if (this.mainImageFile) {
+  //       formData.append('variantImage', this.mainImageFile);
+  //     }
+
+  //     this.additionalImagesFiles.forEach((file) => {
+  //       formData.append('variantImages', file);
+  //     });
+
+  //     for (const pair of formData.entries()) {
+  //       console.log('Frontend FormData:', pair[0], pair[1]);
+  //     }
+
+  //     this.productApiService.updateProduct(this.product._id, formData).subscribe({
+  //       next: (response) => {
+  //         console.log('تم تعديل المنتج بنجاح:', response);
+  //         this.router.navigate(['/products']);
+  //       },
+  //       error: (error) => {
+  //         console.error('فشل في تعديل المنتج:', error);
+  //       }
+  //     });
+  //   } else {
+  //     console.error('الفورم غير صالحة أو المنتج غير موجود.');
+  //   }
+  // }
+
+  //7
+  // saveEdit() {
+  //   console.log('هل الفورم صالحة؟', this.prodForm.valid);
+  //   console.log('قيمة الفورم بالكامل قبل التجميع:', this.prodForm.value);
+
+  //   if (this.prodForm.valid && this.product) {
+  //     const formData = new FormData();
+
+  //     formData.append('brand', this.prodForm.controls['brand'].value);
+  //     formData.append('categories', JSON.stringify({
+  //       main: this.prodForm.controls['mainCategory'].value,
+  //       sub: this.prodForm.controls['subCategory'].value
+  //     }));
+  //     formData.append('description', JSON.stringify({
+  //       en: this.prodForm.controls['DescriptionEN'].value,
+  //       ar: this.prodForm.controls['DescriptionAR'].value
+  //     }));
+  //     formData.append('material', JSON.stringify({
+  //       en: this.prodForm.controls['materialEN'].value,
+  //       ar: this.prodForm.controls['materialAR'].value
+  //     }));
+
+  //     // فحص قيم الـ Form Controls الخاصة بالـ variants بشكل مباشر
+  //     console.log('قيمة variants.name.en:', this.prodForm.get('variants.name.en')?.value);
+  //     console.log('قيمة variants.name.ar:', this.prodForm.get('variants.name.ar')?.value);
+  //     console.log('قيمة variants.color.en:', this.prodForm.get('variants.color.en')?.value);
+  //     console.log('قيمة variants.color.ar:', this.prodForm.get('variants.color.ar')?.value);
+  //     console.log('قيمة variants.price:', this.prodForm.get('variants.price')?.value);
+  //     console.log('قيمة variants.discountPrice:', this.prodForm.get('variants.discountPrice')?.value);
+  //     console.log('قيمة variants.inStock:', this.prodForm.get('variants.inStock')?.value);
+
+  //     // تجميع بيانات الـ Variant الأول من الـ FormControls
+  //     const variants = [
+  //       {
+  //         name: {
+  //           en: this.prodForm.get('variants.name.en')?.value || '',
+  //           ar: this.prodForm.get('variants.name.ar')?.value || ''
+  //         },
+  //         color: {
+  //           en: this.prodForm.get('variants.color.en')?.value || '',
+  //           ar: this.prodForm.get('variants.color.ar')?.value || ''
+  //         },
+  //         price: this.prodForm.get('variants.price')?.value || 0,
+  //         discountPrice: this.prodForm.get('variants.discountPrice')?.value || 0,
+  //         inStock: this.prodForm.get('variants.inStock')?.value || 0
+  //       }
+  //     ];
+  //     formData.append('variants', JSON.stringify(variants));
+
+  //     if (this.mainImageFile) {
+  //       formData.append('variantImage', this.mainImageFile);
+  //     }
+
+  //     this.additionalImagesFiles.forEach((file) => {
+  //       formData.append('variantImages', file);
+  //     });
+
+  //     // للتأكد من محتويات formData في الكونسول
+  //     for (const pair of formData.entries()) {
+  //       console.log('Frontend FormData:', pair[0], pair[1]);
+  //     }
+
+  //     this.productApiService.updateProduct(this.product._id, formData).subscribe({
+  //       next: (response) => {
+  //         console.log('تم تعديل المنتج بنجاح:', response);
+  //         this.router.navigate(['/products']);
+  //       },
+  //       error: (error) => {
+  //         console.error('فشل في تعديل المنتج:', error);
+  //       }
+  //     });
+  //   } else {
+  //     console.error('الفورم غير صالحة أو المنتج غير موجود.');
+  //   }
+  // }
+
+
+  //8
   saveEdit() {
+    console.log('هل الفورم صالحة؟', this.prodForm.valid);
+    console.log('قيمة الفورم بالكامل قبل التجميع:', this.prodForm.value);
+
     if (this.prodForm.valid && this.product) {
       const formData = new FormData();
 
@@ -174,35 +539,47 @@ export class ProductControlComponent implements OnInit {
         ar: this.prodForm.controls['materialAR'].value
       }));
 
+      // فحص قيم الـ Form Controls الخاصة بالـ variants بشكل مباشر **(تم التعديل هنا)**
+      console.log('قيمة variants.name.en:', this.prodForm.get('variants.name.en')?.value); // **غلط**
+      console.log('قيمة variants.name.ar:', this.prodForm.get('variants.name.ar')?.value); // **غلط**
+      console.log('قيمة variants.color.en:', this.prodForm.get('variants.color.en')?.value);
+      console.log('قيمة variants.color.ar:', this.prodForm.get('variants.color.ar')?.value);
+      console.log('قيمة variants.price:', this.prodForm.get('variants.price')?.value);
+      console.log('قيمة variants.discountPrice:', this.prodForm.get('variants.discountPrice')?.value);
+      console.log('قيمة variants.inStock:', this.prodForm.get('variants.inStock')?.value);
+
+      // تجميع بيانات الـ Variant الأول من الـ FormControls **(تم التعديل هنا)**
       const variants = [
         {
-          name: { en: this.prodForm.controls['nameEN'].value, ar: this.prodForm.controls['nameAR'].value },
-          color: { en: this.prodForm.controls['colorEN'].value, ar: this.prodForm.controls['colorAR'].value },
-          price: this.prodForm.controls['price'].value,
-          discountPrice: this.prodForm.controls['discountPrice'].value,
-          inStock: this.prodForm.controls['inStock'].value
+          name: {
+            en: this.prodForm.get('variants.name.en')?.value || '', // **غلط**
+            ar: this.prodForm.get('variants.name.ar')?.value || ''  // **غلط**
+          },
+          color: {
+            en: this.prodForm.get('variants.color.en')?.value || '',
+            ar: this.prodForm.get('variants.color.ar')?.value || ''
+          },
+          price: this.prodForm.get('variants.price')?.value || 0,
+          discountPrice: this.prodForm.get('variants.discountPrice')?.value || 0,
+          inStock: this.prodForm.get('variants.inStock')?.value || 0
         }
       ];
       formData.append('variants', JSON.stringify(variants));
 
-
       if (this.mainImageFile) {
         formData.append('variantImage', this.mainImageFile);
-      } else {
-
-        // formData.append('variantImage', '');
       }
-
 
       this.additionalImagesFiles.forEach((file) => {
         formData.append('variantImages', file);
       });
 
+      // للتأكد من محتويات formData في الكونسول
       for (const pair of formData.entries()) {
-        console.log(pair[0] + ':', pair[1]);
+        console.log('Frontend FormData:', pair[0], pair[1]);
       }
 
-      this.productApiService.updateProduct(this.product._id, formData).subscribe({ // نبعت formData
+      this.productApiService.updateProduct(this.product._id, formData).subscribe({
         next: (response) => {
           console.log('تم تعديل المنتج بنجاح:', response);
           this.router.navigate(['/products']);
@@ -215,6 +592,7 @@ export class ProductControlComponent implements OnInit {
       console.error('الفورم غير صالحة أو المنتج غير موجود.');
     }
   }
+
 
   cancelEdit() {
     this.router.navigate(['/products']);
@@ -232,7 +610,7 @@ export class ProductControlComponent implements OnInit {
   onSelectImages(event: any): void {
     for (let file of event.files) {
       this.additionalImagesFiles.push(file);
-      this.imageUrls.push(URL.createObjectURL(file)); 
+      this.imageUrls.push(URL.createObjectURL(file));
     }
   }
   onCategoryChange(event: any) {
