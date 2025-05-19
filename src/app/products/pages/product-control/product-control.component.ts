@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,6 +17,7 @@ import { SelectModule } from 'primeng/select';
 import { CategoriesServiceApi } from '../../../service/categories.service';
 import { SubCategoryServiceApi } from '../../../service/subcategory.service';
 import { ProductApiService } from '../../../service/product-api.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-product-control',
@@ -36,10 +37,11 @@ import { ProductApiService } from '../../../service/product-api.service';
     InputGroupAddonModule,
     SelectModule,
     InputNumberModule,
+    ConfirmDialogModule
   ],
   templateUrl: './product-control.component.html',
   styleUrls: ['./product-control.component.css'], // صححت من styleUrl إلى styleUrls
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
 })
 export class ProductControlComponent implements OnInit {
 
@@ -55,7 +57,9 @@ export class ProductControlComponent implements OnInit {
   product: any;
   isEditMode: boolean = false;
 
+
   constructor(
+    private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private ProductApiService: ProductApiService,
     private router: Router,
@@ -86,6 +90,11 @@ export class ProductControlComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    // const product = this.route.snapshot.data['product'] || {};
+
+    // this.mainImageUrl = product.mainImage || '';
+    // this.imageUrls = product.images || [];
     // حساب سعر الخصم عند تغير السعر أو الخصم
     this.prodForm.get('price')?.valueChanges.subscribe(() => this.updateDiscountPrice());
     this.prodForm.get('discount')?.valueChanges.subscribe(() => this.updateDiscountPrice());
@@ -194,30 +203,78 @@ export class ProductControlComponent implements OnInit {
     }
   }
 
-  onSelectImages(event: any) {
-    if (event && event.files && event.files.length > 0) {
-      this.additionalImages = [...event.files];
-      this.imageUrls = [];
+  // onSelectImages(event: any) {
+  //   if (event && event.files && event.files.length > 0) {
+  //     this.additionalImages = [...event.files];
+  //     this.imageUrls = [];
 
-      const fileReaders: Promise<void>[] = [];
+  //     const fileReaders: Promise<void>[] = [];
 
-      for (const file of this.additionalImages) {
-        const reader = new FileReader();
-        const frPromise = new Promise<void>((resolve) => {
-          reader.onload = () => {
-            this.imageUrls.push(reader.result as string);
-            resolve();
-          };
-        });
-        reader.readAsDataURL(file);
-        fileReaders.push(frPromise);
-      }
+  //     for (const file of this.additionalImages) {
+  //       const reader = new FileReader();
+  //       const frPromise = new Promise<void>((resolve) => {
+  //         reader.onload = () => {
+  //           this.imageUrls.push(reader.result as string);
+  //           resolve();
+  //         };
+  //       });
+  //       reader.readAsDataURL(file);
+  //       fileReaders.push(frPromise);
+  //     }
 
-      Promise.all(fileReaders).then(() => {
-        // جميع الصور جاهزة للعرض أو المعالجة
+  //     Promise.all(fileReaders).then(() => {
+  //       // جميع الصور جاهزة للعرض أو المعالجة
+  //     });
+  //   }
+  // }
+
+  removeMainImage(): void {
+    this.mainImageUrl = '';
+  }
+
+  onSelectImages(event: any): void {
+    for (let file of event.files) {
+      this.additionalImages.push(file); // ⬅️ حفظ الملفات هنا
+      this.convertToBase64(file).then((base64: string) => {
+        this.imageUrls.push(base64); // للعرض فقط
       });
     }
   }
+  removeAdditionalImage(index: number): void {
+    this.imageUrls.splice(index, 1);
+  }
+
+  private convertToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  controlProduct(productId: string) {
+    this.confirmationService.confirm({
+      message: 'Are you Sure you want to Edit this Product',
+      header: 'Confirm Edit ',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.editProduct(productId);
+      },
+      reject: () => {
+        this.exitComponent();
+      }
+    });
+  }
+
+  editProduct(productId: string) {
+    this.updateProduct();
+    console.log('بدء تعديل المنتج برقم:', productId);
+  }
+  exitComponent() {
+    this.router.navigate(['/products']);
+  }
+
 
   updateProduct() {
     if (this.prodForm.invalid) {
