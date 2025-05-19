@@ -5,7 +5,7 @@
 
   <!-- <form (ngSubmit)="updateProduct()" [formGroup]="prodForm" #Form="ngForm"
     class="grid grid-cols-1 lg:grid-cols-2 gap-10"> -->
-  <form (ngSubmit)="controlProduct()" [formGroup]="prodForm" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+  <form (ngSubmit)="controlProduct(product._id)" [formGroup]="prodForm" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
     <!-- RIGHT COLUMN -->
     <div class="!space-y-6">
@@ -166,10 +166,82 @@
     </div>
 
     <!-- Submit Button -->
-    <div class="!md:col-span-2 !mt-8 !text-center">
-      <button pButton type="submit" label="Edit Product"
+    <div class="!md:col-span-2 !mt-8 !text-center space-x-4">
+      <button style="margin-right:16px;" pButton type="button"
+        label="{{ showVariantTable ? 'Hide Variants' : 'Show Variants' }}" (click)="toggleVariantTable()"
+        class="!p-button-info !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
+
+      <button style="margin-right:16px;" pButton type="submit" label="Edit Product"
         class="!p-button-success !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
-      <!-- <button pButton type="button" (click)="router.navigate(['/products'])" label="Cancel"></button> -->
+
+      <button style="margin-right:16px;" pButton type="button" label="Cancel Edit" (click)="exitEdit()"
+        class="p-button-danger !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
+
+
     </div>
   </form>
+
+
+  <div *ngIf="showVariantTable" class="!mt-12 !border-t !pt-10">
+    <h3 class="!text-2xl !font-bold !mb-6 text-blue-800">Product Variants</h3>
+
+    <div class="text-right mb-6">
+      <button pButton type="button" label="Add New Variant" (click)="addNewVariant()"
+        class="p-button-primary !px-6 !py-2 !rounded-lg"></button>
+    </div>
+
+    <p-table [value]="product?.variants" [tableStyle]="{ 'min-width': '60rem' }"> <ng-template pTemplate="header">
+        <tr>
+          <th class="text-left p-3">ID</th>
+          <th class="text-left p-3">Name (EN)</th>
+          <th class="text-left p-3">Name (AR)</th>
+          <th class="text-left p-3">Price</th>
+          <th class="text-left p-3">Discount Price</th>
+          <th class="text-left p-3">In Stock</th>
+          <th class="text-left p-3">Color (EN)</th>
+          <th class="text-left p-3">Color (AR)</th>
+          <th class="text-left p-3">Main Image</th>
+          <th class="text-left p-3">Additional Images</th>
+          <th class="text-left p-3" style="width: 10rem;">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-variant>
+        <tr>
+          <td class="p-3">{{ variant._id }}</td>
+          <td class="p-3">{{ variant.name?.en || 'N/A' }}</td>
+          <td class="p-3">{{ variant.name?.ar || 'N/A' }}</td>
+          <td class="p-3">{{ variant.price | currency: 'USD' }}</td>
+          <td class="p-3">{{ variant.discountPrice | currency: 'USD' }}</td>
+          <td class="p-3">{{ variant.inStock }}</td>
+          <td class="p-3">{{ variant.color?.en || 'N/A' }}</td>
+          <td class="p-3">{{ variant.color?.ar || 'N/A' }}</td>
+          <td class="p-3">
+            <img *ngIf="variant.image" [src]="variant.image" alt="Variant Main Image" class="w-16 rounded" />
+            <span *ngIf="!variant.image">-</span>
+          </td>
+          <td class="p-3">
+            <div *ngIf="variant.images && variant.images.length > 0" class="flex flex-wrap gap-1">
+              <img *ngFor="let img of variant.images" [src]="img" alt="Variant Thumbnail"
+                class="w-12 h-12 rounded border" />
+            </div>
+            <span *ngIf="!variant.images || variant.images.length === 0">-</span>
+          </td>
+          <td class="p-3 flex gap-2">
+            <button pButton type="button" icon="pi pi-pencil" class="p-button-sm p-button-secondary mr-2"
+              (click)="editVariant(variant)"></button>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-sm p-button-danger"
+              (click)="confirmDeleteVariant(variant)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptyMessage">
+        <tr>
+          <td colspan="11" class="text-center text-gray-600">No variants found for this product.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div *ngIf="!product?.variants?.length" class="text-center text-gray-600 mt-4">No variants available.</div>
+
+  </div>
+
 </div>

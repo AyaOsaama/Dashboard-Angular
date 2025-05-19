@@ -18,6 +18,11 @@ import { CategoriesServiceApi } from '../../../service/categories.service';
 import { SubCategoryServiceApi } from '../../../service/subcategory.service';
 import { ProductApiService } from '../../../service/product-api.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table'; // **تأكد من استيراد TableModule**
+import { CurrencyPipe } from '@angular/common'; // **لأجل استخدام pipe currency في الـ HTML**
+import { RatingModule } from 'primeng/rating'; // **لأجل استخدام p-rating في الجدول**
+import { TagModule } from 'primeng/tag'; // **لأجل استخدام p-tag في الجدول**
 
 @Component({
   selector: 'app-product-control',
@@ -37,11 +42,16 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     InputGroupAddonModule,
     SelectModule,
     InputNumberModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    DialogModule,
+    TableModule, // **أضف TableModule هنا**
+    CurrencyPipe, // **أضف CurrencyPipe هنا لو استخدمت في الجدول**
+    RatingModule, // **أضف RatingModule هنا لو استخدمت في الجدول**
+    TagModule // **أضف TagModule هنا لو استخدمت في الجدول**
   ],
   templateUrl: './product-control.component.html',
   styleUrls: ['./product-control.component.css'], // صححت من styleUrl إلى styleUrls
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService, ConfirmationService, CurrencyPipe],
 })
 export class ProductControlComponent implements OnInit {
 
@@ -57,6 +67,21 @@ export class ProductControlComponent implements OnInit {
   product: any;
   isEditMode: boolean = false;
 
+  // --- خاصية جديدة للتحكم في ظهور جدول الفارينتس ---
+  showVariantTable: boolean = false;
+
+  // خصائص متعلقة بـ "فورم الفارينت المنفصل" و "مودال عرض بيانات فارينت" (تبقى كما هي حالياً)
+  // خصائص متعلقة بـ "فورم الفارينت المنفصل" و "مودال عرض بيانات فارينت" (تبقى كما هي حالياً، إذا كنت ستستخدمهم)
+  variantForm: FormGroup; // إذا قررت استخدام فورم منفصل لإضافة/تعديل الفارينت
+  showVariantAddEditForm: boolean = false; // للتحكم في ظهور فورم الفارينت المنفصل (إذا استخدمته)
+  editingVariantId: string | null = null; // لتخزين ID الفارينت الذي يتم تعديله (إذا استخدمت فورم منفصل)
+  variantImageFile: File | null = null; // ملف صورة الفارينت المحدد (إذا استخدمت فورم منفصل)
+  variantImageUrl: string | null = null; // معاينة صورة الفارينت المحدد (إذا استخدمت فورم منفصل)
+  variantAdditionalImageFiles: File[] = []; // ملفات صور الفارينت الإضافية (إذا استخدمت فورم منفصل)
+  variantAdditionalImageUrls: string[] = []; // معاينة صور الفارينت الإضافية (إذا استخدمت فورم منفصل)
+  showVariantDialog: boolean = false; // للتحكم في ظهور المودال المعلق (لو تم استخدامه)
+  currentVariant: any; // بيانات فارينت لعرضها في المودال (لو تم استخدامه)
+
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -66,7 +91,8 @@ export class ProductControlComponent implements OnInit {
     private route: ActivatedRoute,
     private f_builder: FormBuilder,
     private CategoriesServiceApi: CategoriesServiceApi,
-    private SubCategoryServiceApi: SubCategoryServiceApi
+    private SubCategoryServiceApi: SubCategoryServiceApi,
+    private currencyPipe: CurrencyPipe // **جديد: لو احتجت تستخدمه في الـ TS**
   ) {
     this.prodForm = this.f_builder.group({
       brand: [''],
@@ -87,6 +113,20 @@ export class ProductControlComponent implements OnInit {
       image: [''],
       images: [[]]
     });
+
+    // تهيئة فورم الفارينت المنفصل (نتركه كما هو، قد نحتاجه لعمليات الإضافة/التعديل)
+    this.variantForm = this.f_builder.group({
+      nameEn: ['', Validators.required],
+      nameAr: ['', Validators.required],
+      colorEn: [''],
+      colorAr: [''],
+      price: [0, [Validators.min(0), Validators.required]],
+      inStock: [0, [Validators.min(0), Validators.required]],
+      // حقول صور خاصة بفورم الفارينت، قد لا تحتاج Validators عليها مباشرة لو سيتم التحقق من الملفات
+      variantMainImage: [''], // للتعامل مع صورة الفارينت الرئيسية في هذا الفورم
+      variantAdditionalImages: [[]] // للتعامل مع صور الفارينت الإضافية في هذا الفورم
+    });
+
   }
 
   ngOnInit(): void {
@@ -163,6 +203,8 @@ export class ProductControlComponent implements OnInit {
         console.error('Error loading product details:', error);
       }
     });
+    // تهيئة حالة ظهور جدول الفارينتس ليكون مخفياً عند تحميل الصفحة
+    this.showVariantTable = false;
   }
 
   fetchCategories() {
@@ -344,4 +386,184 @@ export class ProductControlComponent implements OnInit {
       }
     });
   }
+
+  exitEdit() {
+    this.router.navigate(['/products']);
+  }
+
+  // === دوال ومنطق جدول الفارينتس وقسم إدارة الفارينتس ===
+
+  // دالة لتبديل حالة ظهور جدول الفارينتس
+  // سنربط هذه الدالة بزر "Show Variant" في الـ HTML
+  toggleVariantTable(): void {
+    this.showVariantTable = !this.showVariantTable;
+    // يمكن هنا أيضاً إضافة منطق لجلب الفارينتس لو لم تكن قد حملت بالكامل مع المنتج
+    // لكن بناءً على الكود السابق، يبدو أن الفارينتس يتم تحميلها مع المنتج في loadProductDetails
+  }
+
+
+  // دوال إدارة الفارينتس التي ستُستدعى من أزرار الجدول الجديد
+  // هذه الدوال ستحتاج منك ربطها بـ API الباك إند المناسب
+
+  // دالة لفتح فورم/مودال لإضافة فارينت جديد
+  // addNewVariant(): void {
+  //   // هنا يمكنك إظهار فورم الفارينت المنفصل (showVariantAddEditForm = true) وتهيئته للإضافة
+  //   // أو الانتقال لصفحة أخرى مخصصة لإضافة الفارينت مع تمرير ProductId
+  //   console.log('Add New Variant clicked for Product ID:', this.productId);
+  //   // مثال لفتح الفورم المنفصل الذي كان معلقاً:
+  //   // this.editingVariantId = null;
+  //   // this.variantForm.reset();
+  //   // this.variantImageFile = null;
+  //   // this.variantImageUrl = null;
+  //   // this.variantAdditionalImageFiles = [];
+  //   // this.variantAdditionalImageUrls = [];
+  //   // this.showVariantAddEditForm = true;
+
+  //   // مثال للانتقال لصفحة إضافة فارينت:
+  //   // this.router.navigate(['/add-variant'], { queryParams: { productId: this.productId } });
+  //   this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Add New Variant logic pending implementation.' });
+
+  // }
+
+
+  // دالة لفتح فورم/مودال لإضافة فارينت جديد
+  // **سيتم ربط زر "Add New Variant" في جدول الفارينتس بهذه الدالة**
+  addNewVariant(): void {
+    // هنا سنقوم بالانتقال إلى مكون جديد مخصص لإضافة فارينت جديد
+    // مع تمرير ProductId كـ query parameter ليعرفه المكون الجديد
+    if (this.productId) {
+      console.log('Navigating to add new variant for Product ID:', this.productId);
+      // استخدام خدمة Router للانتقال
+      // المسار '/add-variant' يجب أن يكون معرفاً في ملف التوجيه (routing module) الخاص بتطبيقك
+      // queryParams: { productId: this.productId } يمرر ID المنتج كباراميتر في رابط الصفحة الجديدة
+      this.router.navigate(['/insert-variant'], { queryParams: { productId: this.productId } });
+    } else {
+      // هذه الحالة لا ينبغي أن تحدث في صفحة تعديل منتج موجود، لكنها كحماية
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cannot add variant, Product ID is missing.' });
+    }
+
+    // **ملاحظة:** بما أننا سننتقل لمكون جديد، فليس هناك حاجة لإظهار فورم أو مودال داخل المكون الحالي هنا.
+    // لذلك، أي كود سابق لإظهار فورم منفصل أو إعادة تعيينه في هذه الدالة يمكن إزالته.
+  }
+
+
+  // دالة لفتح فورم/مودال لتعديل فارينت موجود
+  editVariant(variant: any): void {
+    // هنا يمكنك إظهار فورم الفارينت المنفصل (showVariantAddEditForm = true) وملءه ببيانات الفارينت
+    // أو الانتقال لصفحة أخرى مخصصة لتعديل الفارينت مع تمرير VariantId
+    console.log('Edit Variant clicked:', variant);
+    // مثال لفتح الفورم المنفصل الذي كان معلقاً (إذا قررت استخدامه):
+    /*
+    this.editingVariantId = variant._id;
+    this.variantForm.patchValue({
+       nameEn: variant.name?.en || '',
+       nameAr: variant.name?.ar || '',
+       colorEn: variant.color?.en || '',
+       colorAr: variant.color?.ar || '',
+       price: variant.price || 0,
+       inStock: variant.inStock || 0,
+    });
+     // ملء بيانات الصور في الفورم المنفصل لو كانت موجودة
+     this.variantImageUrl = variant.image || null;
+     this.variantAdditionalImageUrls = variant.images || []; // نفترض أنها images في بيانات الفارينت
+     this.variantImageFile = null; // مسح الملف المختار لأننا نعرض الموجود
+     this.variantAdditionalImageFiles = []; // مسح الملفات المختارة
+
+    this.showVariantAddEditForm = true; // افترض أن هذا المتغير يتحكم في ظهور الفورم المنفصل
+    */
+
+    // مثال للانتقال لصفحة تعديل فارينت منفصلة:
+    // this.router.navigate(['/edit-variant', variant._id]); // لو المسار يحتوي على ID الفارينت
+    // this.router.navigate(['/edit-variant'], { queryParams: { variantId: variant._id, productId: this.productId } }); // لو بالـ query params
+    this.messageService.add({ severity: 'info', summary: 'Info', detail: `Edit Variant logic for ID ${variant._id} pending implementation.` });
+  }
+
+  // دالة لتأكيد حذف فارينت
+  confirmDeleteVariant(variant: any): void {
+    console.log('Confirm delete for variant:', variant);
+    this.confirmationService.confirm({
+      message: `Are you Sure you want to Delete Variant: ${variant.name?.en || variant._id}?`,
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.deleteVariant(variant._id); // استدعاء دالة الحذف عند التأكيد
+      },
+      reject: () => {
+        // لا شيء يحدث عند الإلغاء
+      }
+    });
+  }
+
+  // دالة لحذف فارينت موجود
+  deleteVariant(variantId: string): void {
+    if (!this.productId) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Product ID is missing for variant deletion' });
+      return;
+    }
+    // استدعاء خدمة حذف الفارينت في الباك إند (افترض وجودها)
+    console.log('Deleting variant with ID:', variantId);
+    // this.ProductApiService.deleteVariant(variantId).subscribe({
+    //   next: () => {
+    //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Variant deleted successfully' });
+    //     this.loadProductDetails(this.productId!); // إعادة تحميل بيانات المنتج لتحديث القائمة
+    //   },
+    //   error: (error) => {
+    //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete variant' });
+    //     console.error('Delete variant error:', error);
+    //   }
+    // });
+    this.messageService.add({ severity: 'info', summary: 'Info', detail: `Delete variant logic for ID ${variantId} is pending implementation.` });
+
+    // مؤقتاً: قم بإزالة الفارينت من القائمة المحلية للعرض الفوري (لا تنسى استدعاء loadProductDetails بعد الـ API call الحقيقي)
+    if (this.product?.variants) {
+      this.product.variants = this.product.variants.filter((v: any) => v._id !== variantId);
+    }
+  }
+
+
+  // دوال التعامل مع صور فورم الفارينت المنفصل (تبقى كما هي، قد تحتاجها لو استخدمت هذا الفورم للإضافة/التعديل)
+  // onSelectVariantMainImage(event: any): void { /* ... */ }
+  // removeVariantMainImage(): void { /* ... */ }
+  // onSelectVariantAdditionalImages(event: any): void { /* ... */ }
+  // removeVariantAdditionalImage(index: number): void { /* ... */ }
+
+
+  // دوال ومنطق المودال المعلق (تبقى كما هي حالياً)
+  // showVariantDetails(variant: any): void { /* ... */ }
+
+
+  // دوال التعامل مع صور فورم الفارينت المنفصل (تبقى كما هي، قد تحتاجها لو استخدمت هذا الفورم للإضافة/التعديل)
+  onSelectVariantMainImage(event: any): void { /* ... */ }
+  removeVariantMainImage(): void { /* ... */ }
+  onSelectVariantAdditionalImages(event: any): void { /* ... */ }
+  removeVariantAdditionalImage(index: number): void { /* ... */ }
+
+  // دالة getSeverity المستخدمة في الـ HTML الأصلي لحالة المخزون
+  getSeverity(inStock: number): string {
+    if (inStock > 9) return 'success';
+    if (inStock > 0) return 'warning';
+    return 'danger';
+  }
+
+
+
+  // دوال ومنطق المودال المعلق (تبقى كما هي حالياً)
+  // showVariantDetails(variant: any): void { /* ... */ }
+
+
+  // showVariantDialog: boolean = false;
+
+  // currentVariant = {
+  //   name: { en: 'Variant Name EN', ar: 'اسم الفارينت' },
+  //   color: { en: 'Red', ar: 'أحمر' },
+  //   price: 100,
+  //   discountPrice: 90,
+  //   inStock: 50,
+  // };
+
+  // مش محتاج دالة showVariant لأن فتح المودال يتم بالـ binding
 }
+
+
+
+
