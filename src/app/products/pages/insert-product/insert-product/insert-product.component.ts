@@ -38,7 +38,6 @@ import { SubService } from '../../../../subcategory/services/services/subcategor
     FileUploadModule,
     DropdownModule,
     InputNumberModule,
-    InputNumberModule,
     FormsModule,
     FluidModule,
     InputGroupAddonModule,
@@ -97,7 +96,7 @@ export class InsertProductComponent implements OnInit {
     this.fetchSubcategories();
 
   }
-  
+
   onCategoryChange(event: any) {
     this.categoryId = event.value;
 
@@ -119,7 +118,6 @@ export class InsertProductComponent implements OnInit {
     const price = this.prodForm.get('price')?.value || 0;
     const discount = this.prodForm.get('discount')?.value || 0;
     const discountPrice = price - (price * discount / 100);
-
     this.prodForm.patchValue({ discountPrice: parseFloat(discountPrice.toFixed(2)) }, { emitEvent: false });
   }
 

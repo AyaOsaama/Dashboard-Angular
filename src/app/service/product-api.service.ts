@@ -77,6 +77,17 @@ export class ProductApiService {
     return this.http.post<Product>(`${environment.apiUrl}/products`, newProduct, { headers });
   }
 
+  addVariant(productId: string, addVariant: FormData): Observable<ProductVariant> { // Or Observable<any> depending on backend response
+    const token = localStorage.getItem('token');
+    console.log('Token sent:', token);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log("Authorization Header:", headers);
+    // No need to set Content-Type for FormData
+    console.log(`Attempting to add variant for product ID: ${productId}`);
+    // Make a POST request to the variants endpoint for the specific product
+    return this.http.post<ProductVariant>(`${environment.apiUrl}/products/${productId}/variants`, addVariant, { headers });
+  }
+
   // updateProduct(productId: string, updatedProd: Product): Observable<Product> {
   //   const token = localStorage.getItem('token');
   //   console.log('Token sent:', token);
@@ -111,14 +122,7 @@ export class ProductApiService {
     return this.http.delete<void>(`${environment.apiUrl}/products/${productId}`, { headers });
   }
 
-  deleteProductVariant(productId: string, variantId: string): Observable<void> {
-    const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Authorization Header:", headers);
-    // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
-    return this.http.delete<void>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, { headers });
-  }
+
 
 
   // getAllIDs(): Observable<string[]> {
@@ -160,6 +164,39 @@ export class ProductApiService {
     console.log("Authorization Header:", headers);
     // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
     return this.http.get<Product[]>(`${environment.apiUrl}/products?productName=${value}`, { headers });
+  }
+
+  // **NEW FUNCTION: Add a new variant to an existing product**
+  // This function takes the product ID and FormData containing variant data and files.
+  // Assuming the backend endpoint is like POST /products/:productId/variants
+  // addVariant(productId: string, addVariant: FormData): Observable<ProductVariant> { // Or Observable<any> depending on backend response
+  //   const token = localStorage.getItem('token');
+  //   console.log('Token sent:', token);
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   console.log("Authorization Header:", headers);
+  //   // No need to set Content-Type for FormData
+  //   console.log(`Attempting to add variant for product ID: ${productId}`);
+  //   // Make a POST request to the variants endpoint for the specific product
+  //   return this.http.post<ProductVariant>(`${environment.apiUrl}/products/${productId}/variants`, addVariant, { headers });
+  // }
+
+  deleteProductVariant(productId: string, variantId: string): Observable<void> {
+    const token = localStorage.getItem('token');
+    console.log('Token sent:', token);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log("Authorization Header:", headers);
+    // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
+    return this.http.delete<void>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, { headers });
+  }
+
+  // **Placeholder for Update Variant Function (if needed later)**
+  // Assuming the backend endpoint is like PATCH /products/:productId/variants/:variantId
+  updateVariant(productId: string, variantId: string, variantData: FormData): Observable<ProductVariant> {
+    const token = localStorage.getItem('token');
+    console.log('Token sent:', token);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log(`Attempting to update variant ID: ${variantId} for product ID: ${productId}`);
+    return this.http.patch<ProductVariant>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, variantData, { headers });
   }
 
 
