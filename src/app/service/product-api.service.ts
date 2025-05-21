@@ -122,6 +122,25 @@ export class ProductApiService {
     return this.http.delete<void>(`${environment.apiUrl}/products/${productId}`, { headers });
   }
 
+  deleteProductVariant(productId: string, variantId: string): Observable<void> {
+    const token = localStorage.getItem('token');
+    console.log('Token sent:', token);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log("Authorization Header:", headers);
+    // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
+    return this.http.delete<void>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, { headers });
+  }
+
+  // **Placeholder for Update Variant Function (if needed later)**
+  // Assuming the backend endpoint is like PATCH /products/:productId/variants/:variantId
+  updateVariant(productId: string, variantId: string, variantData: FormData): Observable<ProductVariant> {
+    const token = localStorage.getItem('token');
+    console.log('Token sent:', token);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log(`Attempting to update variant ID: ${variantId} for product ID: ${productId}`);
+    return this.http.patch<ProductVariant>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, variantData, { headers });
+  }
+
 
 
 
@@ -180,24 +199,7 @@ export class ProductApiService {
   //   return this.http.post<ProductVariant>(`${environment.apiUrl}/products/${productId}/variants`, addVariant, { headers });
   // }
 
-  deleteProductVariant(productId: string, variantId: string): Observable<void> {
-    const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Authorization Header:", headers);
-    // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
-    return this.http.delete<void>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, { headers });
-  }
 
-  // **Placeholder for Update Variant Function (if needed later)**
-  // Assuming the backend endpoint is like PATCH /products/:productId/variants/:variantId
-  updateVariant(productId: string, variantId: string, variantData: FormData): Observable<ProductVariant> {
-    const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log(`Attempting to update variant ID: ${variantId} for product ID: ${productId}`);
-    return this.http.patch<ProductVariant>(`${environment.apiUrl}/products/${productId}/variants/${variantId}`, variantData, { headers });
-  }
 
 
 }

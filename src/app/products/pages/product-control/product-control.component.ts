@@ -23,6 +23,9 @@ import { TableModule } from 'primeng/table'; // **تأكد من استيراد T
 import { CurrencyPipe } from '@angular/common'; // **لأجل استخدام pipe currency في الـ HTML**
 import { RatingModule } from 'primeng/rating'; // **لأجل استخدام p-rating في الجدول**
 import { TagModule } from 'primeng/tag'; // **لأجل استخدام p-tag في الجدول**
+import { ProductVariant } from '../../model/product';
+
+
 
 @Component({
   selector: 'app-product-control',
@@ -84,6 +87,7 @@ export class ProductControlComponent implements OnInit {
 
 
   constructor(
+
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private ProductApiService: ProductApiService,
@@ -519,6 +523,96 @@ export class ProductControlComponent implements OnInit {
       this.product.variants = this.product.variants.filter((v: any) => v._id !== variantId);
     }
   }
+
+  onDeleteVariant(variantToDelete: ProductVariant) {
+    // الشرط الجديد: التحقق إذا كان هذا هو الفاريانت الوحيد المتبقي
+    if (this.product && this.product.variants && this.product.variants.length === 1) {
+      this.messageService.add({
+        key: 'myToast',
+        severity: 'error',
+        summary: 'Deletion Failed',
+        detail: 'Cannot delete the last remaining variant. A product must have at least one variant.',
+        life: 5000 // مدة عرض الرسالة
+      });
+      console.warn('[Frontend] Deletion blocked: Cannot delete the last variant for product ID:', this.productId);
+      return; // إيقاف عملية الحذف
+    }
+
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete ${variantToDelete.name.en || 'this variant'}?`,
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        if (!this.productId) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Product ID is missing for variant deletion.' });
+          console.error('[Frontend] Product ID is missing for variant deletion.');
+          return;
+        }
+        if (!variantToDelete._id) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Variant ID is missing for deletion.' });
+          console.error('[Frontend] Variant ID is missing for deletion.');
+          return;
+        }
+
+        console.log(`[Frontend] Attempting to delete variant with ID: ${variantToDelete._id} from product: ${this.productId}`);
+
+        this.ProductApiService.deleteProductVariant(this.productId, variantToDelete._id).subscribe({
+          next: () => {
+            if (this.product?.variants) {
+              this.product.variants = this.product.variants.filter((v: ProductVariant) => v._id !== variantToDelete._id);
+            }
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Deleted',
+              detail: 'Variant deleted successfully from the database.',
+              life: 3000
+            });
+            console.log(`[Frontend] Variant ${variantToDelete._id} deleted successfully.`);
+          },
+          error: (err) => {
+            console.error('[Frontend] Failed to delete variant:', err);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Deletion Failed',
+              detail: 'Could not delete variant from the database.',
+              life: 3000
+            });
+          }
+        });
+      }
+    });
+  }
+
+  // onDeleteVariant(variant: ProductVariant) {
+  //   this.confirmationService.confirm({
+  //     message: `Are you sure you want to delete ${variant.name.en}?`,
+  //     header: 'Confirm',
+  //     icon: 'pi pi-exclamation-triangle',
+  //     accept: () => {
+  //       console.log('Deleting product with ID:', variant._id);
+  //       this.ProductApiService.deleteProductVariant(this.product._id,this.variant._id).subscribe({
+  //         next: () => {
+  //           this.products = this.products.filter(p => p._id !== variant._id);
+  //           this.messageService.add({
+  //             severity: 'success',
+  //             summary: 'Deleted',
+  //             detail: 'Product deleted from the database.',
+  //             life: 3000
+  //           });
+  //         },
+  //         error: (err) => {
+  //           console.error('Failed to delete product:', err);
+  //           this.messageService.add({
+  //             severity: 'error',
+  //             summary: 'Deletion Failed',
+  //             detail: 'Could not delete product from the database.',
+  //             life: 3000
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
 
   // دوال التعامل مع صور فورم الفارينت المنفصل (تبقى كما هي، قد تحتاجها لو استخدمت هذا الفورم للإضافة/التعديل)

@@ -27,6 +27,8 @@ import { CategoriesService } from '../../../../category/services/categories.serv
 import { ICategory } from '../../../../category/model/icategory';
 import { SelectModule } from 'primeng/select';
 import { ProductVariant } from '../../../model/product';
+// import { ConfirmationService } from 'primeng/api';
+// import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 @Component({
@@ -46,16 +48,22 @@ import { ProductVariant } from '../../../model/product';
     FormsModule,
     FluidModule,
     InputGroupAddonModule,
-    SelectModule
+    SelectModule,
+    // ConfirmDialogModule
     // InputTextareaModule,
     // أضف أي مكونات PrimeNG أخرى تستخدمها في الـ HTML
   ],
-  providers: [MessageService, CurrencyPipe, InputGroupModule],
+  providers: [MessageService
+    // ConfirmationService
+    , CurrencyPipe
+    , InputGroupModule
+  ],
   templateUrl: './insert-variant.component.html',
   styleUrl: './insert-variant.component.css'
 })
 export class InsertVariantComponent implements OnInit {
   productId!: string; // لتخزين ID المنتج الأم
+  // productsVariants!: ProductVariant[];
   variantForm: FormGroup;
   uploadedFiles: File[] = [];
   mainImageUrl: string = '';
@@ -76,7 +84,8 @@ export class InsertVariantComponent implements OnInit {
     private route: ActivatedRoute, // لحقن ActivatedRoute
     private router: Router, // لحقن Router
     private messageService: MessageService, // لحقن MessageService
-    private productApiService: ProductApiService // لحقن خدمة API
+    private productApiService: ProductApiService, // لحقن خدمة API
+    // private confirmationService: ConfirmationService
   ) {
     // تهيئة فورم الفارينت
     this.variantForm = this.f_builder.group({
@@ -353,7 +362,7 @@ export class InsertVariantComponent implements OnInit {
       next: (response) => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Variant added successfully!' });
         console.log('Variant added:', response);
-        this.router.navigate(['/product-control', this.productId]);
+        this.router.navigate(['/products/product-control', this.productId]);
       },
       error: (error) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add variant.' });
@@ -361,6 +370,8 @@ export class InsertVariantComponent implements OnInit {
       }
     });
   }
+
+
 
 
 }
