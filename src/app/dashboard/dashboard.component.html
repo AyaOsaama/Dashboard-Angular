@@ -1,17 +1,113 @@
-<h2 style="text-align: center;">Monthly Sales Overview</h2>
-<div style="max-width: 700px; margin: auto;">
-  <canvas baseChart
-          [data]="barChartData"
-          [options]="barChartOptions"
-          [type]="barChartType">
-  </canvas>
+<div class="grid">
+  <!-- Monthly Sales -->
+  <div class="col-12 md:col-6 lg:col-4">
+    <p-chart type="bar" [data]="monthlySalesData" [options]="monthlySalesOptions"></p-chart>
+    <h4 class="text-center mt-2">Monthly Sales</h4>
+  </div>
+
+  <!-- Order Status -->
+  <div class="col-12 md:col-6 lg:col-4">
+    <p-chart type="pie" [data]="orderStatusData" [options]="orderStatusOptions"></p-chart>
+    <h4 class="text-center mt-2">Order Status</h4>
+  </div>
+
+  <!-- Top Products in Cart -->
+  <!-- <div class="col-12 md:col-6 lg:col-4">
+    <p-chart type="doughnut" [data]="topProductsData" [options]="topProductsOptions"></p-chart>
+    <h4 class="text-center mt-2">Top Products in Cart</h4>
+  </div> -->
+ <div class="col-12 md:col-6 lg:col-4">
+  <p-chart type="doughnut" [data]="topProductsData" [options]="topProductsOptions"></p-chart>
+  <h4 class="text-center mt-2">Top Products in Cart</h4>
+
 </div>
 
-<h2 style="text-align: center; margin-top: 50px;">Top Selling Categories</h2>
-<div style="max-width: 500px; margin: auto;">
-  <canvas baseChart
-          [data]="doughnutChartData"
-          [options]="doughnutChartOptions"
-          [type]="doughnutChartType">
-  </canvas>
+
+
+  <!-- Total Cart Items -->
+  <div class="col-12 md:col-6 lg:col-4">
+    <p-chart type="pie" [data]="totalCartItemsData" [options]="totalCartItemsOptions"></p-chart>
+    <h4 class="text-center mt-2">Total Cart Items</h4>
+  </div>
+
+  <!-- Total Cart Value -->
+  <div class="col-12 md:col-6 lg:col-4">
+    <p-chart type="pie" [data]="totalCartValueData" [options]="totalCartValueOptions"></p-chart>
+    <h4 class="text-center mt-2">Total Cart Value</h4>
+  </div>
+
+  <!-- Users with Cart Items -->
+  <div class="col-12 md:col-6 lg:col-4">
+   <p-chart 
+  type="doughnut" 
+  [data]="usersWithCartItemsData" 
+  [options]="usersWithCartItemsOptions" 
+  styleClass="w-full md:w-30rem">
+</p-chart>
+
+
+    <h4 class="text-center mt-2">Users with Cart Items</h4>
+  </div>
+
+  <!-- Total Ratings -->
+  <!-- <div class="col-12 md:col-6 lg:col-4">
+    <p-chart type="pie" [data]="totalRatingsData" [options]="totalRatingsOptions"></p-chart>
+    <h4 class="text-center mt-2">Total Ratings</h4>
+  </div> -->
+
+  <!-- Average Rating -->
+  <!-- <div class="col-12 md:col-6 lg:col-4">
+    <p-chart type="pie" [data]="averageRatingData" [options]="averageRatingOptions"></p-chart>
+    <h4 class="text-center mt-2">Average Rating</h4>
+  </div> -->
+
+  <!-- Rating Distribution -->
+  <!-- <div class="col-12">
+    <p-chart type="bar" [data]="ratingDistributionData" [options]="ratingDistributionOptions"></p-chart>
+    <h4 class="text-center mt-2">Rating Distribution</h4>
+  </div> -->
+
+  <!-- Most Rated Products -->
+  <!-- <div class="col-12">
+    <p-chart type="bar" [data]="mostRatedProductsData" [options]="mostRatedProductsOptions"></p-chart>
+    <h4 class="text-center mt-2">Most Rated Products</h4>
+  </div> -->
+<!-- Ratings -->
+ <p-tabPanel header="Charts">
+  <div class="p-grid p-dir-col p-ai-center p-p-3">
+
+    <!-- KPIs Section -->
+    <div class="p-grid p-justify-center p-mb-4" style="width: 100%;">
+      <div class="p-col-6 p-md-3 text-center">
+        <h5>Total Ratings</h5>
+        <p class="text-2xl font-bold text-primary">{{ ratingKPIs.total }}</p>
+      </div>
+      <div class="p-col-6 p-md-3 text-center">
+        <h5>Average Rating</h5>
+        <p class="text-2xl font-bold text-orange-500">{{ ratingKPIs.average }}</p>
+      </div>
+    </div>
+
+    <!-- Ratings Distribution Chart -->
+    <p-chart 
+      type="doughnut"
+      [data]="ratingDistributionData"
+      [options]="ratingDistributionOptions"
+      style="max-width: 300px; margin: auto;"
+    ></p-chart>
+
+    <!-- Most Rated Products List -->
+    <div class="p-mt-4" style="width: 100%;">
+      <h5> Most Rated Products</h5>
+      <ul class="p-pl-3">
+        <li *ngFor="let p of topRatedProducts">
+          <strong>{{ p.productName }}</strong>: {{ p.totalRatings }} ratings
+        </li>
+      </ul>
+    </div>
+    
+  </div>
+</p-tabPanel>
+
+
 </div>

@@ -36,6 +36,7 @@ export class PostsListComponent {
   likesDialogVisible = false;
   commentsDialogVisible = false;
   selectedPost: any = null;
+  defaultImage = 'https://cdn.pixabay.com/photo/2015/10/07/12/17/post-976115_960_720.png';
   defaultAvatar = 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg';
   editedPost: Ieditpost = this.createEmptyPost();
   editPostDialog = false;
@@ -74,6 +75,7 @@ export class PostsListComponent {
         console.log('====================================');
         this.posts = res.posts; 
         this.filteredPosts=res.posts;
+        if(this.filteredPosts)
         console.log('====================================');
         console.log(res.posts);
         console.log('====================================');

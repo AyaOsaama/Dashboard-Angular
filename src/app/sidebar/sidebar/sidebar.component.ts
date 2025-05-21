@@ -84,7 +84,6 @@ export class SidebarComponent {
     if (userBackStr && userBackStr !== "undefined") {
       try {
         this.user = JSON.parse(userBackStr);
-        console.log("User loaded:", this.user);
       } catch (error) {
         console.error("Failed to parse user from localStorage:", error);
       }

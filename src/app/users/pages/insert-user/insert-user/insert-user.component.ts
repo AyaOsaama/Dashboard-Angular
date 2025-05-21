@@ -9,21 +9,27 @@ import { UserService } from '../../../services/user-list.service';
 import { Router } from '@angular/router';
 import { IEditableUser } from '../../../model/ieditableuser';
 import { ToastModule } from 'primeng/toast';    
+import { InputIconModule } from 'primeng/inputicon';
+import { IconFieldModule } from 'primeng/iconfield';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
   selector: 'app-insert-user',
   standalone: true,
-  imports: [CommonModule, FormsModule, InputTextModule, ButtonModule, DialogModule,ToastModule],
+  imports: [CommonModule, FormsModule, InputTextModule, ButtonModule, DialogModule,ToastModule,IconFieldModule,
+    FloatLabelModule,
+    InputIconModule],
   templateUrl: './insert-user.component.html',
   styleUrl: './insert-user.component.css',
   providers: [MessageService]
 })
 export class InsertUserComponent implements OnInit {
+   defaultAvatar='https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg';
   user: IEditableUser = {
     userName: { en: '', ar: '' },
     email: '',
     password: '',
-    role: 'user',
+    role: '',
     phone: '',
     address: { en: '', ar: '' },
     imageFile: null,
@@ -85,7 +91,7 @@ export class InsertUserComponent implements OnInit {
       email: '',
       password: '',
       phone: '',
-      role: 'user',
+      role: '',
       address: { en: '', ar: '' },
       imageFile: null,
       imagePreview: ''
