@@ -19,6 +19,7 @@ import { OrderDetailsComponent } from './orders/pages/order-details/order-detail
 import { TestComponent } from './test/test.component';
 import { ProductControlComponent } from './products/pages/product-control/product-control.component';
 import { InsertVariantComponent } from './products/pages/product-control/insert-variant/insert-variant.component';
+import { EditVariantComponent } from './products/pages/product-control/edit-variant/edit-variant.component';
 // import { ProductControlComponent } from './products/pages/product-control/product-control/product-control.component';
 // import { EditProductComponent } from './products/pages/edit-product/edit-product.component';
 
@@ -41,6 +42,8 @@ export const routes: Routes = [
       { path: 'products/product-control/:idFromURL', component: ProductControlComponent },
       // { path: 'products/edit-product/:id', component: EditProductComponent },
       { path: 'insert-variant', component: InsertVariantComponent },
+      { path: 'products/:productId/edit-variant/:variantId', component: EditVariantComponent }, // <--- المسار الجديد لتعديل الفاريانت
+
 
       { path: 'categories', component: CategoriesListComponent },
       { path: 'categories/insert', component: InsertCategoryComponent },
