@@ -2,6 +2,10 @@
   <p-confirmDialog></p-confirmDialog>
   <p-toast key="myToast"></p-toast>
   <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">Edit Product</h2>
+  <h3 class="!text-2xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">
+    {{'Product ID :'}} {{ product._id }}
+  </h3>
+
 
   <!-- <form (ngSubmit)="updateProduct()" [formGroup]="prodForm" #Form="ngForm"
     class="grid grid-cols-1 lg:grid-cols-2 gap-10"> -->
@@ -9,6 +13,7 @@
 
     <!-- RIGHT COLUMN -->
     <div class="!space-y-6">
+
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Name (EN)</label>
         <input pInputText formControlName="nameEN" placeholder="Product name in English"

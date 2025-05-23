@@ -58,10 +58,10 @@ export class EditVariantComponent implements OnInit {
 
   productId!: string; // لتخزين ID المنتج الأم
   variantId!: string; // لتخزين ID الفاريانت المحدد
-  currentVariant: ProductVariant | null = null; // لتخزين بيانات الفاريانت المحملة
+  loadVariant: ProductVariant | null = null; // لتخزين بيانات الفاريانت المحملة
+  currentVariant: ProductVariant | null = null; // لتخزين الفاريانت الحالي
 
   variantForm: FormGroup;
-
   variantImageFile: File | null = null; // ملف الصورة الرئيسية الجديدة
   variantImageUrl: string | null = null; // لمعاينة الصورة الرئيسية للفاريانت
 
@@ -79,17 +79,21 @@ export class EditVariantComponent implements OnInit {
     // private SubCategoryServiceApi: SubCategoryServiceApi, // قد لا تحتاجها هنا
     private currencyPipe: CurrencyPipe
   ) {
-    // تهيئة فورم الفاريانت
+    // تهيئة فورم الفاريانت - نقوم بتهيئة واحدة فقط في ngOnInit
     this.variantForm = this.f_builder.group({
-      nameEn: ['', Validators.required], // تغيير الاسم من nameEN إلى nameEn
-      nameAr: ['', Validators.required], // تغيير الاسم من nameAR إلى nameAr
-      price: [0, [Validators.min(0), Validators.required]],
+      inStock: [0, Validators.min(0)],
+      nameEN: [''],
+      nameAR: [''],
+      price: [0, Validators.min(0)],
       discount: [0, [Validators.min(0), Validators.max(100)]],
-      discountPrice: [{ value: 0, disabled: true }], // سيكون Disabled
-      inStock: [0, [Validators.min(0), Validators.required]],
-      colorEn: [''], // تغيير الاسم من colorEN إلى colorEn
-      colorAr: [''], // تغيير الاسم من colorAR إلى colorAr
-      // لا نضع image و images كـ form controls مباشرة، التعامل معهم يدوياً
+      discountPrice: [{ value: 0 }],
+      colorEN: [''],
+      colorAR: [''],
+      // price: [0, [Validators.min(0), Validators.required]],
+      // inStock: [0, [Validators.min(0), Validators.required]],
+      // // حقول صور خاصة بفورم الفارينت، قد لا تحتاج Validators عليها مباشرة لو سيتم التحقق من الملفات
+      // variantMainImage: [''], // للتعامل مع صورة الفارينت الرئيسية في هذا الفورم
+      // variantAdditionalImages: [[]] // للتعامل مع صور الفارينت الإضافية في هذا الفورم
     });
   }
 
@@ -98,62 +102,67 @@ export class EditVariantComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.productId = params.get('productId')!; // تأكد من الاسم المطابق في الـ route
       this.variantId = params.get('variantId')!; // تأكد من الاسم المطابق في الـ route
+      // console.log('Product ID from URL:', this.productId); // <--- ضيف السطر ده
+      // console.log('Variant ID from URL:', this.variantId); // <--- ضيف
 
       if (this.productId && this.variantId) {
         this.loadVariantDetails(this.productId, this.variantId);
       } else {
         this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Product ID or Variant ID is missing from URL.' });
-        this.router.navigate(['/products']); // العودة لصفحة المنتجات
+        this.router.navigate(['/test1']); // العودة لصفحة المنتجات
       }
     });
 
     // حساب سعر الخصم عند تغير السعر أو الخصم
-    this.variantForm.get('price')?.valueChanges.subscribe(() => this.updateDiscountPrice());
-    this.variantForm.get('discount')?.valueChanges.subscribe(() => this.updateDiscountPrice());
+    // this.variantForm.get('price')?.valueChanges.subscribe(() => this.updateDiscountPrice());
+    // this.variantForm.get('discount')?.valueChanges.subscribe(() => this.updateDiscountPrice());
   }
 
+  // في دالة loadVariantDetails(productId: string, variantId: string)
+  // في دالة loadVariantDetails(productId: string, variantId: string)
   loadVariantDetails(productId: string, variantId: string): void {
-    // بما أن الـ backend route الذي قدمته لا يحتوي على getVariantById منفصلة،
-    // سنعتمد على getProductById ثم نبحث عن الفاريانت داخله.
-    this.ProductApiService.getProdByIdStr(productId).subscribe({
-      next: (data: { product: Product }) => { // تحديد نوع data المتوقع
-        const product = data.product;
+    this.ProductApiService.getProdByIdStrVariant(productId).subscribe({
+      // هنا هنستقبل الـ `data` اللي جواها `product`
+      next: (data: { message: string; product: Product }) => { // <--- التغيير هنا: نستقبل الكائن الكامل
+        const product = data.product; // <--- وهنا بنستخرج الـ Product من الـ `data`
+
         if (product && product.variants) {
           this.currentVariant = product.variants.find((v: ProductVariant) => v._id === variantId) || null;
 
           if (this.currentVariant) {
-            // ملء الفورم بالبيانات المحملة
             this.variantForm.patchValue({
-              nameEn: this.currentVariant.name?.en || '',
-              nameAr: this.currentVariant.name?.ar || '',
+              nameEN: this.currentVariant.name?.en || '',
+              nameAR: this.currentVariant.name?.ar || '',
+              // ... باقي الحقول
               price: this.currentVariant.price || 0,
-              discount: this.calculateDiscountPercentage(this.currentVariant.price, this.currentVariant.discountPrice),
+              // discount: discountPercentage,
+              discountPrice: this.currentVariant.discountPrice || 0,
               inStock: this.currentVariant.inStock || 0,
-              colorEn: this.currentVariant.color?.en || '',
-              colorAr: this.currentVariant.color?.ar || '',
-            });
-            this.updateDiscountPrice(); // تحديث سعر الخصم بعد ملء البيانات
 
-            // تحميل الصور الموجودة للمعاينة
+              colorEN: this.currentVariant.color?.en || '',
+              colorAR: this.currentVariant.color?.ar || '',
+            });
+
             this.variantImageUrl = this.currentVariant.image || null;
             this.variantAdditionalImageUrls = this.currentVariant.images || [];
 
           } else {
             this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Variant not found within the product.' });
-            this.router.navigate(['/products/edit', productId]); // العودة لصفحة تعديل المنتج الرئيسية
+            this.router.navigate(['/test11', productId]); // رجعتها لـ /products/edit عشان تكون متناسقة مع باقي الكود
           }
         } else {
           this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Product or variants not found.' });
-          this.router.navigate(['/products']);
+          this.router.navigate(['/test2']);
         }
       },
       error: (err) => {
         this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Failed to load product details for variant.' });
         console.error('Error loading product for variant:', err);
-        this.router.navigate(['/products']);
+        this.router.navigate(['/test3']);
       }
     });
   }
+
 
   updateDiscountPrice(): void {
     const price = this.variantForm.get('price')?.value || 0;
@@ -230,7 +239,7 @@ export class EditVariantComponent implements OnInit {
     });
   }
 
-  saveVariant(): void {
+  updateVariant(): void {
     if (this.variantForm.invalid) {
       this.messageService.add({ key: 'editVariantToast', severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly.' });
       return;
@@ -245,15 +254,18 @@ export class EditVariantComponent implements OnInit {
     const formData = new FormData();
 
     // بيانات الفاريانت النصية - تأكد من مطابقتها لما يتوقعه الـ Backend
-    formData.append('name_en', formValue.nameEn);
-    formData.append('name_ar', formValue.nameAr);
+    // formData.append('name', formValue.nameEN);
+    // formData.append('name', formValue.nameAR);
+    formData.append('name', JSON.stringify({ en: formValue.nameEN, ar: formValue.nameAR }));
+    formData.append('color', JSON.stringify({ en: formValue.colorEN, ar: formValue.colorAR }));
+
     formData.append('price', formValue.price.toString());
     formData.append('discount', formValue.discount.toString()); // أضف حقل الخصم
     formData.append('discountPrice', formValue.discountPrice.toString()); // أضف سعر الخصم
 
     formData.append('inStock', formValue.inStock.toString());
-    formData.append('color_en', formValue.colorEn || '');
-    formData.append('color_ar', formValue.colorAr || '');
+    // formData.append('color_en', formValue.colorEn || '');
+    // formData.append('color_ar', formValue.colorAr || '');
 
     // التعامل مع الصور الرئيسية
     // اسم الحقل 'image' يجب أن يطابق `upload.fields({ name: "image", maxCount: 1 })`
@@ -289,7 +301,7 @@ export class EditVariantComponent implements OnInit {
     this.ProductApiService.updateVariant(this.productId, this.variantId, formData).subscribe({
       next: (res) => {
         this.messageService.add({ key: 'editVariantToast', severity: 'success', summary: 'Success', detail: 'Variant updated successfully!' });
-        this.router.navigate(['/products/edit', this.productId]); // العودة لصفحة تعديل المنتج الرئيسية
+        this.router.navigate(['/products/product-control', this.productId]); // العودة لصفحة تعديل المنتج الرئيسية
       },
       error: (err) => {
         this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Failed to update variant.' });

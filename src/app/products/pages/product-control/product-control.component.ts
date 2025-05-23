@@ -57,7 +57,7 @@ import { ProductVariant } from '../../model/product';
   providers: [MessageService, ConfirmationService, CurrencyPipe],
 })
 export class ProductControlComponent implements OnInit {
-
+  prodID: string = '';
   prodForm: FormGroup;
   category: any[] = [];
   subcategory: any[] = [];
@@ -477,8 +477,11 @@ export class ProductControlComponent implements OnInit {
     */
 
     // مثال للانتقال لصفحة تعديل فارينت منفصلة:
-    // this.router.navigate(['/edit-variant', variant._id]); // لو المسار يحتوي على ID الفارينت
-    // this.router.navigate(['/edit-variant'], { queryParams: { variantId: variant._id, productId: this.productId } }); // لو بالـ query params
+    // products /: productId / edit - variant /:variantId
+    // this.router.navigate([`products/product-control/ ${this.productId}/edit-variant/`, variant._id]); // لو المسار يحتوي على ID الفارينت
+    // this.router.navigate(['/products/product-control', this.productId, '/edit-variant', variant.id]); // لو المسار يحتوي على ID الفارينت
+    // this.router.navigate(['/edit-variant'], { queryParams: {productId: this.productId ,variantId: variant._id} }); // لو بالـ query params
+    this.router.navigate(['/products', this.productId, 'edit-variant', variant._id]);
     this.messageService.add({ severity: 'info', summary: 'Info', detail: `Edit Variant logic for ID ${variant._id} pending implementation.` });
   }
 

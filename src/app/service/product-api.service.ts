@@ -68,6 +68,23 @@ export class ProductApiService {
     // return this.http.get<Product>(`${environment.baseURL}/products/${strID}`);
   }
 
+  getProdByIdStrVariant(strID: string): Observable<{ message: string; product: Product }> {
+    const token = localStorage.getItem('token');
+    console.log('Token sent:', token);
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    console.log("Authorization Header:", headers);
+
+    // هنا يتم بناء الـ URL بشكل صحيح باستخدام الـ backticks (`)
+    const url = `${environment.apiUrl}/products/${strID}`; // <--- هذا هو التصحيح الرئيسي
+
+    console.log('API URL being called:', url); // للتأكد أن الـ URL صحيح في الـ console
+
+    // استدعاء الـ http.get بالـ URL الصحيح
+    // لاحظ: نوع الإرجاع هنا هو Observable<{ message: string; product: Product }>
+    // بناءً على ما اخترته أنت، وهذا يعني أن الكومبوننت سيحتاج إلى استخراج product منه
+    return this.http.get<{ message: string; product: Product }>(url, { headers });
+  }
+
   addNewProduct(newProduct: Product): Observable<Product> {
     const token = localStorage.getItem('token');
     console.log('Token sent:', token);

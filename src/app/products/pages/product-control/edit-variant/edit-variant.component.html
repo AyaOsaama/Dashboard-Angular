@@ -1,8 +1,7 @@
 <div class="container !mx-auto !my-8 !p-8 !bg-white !shadow-xl !rounded-2xl">
   <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">Insert New Variant</h2>
 
-  <form (ngSubmit)="addNewVariant()" [formGroup]="variantForm" #Form="ngForm"
-    class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+  <form (ngSubmit)="updateVariant()" [formGroup]="variantForm" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
     <!-- RIGHT COLUMN -->
     <div class="!space-y-6">
@@ -45,10 +44,10 @@
       <!-- main Image -->
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Main Image</label>
-        <p-fileupload name="image" [customUpload]="true" (onSelect)="onSelectMainImage($event)" accept="image/*"
+        <p-fileupload name="image" [customUpload]="true" (onSelect)="onSelectVariantMainImage($event)" accept="image/*"
           maxFileSize="1000000" mode="basic" />
-        <div *ngIf="mainImageUrl" class="!mt-3">
-          <img [src]="mainImageUrl" class="!w-52 !rounded !shadow-md" />
+        <div *ngIf="variantImageUrl" class="!mt-3">
+          <img [src]="variantImageUrl" class="!w-52 !rounded !shadow-md" />
         </div>
       </div>
     </div>
@@ -70,18 +69,106 @@
 
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Additional Images</label>
-        <p-fileupload name="images[]" [customUpload]="true" (onSelect)="onSelectImages($event)" [multiple]="true"
-          accept="image/*" maxFileSize="1000000" mode="advanced" />
-        <ul *ngIf="imageUrls.length" class="!mt-3 !text-sm !text-gray-600 !list-disc !list-inside">
-          <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+        <p-fileupload name="images[]" [customUpload]="true" (onSelect)="onSelectVariantAdditionalImages($event)"
+          [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced" />
+        <ul *ngIf="variantAdditionalImageUrls.length" class="!mt-3 !text-sm !text-gray-600 !list-disc !list-inside">
+          <li *ngFor="let file of variantAdditionalImageFiles">{{ file.name }} - {{ file.size }} bytes</li>
         </ul>
       </div>
     </div>
 
     <!-- Submit Button -->
     <div class="!md:col-span-2 !mt-8 !text-center">
-      <button pButton type="submit" label="Add Product"
+      <button pButton type="submit" label="Edit Variant"
         class="!p-button-success !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
     </div>
   </form>
 </div>
+
+
+
+
+
+<!-- <div class="container !mx-auto !my-8 !p-8 !bg-white !shadow-xl !rounded-2xl">
+  <p-toast key="myToast"></p-toast>
+  <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">Add New Variant</h2>
+
+  <form [formGroup]="variantForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+    <div>
+      <label class="!block !font-semibold !mb-2">Name (EN)</label>
+      <input pInputText formControlName="nameEn" placeholder="Variant Name (EN)" class="!w-full !p-3 !rounded-lg" />
+    </div>
+
+    <div>
+      <label class="!block !font-semibold !mb-2">Name (AR)</label>
+      <input pInputText formControlName="nameAr" placeholder="اسم الفارينت بالعربية" class="!w-full !p-3 !rounded-lg" />
+    </div>
+
+    <div>
+      <label class="!block !font-semibold !mb-2">Color (EN)</label>
+      <input pInputText formControlName="colorEn" placeholder="Color in English" class="!w-full !p-3 !rounded-lg" />
+    </div>
+
+    <div>
+      <label class="!block !font-semibold !mb-2">Color (AR)</label>
+      <input pInputText formControlName="colorAr" placeholder="اللون بالعربية" class="!w-full !p-3 !rounded-lg" />
+    </div>
+
+
+
+    <div class="!grid !grid-cols-2 !gap-4">
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Price</label>
+        <p-inputnumber formControlName="price" mode="currency" currency="USD" class="!w-full !p-2 !rounded-lg" />
+      </div>
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Discount %</label>
+        <p-inputnumber formControlName="discount" prefix="%" class="!w-full !p-2 !rounded-lg" />
+      </div>
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Discount Price</label>
+        <p-inputnumber formControlName="discountPrice" mode="currency" currency="USD" [disabled]="true"
+          class="!w-full !p-2 !rounded-lg" />
+      </div>
+    </div>
+
+
+    <div>
+      <label class="!block !font-semibold !mb-2">In Stock</label>
+      <p-inputnumber formControlName="inStock" mode="decimal" [useGrouping]="false" class="!w-full !p-2 !rounded-lg" />
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="!block !text-gray-700 !font-semibold !mb-2">Variant Main Image</label>
+      <p-fileupload name="variantMainImage" [customUpload]="true" (onSelect)="onSelectMainImage($event)"
+        accept="image/*" maxFileSize="1000000" mode="basic" />
+      <div *ngIf="mainImageUrl" class="!mt-3 relative">
+        <img [src]="mainImageUrl" class="!w-32 !rounded !shadow-md" />
+        <button type="button" (click)="removeMainImage()"
+          class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs">X</button>
+      </div>
+    </div>
+
+    <div class="md:col-span-2">
+      <label class="!block !text-gray-700 !font-semibold !mb-2">Variant Additional Images</label>
+      <p-fileupload name="variantAdditionalImages[]" [customUpload]="true" (onSelect)="onSelectAdditionalImages($event)"
+        [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced" />
+      <div *ngIf="imageUrls && imageUrls.length > 0" class="!mt-3 grid grid-cols-3 gap-4">
+        <div *ngFor="let img of imageUrls; let i = index" class="relative">
+          <img [src]="img" class="!w-full !h-28 !object-cover !rounded-lg !shadow" />
+          <button type="button" (click)="removeAdditionalImage(i)"
+            class="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-1 text-xs">X</button>
+        </div>
+      </div>
+    </div>
+    <div class="!md:col-span-2 !mt-4 text-center space-x-4">
+      <button pButton type="submit" label="Save Variant" [disabled]="variantForm.invalid"
+        class="!p-button-success !px-6 !py-2 !text-lg !rounded-lg !shadow"></button>
+
+      <button pButton type="button" label="Cancel" class="p-button-secondary !ml-4 !px-6 !py-2 !rounded-lg"
+        (click)="cancelAdd()"></button>
+    </div>
+  </form>
+
+</div> -->
