@@ -1,5 +1,5 @@
 <div class="container !mx-auto !my-8 !p-8 !bg-white !shadow-xl !rounded-2xl">
-  <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">🛒 Insert New Product</h2>
+  <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">Insert New Product</h2>
 
   <form (ngSubmit)="addNewProduct()" [formGroup]="prodForm" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
@@ -90,9 +90,9 @@
               <i class=" pi pi-map"></i>
             </p-inputgroup-addon>
             <div class="card flex justify-center !w-full">
-              <p-select class="!w-full" [options]="filteredSubcategories" [(ngModel)]="subcategoryId" [ngModelOptions]="{standalone: true}" optionValue="_id"
-                optionLabel="name.en" placeholder="Select a subcategory" class="w-full md:w-56"
-                (onChange)="onSubcategoryChange($event)" />
+              <p-select class="!w-full" [options]="filteredSubcategories" [(ngModel)]="subcategoryId"
+                [ngModelOptions]="{standalone: true}" optionValue="_id" optionLabel="name.en"
+                placeholder="Select a subcategory" class="w-full md:w-56" (onChange)="onSubcategoryChange($event)" />
             </div>
           </p-inputgroup>
         </p-inputgroup>
@@ -134,8 +134,11 @@
 
     <!-- Submit Button -->
     <div class="!md:col-span-2 !mt-8 !text-center">
-      <button pButton type="submit" label="Add Product"
+      <button style="margin-right:16px;" pButton type="submit" label="Insert Product"
         class="!p-button-success !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
+
+      <button style="margin-right:16px;" pButton type="button" label="Cancel" (click)="exitInsert()"
+        class="p-button-danger !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
     </div>
   </form>
 </div>

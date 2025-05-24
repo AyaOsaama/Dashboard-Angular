@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule,FormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ProductApiService } from '../../../services/product-api.service';
+import { ProductApiService } from '../../../../service/product-api.service';
 import { Router } from '@angular/router';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,7 @@ import { SubService } from '../../../../subcategory/services/services/subcategor
   selector: 'app-insert-product',
   templateUrl: './insert-product.component.html',
   styleUrls: ['./insert-product.component.css'],
-  providers: [MessageService,InputGroupModule],
+  providers: [MessageService, InputGroupModule],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -49,12 +49,12 @@ import { SubService } from '../../../../subcategory/services/services/subcategor
 export class InsertProductComponent implements OnInit {
   prodForm: FormGroup;
   uploadedFiles: File[] = [];
-  category!: any[] ;
+  category!: any[];
   mainImageUrl: string = '';
   imageUrls: string[] = [];
-  categoryId!:string;
-  subcategoryId!:string |null;
-  subcategory!: any[] ;
+  categoryId!: string;
+  subcategoryId!: string | null;
+  subcategory!: any[];
   filteredSubcategories: any[] = [];
   mainImageFile: File | null = null;
   additionalImages: File[] = [];
@@ -76,7 +76,7 @@ export class InsertProductComponent implements OnInit {
       nameAR: [''],
       price: [0, Validators.min(0)],
       discount: [0, [Validators.min(0), Validators.max(100)]],
-      discountPrice: [{ value: 0}],
+      discountPrice: [{ value: 0 }],
       colorEN: [''],
       colorAR: [''],
       DescriptionEN: [''],
@@ -145,14 +145,14 @@ export class InsertProductComponent implements OnInit {
 
       next: (res) => {
         this.category = res.categories;
-       console.log('====================================');
-       console.log(res.categories);
-       console.log('====================================');
+        console.log('====================================');
+        console.log(res.categories);
+        console.log('====================================');
       },
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' }),
     });
   }
-  fetchSubcategories(){
+  fetchSubcategories() {
     this.subcategoeryService.getSubCategories().subscribe({
       next: (res) => {
         this.subcategory = res.subcategories;
@@ -179,65 +179,67 @@ export class InsertProductComponent implements OnInit {
   }
 
 
-addNewProduct() {
-  if (this.prodForm.invalid) {
-    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly' });
-    return;
+  addNewProduct() {
+    if (this.prodForm.invalid) {
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly' });
+      return;
+    }
+
+    if (!this.mainImageFile) {
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please upload the main product image' });
+      return;
+    }
+
+    const formValue = this.prodForm.value;
+    const formData = new FormData();
+
+    formData.append('brand', formValue.brand);
+    formData.append('categories', JSON.stringify({
+      main: this.categoryId,
+      sub: this.subcategoryId ?? ''
+    }));
+
+    formData.append('description', JSON.stringify({
+      en: formValue.DescriptionEN,
+      ar: formValue.DescriptionAR
+    }));
+
+    formData.append('material', JSON.stringify({
+      en: formValue.materialEN,
+      ar: formValue.materialAR
+    }));
+
+    const variants = [
+      {
+        name: { en: formValue.nameEN, ar: formValue.nameAR },
+        color: { en: formValue.colorEN, ar: formValue.colorAR },
+        price: formValue.price,
+        discountPrice: formValue.discountPrice,
+        inStock: formValue.inStock
+      }
+    ];
+    formData.append('variants', JSON.stringify(variants));
+
+    formData.append('variantImage', this.mainImageFile);
+    this.additionalImages.forEach((file) => {
+      formData.append('variantImages', file);
+    });
+
+    this.productApi.addNewProduct(formData).subscribe({
+      next: (res) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
+        this.router.navigate(['/products']);
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the product' });
+        console.error(err);
+      }
+    });
   }
 
-  if (!this.mainImageFile) {
-    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please upload the main product image' });
-    return;
+
+  exitInsert() {
+    this.router.navigate(['/products']);
   }
-
-  const formValue = this.prodForm.value;
-  const formData = new FormData();
-
-  formData.append('brand', formValue.brand);
-  formData.append('categories', JSON.stringify({
-    main: this.categoryId,
-    sub: this.subcategoryId ?? ''
-  }));
-
-  formData.append('description', JSON.stringify({
-    en: formValue.DescriptionEN,
-    ar: formValue.DescriptionAR
-  }));
-
-  formData.append('material', JSON.stringify({
-    en: formValue.materialEN,
-    ar: formValue.materialAR
-  }));
-
-  const variants = [
-    {
-      name: { en: formValue.nameEN, ar: formValue.nameAR },
-      color: { en: formValue.colorEN, ar: formValue.colorAR },
-      price: formValue.price,
-      discountPrice: formValue.discountPrice,
-      inStock: formValue.inStock
-    }
-  ];
-  formData.append('variants', JSON.stringify(variants));
-
-  formData.append('variantImage', this.mainImageFile);
-  this.additionalImages.forEach((file) => {
-    formData.append('variantImages', file);
-  });
-
-  this.productApi.addNewProduct(formData).subscribe({
-    next: (res) => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
-      this.router.navigate(['/products']);
-    },
-    error: (err) => {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the product' });
-      console.error(err);
-    }
-  });
-}
-
-
-
 
 }

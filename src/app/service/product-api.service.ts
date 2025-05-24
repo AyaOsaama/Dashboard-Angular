@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
-import { Product } from '../products/pages/products-list/products-list/models/product';
+import { Product } from '../products/model/product';
+// import { Product } from '../products/pages/products-list/products-list/models/product';
 import { ProductVariant } from '../products/pages/products-list/products-list/models/product';
 import { environment } from '../../environments/environment';
 import id from '@angular/common/locales/id';
@@ -85,14 +86,25 @@ export class ProductApiService {
     return this.http.get<{ message: string; product: Product }>(url, { headers });
   }
 
-  addNewProduct(newProduct: Product): Observable<Product> {
+  // addNewProduct(newProduct: Product): Observable<Product> {
+  //   const token = localStorage.getItem('token');
+  //   console.log('Token sent:', token);
+  //   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  //   console.log("Authorization Header:", headers);
+  //   // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
+  //   return this.http.post<Product>(`${environment.apiUrl}/products`, newProduct, { headers });
+  // }
+
+  addNewProduct(formData: FormData): Observable<any> {
     const token = localStorage.getItem('token');
-    console.log('Token sent:', token);
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    console.log("Authorization Header:", headers);
-    // return this.http.get<Product[]>(`${environment.apiUrl}/products`, { headers });
-    return this.http.post<Product>(`${environment.apiUrl}/products`, newProduct, { headers });
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+    });
+
+    const response = this.http.post<any>(`${environment.apiUrl}/products`, formData, { headers });
+    return response;
   }
+
 
   addVariant(productId: string, addVariant: FormData): Observable<ProductVariant> { // Or Observable<any> depending on backend response
     const token = localStorage.getItem('token');
