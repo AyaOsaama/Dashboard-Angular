@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -14,7 +14,7 @@ import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { OrderService } from '../../../service/order.service';
 import { Iorder } from '../../../models/iorder';
-import {  Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orders-list',
@@ -30,15 +30,14 @@ import {  Router } from '@angular/router';
     RippleModule,
     TableModule,
     TagModule,
-    ToastModule
+    ToastModule,
   ],
   templateUrl: './orders-list.component.html',
   styleUrl: './orders-list.component.css',
   providers: [ConfirmationService, MessageService],
-
 })
-export class OrdersListComponent {
-  id?:string='' ;
+export class OrdersListComponent implements OnInit {
+  id?: string = '';
   editOrderDialog = false;
   orderService = inject(OrderService);
   orders: Iorder[] = [];
@@ -55,11 +54,19 @@ export class OrdersListComponent {
     products: [],
     totalPrice: 0,
     status: 'pending',
-    shippingAddress: '',
+    shippingAddress: {
+      fullName: '',
+      phone: '',
+      street: '',
+      city: '',
+      state: '',
+      country: '',
+      postalCode: '',
+    },
     paymentMethod: 'cash_on_delivery',
-    paymentStatus: 'pending'
+    paymentStatus: 'pending',
   };
-  
+
   editCategoryDialog: boolean = false;
   constructor(
     private router: Router,
@@ -69,59 +76,82 @@ export class OrdersListComponent {
     this.loadOrders();
   }
 
-  loadOrders() {
+  ngOnInit() {
     this.orderService.getAllOrders().subscribe({
-      next: data => {
-        console.log('Fetched Orders:', data);   //{[]} 
-        this.orders = data.orders;  // [{[]}]
+      next: (data) => {
+        console.log('Fetched Orders:', data); //{[]}
+        this.orders = data.orders.map((order) => ({
+          ...order,
+          shippingAddress:
+            typeof order.shippingAddress === 'string'
+              ? {
+                  fullName: '',
+                  phone: '',
+                  street: '',
+                  city: '',
+                  state: '',
+                  country: '',
+                  postalCode: '',
+                }
+              : order.shippingAddress,
+        })); // [{[]}]
         console.log('====================================');
         console.log(this.orders);
         console.log('====================================');
       },
-      error: err => console.error('Failed to load orders:', err)
+      error: (err) => console.error('Failed to load orders:', err),
+    });
+  }
+
+  loadOrders() {
+    this.orderService.getAllOrders().subscribe({
+      next: (data) => {
+        console.log('Fetched Orders:', data); //{[]}
+        this.orders = data.orders; // [{[]}]
+        console.log('====================================');
+        console.log(this.orders);
+        console.log('====================================');
+      },
+      error: (err) => console.error('Failed to load orders:', err),
     });
   }
   getTotalProducts(products: any[]): number {
     if (!products) return 0;
     return products.reduce((total, item) => total + item.quantity, 0);
   }
-  
-  
-  
-  
- 
+
   onEditOrder(order: Iorder) {
-    this.editedOrder = { ...order }; 
+    this.editedOrder = { ...order };
     this.editOrderDialog = true;
   }
-  
+
   onSaveOrder() {
     if (!this.editedOrder._id || !this.editedOrder.status) return;
-  
-    this.orderService.updateOrderStatus(this.editedOrder._id, this.editedOrder.status).subscribe({
-      next: (updatedOrder) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Updated',
-          detail: `Order status updated to${updatedOrder.status}`
-        });
-        this.editOrderDialog = false;
-        this.loadOrders();
-      },
-      error: (err) => {
-        console.error('Update error:', err);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Failed to update order status'
-        });
-      }
-    });
+
+    this.orderService
+      .updateOrderStatus(this.editedOrder._id, this.editedOrder.status)
+      .subscribe({
+        next: (updatedOrder) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Updated',
+            detail: `Order status updated to${updatedOrder.status}`,
+          });
+          this.editOrderDialog = false;
+          this.loadOrders();
+        },
+        error: (err) => {
+          console.error('Update error:', err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to update order status',
+          });
+        },
+      });
   }
-  
-orderDetails(order: Iorder) {
+
+  orderDetails(order: Iorder) {
     this.router.navigate(['/orders', order._id]);
-}
-  
-  
+  }
 }

@@ -1,113 +1,166 @@
-<div class="grid">
-  <!-- Monthly Sales -->
-  <div class="col-12 md:col-6 lg:col-4">
-    <p-chart type="bar" [data]="monthlySalesData" [options]="monthlySalesOptions"></p-chart>
-    <h4 class="text-center mt-2">Monthly Sales</h4>
-  </div>
-
-  <!-- Order Status -->
-  <div class="col-12 md:col-6 lg:col-4">
-    <p-chart type="pie" [data]="orderStatusData" [options]="orderStatusOptions"></p-chart>
-    <h4 class="text-center mt-2">Order Status</h4>
-  </div>
-
-  <!-- Top Products in Cart -->
-  <!-- <div class="col-12 md:col-6 lg:col-4">
-    <p-chart type="doughnut" [data]="topProductsData" [options]="topProductsOptions"></p-chart>
-    <h4 class="text-center mt-2">Top Products in Cart</h4>
-  </div> -->
- <div class="col-12 md:col-6 lg:col-4">
-  <p-chart type="doughnut" [data]="topProductsData" [options]="topProductsOptions"></p-chart>
-  <h4 class="text-center mt-2">Top Products in Cart</h4>
-
-</div>
-
-
-
-  <!-- Total Cart Items -->
-  <div class="col-12 md:col-6 lg:col-4">
-    <p-chart type="pie" [data]="totalCartItemsData" [options]="totalCartItemsOptions"></p-chart>
-    <h4 class="text-center mt-2">Total Cart Items</h4>
-  </div>
-
-  <!-- Total Cart Value -->
-  <div class="col-12 md:col-6 lg:col-4">
-    <p-chart type="pie" [data]="totalCartValueData" [options]="totalCartValueOptions"></p-chart>
-    <h4 class="text-center mt-2">Total Cart Value</h4>
-  </div>
-
-  <!-- Users with Cart Items -->
-  <div class="col-12 md:col-6 lg:col-4">
-   <p-chart 
-  type="doughnut" 
-  [data]="usersWithCartItemsData" 
-  [options]="usersWithCartItemsOptions" 
-  styleClass="w-full md:w-30rem">
-</p-chart>
-
-
-    <h4 class="text-center mt-2">Users with Cart Items</h4>
-  </div>
-
-  <!-- Total Ratings -->
-  <!-- <div class="col-12 md:col-6 lg:col-4">
-    <p-chart type="pie" [data]="totalRatingsData" [options]="totalRatingsOptions"></p-chart>
-    <h4 class="text-center mt-2">Total Ratings</h4>
-  </div> -->
-
-  <!-- Average Rating -->
-  <!-- <div class="col-12 md:col-6 lg:col-4">
-    <p-chart type="pie" [data]="averageRatingData" [options]="averageRatingOptions"></p-chart>
-    <h4 class="text-center mt-2">Average Rating</h4>
-  </div> -->
-
-  <!-- Rating Distribution -->
-  <!-- <div class="col-12">
-    <p-chart type="bar" [data]="ratingDistributionData" [options]="ratingDistributionOptions"></p-chart>
-    <h4 class="text-center mt-2">Rating Distribution</h4>
-  </div> -->
-
-  <!-- Most Rated Products -->
-  <!-- <div class="col-12">
-    <p-chart type="bar" [data]="mostRatedProductsData" [options]="mostRatedProductsOptions"></p-chart>
-    <h4 class="text-center mt-2">Most Rated Products</h4>
-  </div> -->
-<!-- Ratings -->
- <p-tabPanel header="Charts">
-  <div class="p-grid p-dir-col p-ai-center p-p-3">
-
-    <!-- KPIs Section -->
-    <div class="p-grid p-justify-center p-mb-4" style="width: 100%;">
-      <div class="p-col-6 p-md-3 text-center">
-        <h5>Total Ratings</h5>
-        <p class="text-2xl font-bold text-primary">{{ ratingKPIs.total }}</p>
+<!-- Main Dashboard Container -->
+<div class="dashboard-container p-4 bg-gray-50 min-h-screen">
+  <!-- Welcome Section -->
+  
+    <div class="flex justify-between items-center !mb-6 p-10 h-20 ">
+      <div class="!mx-10">
+        <h1 class="text-3xl font-bold mx-auto text-gray-800 mb-2">Dashboard Overview</h1>
       </div>
-      <div class="p-col-6 p-md-3 text-center">
-        <h5>Average Rating</h5>
-        <p class="text-2xl font-bold text-orange-500">{{ ratingKPIs.average }}</p>
+      <p-button icon="pi pi-refresh" label="Refresh" class="p-button-rounded !mx-10" (onClick)="refreshDashboard()"></p-button>
+    </div>
+  
+
+  <!-- KPIs Section -->
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 !mb-8 !p-10">
+    <p-card class="hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <h5 class="text-gray-500 text-sm font-medium mb-2">Total Products</h5>
+          <p class="text-2xl font-bold text-blue-700">{{ productKPIs.totalProducts }}</p>
+        </div>
+        <div class="bg-blue-100 p-3 rounded-full">
+          <i class="pi pi-box text-blue-600 text-xl"></i>
+        </div>
       </div>
-    </div>
+    </p-card>
 
-    <!-- Ratings Distribution Chart -->
-    <p-chart 
-      type="doughnut"
-      [data]="ratingDistributionData"
-      [options]="ratingDistributionOptions"
-      style="max-width: 300px; margin: auto;"
-    ></p-chart>
+    <p-card class="hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <h5 class="text-gray-500 text-sm font-medium mb-2">Total Variants</h5>
+          <p class="text-2xl font-bold text-green-700">{{ productKPIs.totalVariants }}</p>
+        </div>
+        <div class="bg-green-100 p-3 rounded-full">
+          <i class="pi pi-list text-green-600 text-xl"></i>
+        </div>
+      </div>
+    </p-card>
 
-    <!-- Most Rated Products List -->
-    <div class="p-mt-4" style="width: 100%;">
-      <h5> Most Rated Products</h5>
-      <ul class="p-pl-3">
-        <li *ngFor="let p of topRatedProducts">
-          <strong>{{ p.productName }}</strong>: {{ p.totalRatings }} ratings
-        </li>
-      </ul>
-    </div>
-    
+    <p-card class="hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <h5 class="text-gray-500 text-sm font-medium mb-2">Brands</h5>
+          <p class="text-2xl font-bold text-purple-700">{{ productKPIs.brandsCount }}</p>
+        </div>
+        <div class="bg-purple-100 p-3 rounded-full">
+          <i class="pi pi-tag text-purple-600 text-xl"></i>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <h5 class="text-gray-500 text-sm font-medium mb-2">Discounted Variants</h5>
+          <p class="text-2xl font-bold text-pink-700">{{ productKPIs.discountedVariants }}</p>
+        </div>
+        <div class="bg-pink-100 p-3 rounded-full">
+          <i class="pi pi-percentage text-pink-600 text-xl"></i>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card class="hover:shadow-xl transition-all duration-300">
+      <div class="flex items-center justify-between">
+        <div>
+          <h5 class="text-gray-500 text-sm font-medium mb-2">Low Stock Variants</h5>
+          <p class="text-2xl font-bold text-red-700">{{ productKPIs.lowStockVariants }}</p>
+        </div>
+        <div class="bg-red-100 p-3 rounded-full">
+          <i class="pi pi-exclamation-triangle text-red-600 text-xl"></i>
+        </div>
+      </div>
+    </p-card>
   </div>
-</p-tabPanel>
 
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 !mb-6 !p-10">
+   
 
+    <p-card header="Order Status" class="hover:shadow-xl transition-all duration-300">
+      <p-chart type="pie" [data]="orderStatusData" [options]="orderStatusOptions"></p-chart>
+    </p-card>
+
+    <p-card header="Top Products in Cart" class="hover:shadow-xl transition-all duration-300">
+      <p-chart type="doughnut" [data]="topProductsData" [options]="topProductsOptions"></p-chart>
+    </p-card>
+
+    <p-card header="Total Cart Items" class="hover:shadow-xl transition-all duration-300">
+      <p-chart type="pie" [data]="totalCartItemsData" [options]="totalCartItemsOptions"></p-chart>
+    </p-card>
+
+    <p-card header="Total Cart Value" class="hover:shadow-xl transition-all duration-300">
+      <p-chart type="pie" [data]="totalCartValueData" [options]="totalCartValueOptions"></p-chart>
+    </p-card>
+
+    <p-card header="Users with Cart Items" class="hover:shadow-xl transition-all duration-300">
+      <p-chart type="doughnut" [data]="usersWithCartItemsData" [options]="usersWithCartItemsOptions"></p-chart>
+    </p-card>
+    <p-card header="Monthly Sales" class="hover:shadow-xl transition-all ">
+      <p-chart class="!h-full" type="bar" [data]="monthlySalesData" [options]="monthlySalesOptions"></p-chart>
+    </p-card>
+  </div>
+
+  <!-- Ratings Section -->
+  <p-tabView>
+    <p-tabPanel header=" Ratings Dashboard" class="!p-10 !text-green-500 !mb-10">
+      
+        <!-- Ratings KPIs -->
+        <div *ngIf="ratingKPIs" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <p-card class="bg-blue-50">
+            <div class="text-center">
+              <h5 class="text-gray-600 font-medium mb-2">Total Ratings</h5>
+              <p class="text-4xl font-bold text-blue-600">{{ ratingKPIs.total }}</p>
+            </div>
+          </p-card>
+
+          <p-card class="bg-orange-50">
+            <div class="text-center">
+              <h5 class="text-gray-600 font-medium mb-2">Average Rating</h5>
+              <p class="text-4xl font-bold text-orange-500">{{ ratingKPIs.average }}</p>
+            </div>
+          </p-card>
+        </div>
+
+        <!-- Rating Distribution -->
+        <div *ngIf="ratingDistributionData.labels.length > 0" class="!mb-10">
+          <p-card header="Rating Distribution">
+            <p-chart type="doughnut" [data]="ratingDistributionData" [options]="ratingDistributionOptions"></p-chart>
+          </p-card>
+        </div>
+
+        <!-- Most Rated Products -->
+        <p-card class="rounded-xl shadow-lg bg-white p-6 mt-10">
+          <ng-template pTemplate="header">
+            <div class="text-center font-bold text-2xl !text-green-500 mb-6 !mt-10">Most Rated Products</div>
+          </ng-template>
+          <p-table [value]="topRatedProducts" styleClass="p-datatable-sm">
+            <ng-template pTemplate="body" let-product>
+              <tr class="hover:bg-gray-50">
+                <td class="p-4">
+                  <div class="flex items-center gap-4">
+                    <img *ngIf="product.image && product.image[0]" 
+                         [src]="product.image[0]" 
+                         [alt]="product.name[0]?.en"
+                         class="w-16 h-16 rounded-lg object-cover shadow" />
+                    <div>
+                      <div class="text-lg font-semibold text-gray-800">{{ product.name[0]?.en }}</div>
+                      <div class="flex items-center gap-3 mt-1">
+                        <span class="text-yellow-500 font-bold text-lg">
+                          <ng-container *ngFor="let star of getStarsArray(product.avg)">★</ng-container>
+                          {{ product.avg }}
+                        </span>
+                        <span class="text-sm text-gray-500"> ratings by {{ product.count }} </span>
+                       
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-card>
+      
+    </p-tabPanel>
+  </p-tabView>
 </div>
