@@ -82,9 +82,10 @@ export class SidebarComponent {
   ngOnInit() {
     const userBackStr = localStorage.getItem("user");
     if (userBackStr && userBackStr !== "undefined") {
+      // console.log("User data found in localStorage:", userBackStr);
+
       try {
         this.user = JSON.parse(userBackStr);
-        console.log("User loaded:", this.user);
       } catch (error) {
         console.error("Failed to parse user from localStorage:", error);
       }

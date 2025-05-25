@@ -23,7 +23,8 @@
   <p-card [style]="{ width: '25rem', marginBottom: '2rem' }">
   
     <ng-template pTemplate="header">
-      <img alt="Post Image" class="w-full Image" [src]="post.image" />
+    =
+      <img alt="Post Image" class="w-full Image" [src]="post.image || defaultImage" />
     </ng-template>
 
     <ng-template pTemplate="title"> {{ post.title.en }} </ng-template>
@@ -163,7 +164,7 @@
       <label class="font-semibold block mb-2">Image</label>
       <div class="flex items-center gap-4">
         <img 
-          [src]="editedPost.imagePreview || defaultAvatar" 
+          [src]="editedPost.imagePreview || defaultImage" 
           alt="Preview" 
           width="100" 
           height="100" 

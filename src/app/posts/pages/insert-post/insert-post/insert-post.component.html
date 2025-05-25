@@ -1,52 +1,123 @@
-<h2 class="text-2xl font-semibold text-gray-800 mb-4">Add New Post</h2>
-
-<p-card>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="!p-6 sm:!p-10 md:!p-12 lg:!p-16 xl:!p-20 !card !border !border-gray-200 !rounded-lg shadow-md">
+<h2 class="!text-3xl font-bold text-gray-800 !mb-6 text-center ">Add New Post</h2>
+ 
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ">
     <div>
       <label class="font-semibold block mb-1">Title (EN)</label>
-      <input type="text" pInputText [(ngModel)]="newPost.title.en" class="w-full">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="newPost.title.en"
+        class="w-full !p-2  !border !border-gray-300 !rounded !block"
+        placeholder="Enter English title"
+      >
     </div>
     <div>
       <label class="font-semibold block mb-1">Title (AR)</label>
-      <input type="text" pInputText [(ngModel)]="newPost.title.ar" class="w-full">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="newPost.title.ar"
+        class="w-full !p-2 !text-base !border !border-gray-300 !rounded"
+        placeholder="Enter Arabic title"
+      >
     </div>
     <div>
       <label class="font-semibold block mb-1">Description (EN)</label>
-      <textarea pInputTextarea rows="3" [(ngModel)]="newPost.description.en" class="w-full"></textarea>
+      <textarea
+        pInputTextarea
+        rows="3"
+        [(ngModel)]="newPost.description.en"
+        class="w-full !p-2  !border !border-gray-300 !rounded"
+        placeholder="Enter English description"
+      ></textarea>
     </div>
     <div>
       <label class="font-semibold block mb-1">Description (AR)</label>
-      <textarea pInputTextarea rows="3" [(ngModel)]="newPost.description.ar" class="w-full"></textarea>
+      <textarea
+        pInputTextarea
+        rows="3"
+        [(ngModel)]="newPost.description.ar"
+        class="w-full !p-2 !text-base !border !border-gray-300 !rounded"
+        placeholder="Enter Arabic description"
+      ></textarea>
     </div>
     <div class="md:col-span-2">
       <label class="font-semibold block mb-1">Content (EN)</label>
-      <textarea pInputTextarea rows="4" [(ngModel)]="newPost.content.en" class="w-full"></textarea>
+      <textarea
+        pInputTextarea
+        rows="4"
+        [(ngModel)]="newPost.content.en"
+        class="w-full !p-3  !border !border-gray-300 !rounded"
+        placeholder="Enter English content"
+      ></textarea>
     </div>
     <div class="md:col-span-2">
       <label class="font-semibold block mb-1">Content (AR)</label>
-      <textarea pInputTextarea rows="4" [(ngModel)]="newPost.content.ar" class="w-full"></textarea>
+      <textarea
+        pInputTextarea
+        rows="4"
+        [(ngModel)]="newPost.content.ar"
+        class="w-full !p-3 !text-base !border !border-gray-300 !rounded"
+        placeholder="Enter Arabic content"
+      ></textarea>
     </div>
-    <div class="md:col-span-2">
-      <label class="font-semibold block mb-1">Author</label>
-      <input type="text" pInputText [(ngModel)]="newPost.author" class="w-full">
-    </div>
-    <div class="md:col-span-2">
-      <label class="font-semibold block mb-2">Image</label>
-      <div class="flex items-center gap-4">
-        <img 
-          [src]="newPost.imagePreview || defaultAvatar" 
-          alt="Preview" 
-          width="100" 
-          height="100" 
+ 
+    <div class="md:col-span-2 p-4 block max-w-full box-border">
+      <label class=" font-semibold text-gray-800 text-center text-2xl block !m-2 " for="post_image">Image</label>
+      <div class="flex flex-col items-center gap-4">
+        <img
+          [src]="newPost.imagePreview || defaultAvatar"
+          alt="Preview"
+          width="320"
+          height="300"
           class="rounded shadow border border-gray-300 object-cover"
-        >
-        <input type="file" (change)="onImageSelectedForPost($event)">
+        />
+        <input
+          type="file"
+          id="post_image"
+          (change)="onImageSelectedForPost($event)"
+          class="p-2 border border-gray-300 rounded w-full max-w-xs box-border"
+        />
       </div>
     </div>
+ 
+ 
   </div>
-
-  <div class="flex justify-end gap-4 mt-4">
-    <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="onCancel()"></button>
-    <button pButton label="Add Post" icon="pi pi-check" class="p-button-success" (click)="onAddPost()"></button>
+ 
+  <div class="flex flex-col md:flex-row md:justify-between gap-4 mt-6 items-center md:items-end">
+ 
+    <div class="md:col-span-2 flex-grow w-full sm:w-auto max-w-[250px]">
+      <label class="font-semibold block mb-1" for="author">Author</label>
+      <input
+        id="author"
+        type="text"
+        pInputText
+        [(ngModel)]="newPost.author"
+        class="w-full !p-2 !text-base !border !border-gray-300 !rounded"
+        placeholder="Enter author name"
+      />
+    </div>
+ 
+    <div class="flex gap-4 w-full sm:w-auto justify-between">
+      <button
+        pButton
+        label="Cancel"
+        icon="pi pi-times"
+        class="p-button-text w-full sm:w-auto"
+        (click)="onCancel()"
+      ></button>
+ 
+      <button
+        pButton
+        label="Add Post"
+        icon="pi pi-check"
+        class="p-button-success w-full sm:w-auto whitespace-nowrap"
+        (click)="onAddPost()"
+      ></button>
+    </div>
+ 
   </div>
-</p-card>
+ 
+  </div>
+ 

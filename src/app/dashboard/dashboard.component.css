@@ -2,4 +2,11 @@ canvas {
     max-width: 100%;
     display: block;
   }
-  
+  /* .p-card-body {
+    padding: var(--p-card-body-padding);
+    display: flex
+;
+    flex-direction: column;
+    gap: var(--p-card-body-gap);
+    height: 261px;
+  } */

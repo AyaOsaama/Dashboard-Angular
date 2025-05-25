@@ -25,8 +25,7 @@ import { CommonModule } from '@angular/common';
 export class InsertPostComponent {
 
   newPost: Ieditpost = this.createEmptyPost();
-  defaultAvatar = 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg';
-
+defaultAvatar ='https://cdn.pixabay.com/photo/2015/10/07/12/17/post-976115_960_720.png';
   constructor(
     private postService: PostService,
     private router: Router,

@@ -7,7 +7,7 @@ export interface IUser {
     email: string;
     password?: string;  
     image?: string;
-    role: 'super_admin' | 'admin' | 'user';
+    role : 'super_admin' | 'admin' | 'user'|"";
     refreshToken?: string;
     phone?: string;
     address: { en: '', ar: '' };

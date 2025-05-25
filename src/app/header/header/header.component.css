@@ -1,7 +1,7 @@
 .navbar {
   position: relative;
 }
-.navbar::after {
+/* .navbar::after {
   content: "";
   position: absolute;
   left: 20px;
@@ -11,4 +11,4 @@
   background-color: #8b8b8b;
   border-radius: 3rem;
   z-index: 1;
-}
+} */
