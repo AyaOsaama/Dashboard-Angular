@@ -83,7 +83,7 @@ export class InsertVariantComponent implements OnInit {
       nameAR: [''],
       price: [0, Validators.min(0)],
       discount: [0, [Validators.min(0), Validators.max(100)]],
-      discountPrice: [{ value: 0 }],
+      discountPrice: [{ value: 0, disabled: true }],
       colorEN: [''],
       colorAR: [''],
       image: [''],
@@ -167,17 +167,6 @@ export class InsertVariantComponent implements OnInit {
     this.mainImageUrl = '';
   }
 
-  // onSelectAdditionalImages(event: any): void {
-  //   if (event && event.files && event.files.length > 0) {
-  //     for (let file of event.files) {
-  //       this.additionalImageFiles.push(file); // حفظ الملفات الجديدة
-  //       // يمكنك إضافة شرط هنا للحد الأقصى لعدد الصور الإضافية لو أردت
-  //       this.convertToBase64(file).then((base64: string) => {
-  //         this.imageUrls.push(base64); // للعرض فقط (Base64)
-  //       });
-  //     }
-  //   }
-  // }
 
   onSelectImages(event: any): void {
     for (let file of event.files) {
@@ -220,8 +209,52 @@ export class InsertVariantComponent implements OnInit {
     formData.append('name', JSON.stringify({ en: formValue.nameEN, ar: formValue.nameAR }));
     formData.append('color', JSON.stringify({ en: formValue.colorEN, ar: formValue.colorAR }));
 
-    formData.append('price', formValue.price.toString());
-    formData.append('discountPrice', formValue.discountPrice.toString());
+    // formData.append('price', formValue.price.toString());
+
+    const price = Number(formValue.price);
+    if (isNaN(price) || price < 0) {
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Price must be a valid non-negative number.' });
+      return;
+    }
+    formData.append('price', price.toString());
+
+    // **هنا التعديل الأساسي على التعامل مع discountPrice**
+    const discount = Number(formValue.discount); // هتكون 0 لو الحقل فاضي أو Number(NaN) لو مش رقم
+    let finalDiscountPrice: number | null = null;
+
+    // لو الخصم مش رقم (NaN) أو قيمته صفر
+    if (isNaN(discount) || discount === 0) {
+      finalDiscountPrice = null; // نضعها null هنا
+      console.log('Discount is NaN or 0. Setting finalDiscountPrice to null.');
+    } else {
+      // لو فيه خصم (رقم أكبر من صفر)، نقوم بالحساب
+      if (isNaN(price) || price < 0) { // تحقق إضافي، مع إنه المفروض يكون تم فوق
+        console.error('Error: Price is invalid for discount calculation.');
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price value for discount calculation.' });
+        return;
+      }
+      finalDiscountPrice = price - (price * discount / 100);
+      finalDiscountPrice = parseFloat(finalDiscountPrice.toFixed(2));
+      console.log('Discount is not NaN or 0. Calculated finalDiscountPrice:', finalDiscountPrice);
+    }
+
+    // **هنا النقطة الحاسمة:**
+    // لو finalDiscountPrice قيمتها null، مش هنضيفها للـ FormData من الأساس.
+    // الباك إند بيعتبر عدم وجود الحقل ده معناه null.
+    if (finalDiscountPrice !== null) {
+      // نتأكد إنها مش NaN قبل الإرسال لو ليها قيمة
+      if (isNaN(finalDiscountPrice)) {
+        console.error('FINAL CHECK: finalDiscountPrice is NaN despite calculation. This is critical.');
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Final discount price calculation resulted in NaN unexpectedly.' });
+        return;
+      }
+      formData.append('discountPrice', finalDiscountPrice.toString());
+      console.log('Appending discountPrice as string:', finalDiscountPrice.toString());
+    } else {
+      console.log('finalDiscountPrice is null. NOT appending discountPrice to FormData.');
+      // لا يتم إضافة discountPrice للـ FormData إذا كانت قيمتها null
+    }
+
     formData.append('inStock', formValue.inStock.toString());
 
     if (this.mainImageFile) {

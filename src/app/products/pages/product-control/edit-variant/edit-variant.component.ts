@@ -80,7 +80,7 @@ export class EditVariantComponent implements OnInit {
       nameAR: [''],
       price: [0, Validators.min(0)],
       discount: [0, [Validators.min(0), Validators.max(100)]],
-      discountPrice: [{ value: 0 }],
+      discountPrice: [{ value: 0, disabled: true }],
       colorEN: [''],
       colorAR: [''],
     });
@@ -93,6 +93,8 @@ export class EditVariantComponent implements OnInit {
 
       if (this.productId && this.variantId) {
         this.loadVariantDetails(this.productId, this.variantId);
+        this.variantForm.get('price')?.valueChanges.subscribe(() => this.updateDiscountPrice());
+        this.variantForm.get('discount')?.valueChanges.subscribe(() => this.updateDiscountPrice());
       } else {
         this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Product ID or Variant ID is missing from URL.' });
         this.router.navigate(['/test1']); // العودة لصفحة المنتجات
@@ -101,6 +103,47 @@ export class EditVariantComponent implements OnInit {
 
 
   }
+
+  // loadVariantDetails(productId: string, variantId: string): void {
+  //   this.ProductApiService.getProdByIdStrVariant(productId).subscribe({
+  //     next: (data: { message: string; product: Product }) => {
+  //       const product = data.product;
+
+  //       if (product && product.variants) {
+  //         this.currentVariant = product.variants.find((v: ProductVariant) => v._id === variantId) || null;
+
+  //         if (this.currentVariant) {
+  //           this.variantForm.patchValue({
+  //             nameEN: this.currentVariant.name?.en || '',
+  //             nameAR: this.currentVariant.name?.ar || '',
+  //             price: this.currentVariant.price || 0,
+  //             // discount: discountPercentage,
+  //             discountPrice: this.currentVariant.discountPrice || 0,
+  //             inStock: this.currentVariant.inStock || 0,
+
+  //             colorEN: this.currentVariant.color?.en || '',
+  //             colorAR: this.currentVariant.color?.ar || '',
+  //           });
+
+  //           this.variantImageUrl = this.currentVariant.image || null;
+  //           this.variantAdditionalImageUrls = this.currentVariant.images || [];
+
+  //         } else {
+  //           this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Variant not found within the product.' });
+  //           this.router.navigate(['/test11', productId]);
+  //         }
+  //       } else {
+  //         this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Product or variants not found.' });
+  //         this.router.navigate(['/test2']);
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.messageService.add({ key: 'editVariantToast', severity: 'error', summary: 'Error', detail: 'Failed to load product details for variant.' });
+  //       console.error('Error loading product for variant:', err);
+  //       this.router.navigate(['/test3']);
+  //     }
+  //   });
+  // }
 
   loadVariantDetails(productId: string, variantId: string): void {
     this.ProductApiService.getProdByIdStrVariant(productId).subscribe({
@@ -111,14 +154,19 @@ export class EditVariantComponent implements OnInit {
           this.currentVariant = product.variants.find((v: ProductVariant) => v._id === variantId) || null;
 
           if (this.currentVariant) {
+            const originalPrice = this.currentVariant.price || 0; // تأكد من وجود سعر
+            const discountPriceFromApi = this.currentVariant.discountPrice; // القيمة اللي جاية من الـ API
+
+            // حساب نسبة الخصم المئوية لعرضها في حقل discount
+            const discountPercentage = this.calculateDiscountPercentage(originalPrice, discountPriceFromApi);
+
             this.variantForm.patchValue({
               nameEN: this.currentVariant.name?.en || '',
               nameAR: this.currentVariant.name?.ar || '',
-              price: this.currentVariant.price || 0,
-              // discount: discountPercentage,
-              discountPrice: this.currentVariant.discountPrice || 0,
+              price: originalPrice,
+              discount: discountPercentage, // **هنا نضع نسبة الخصم**
+              discountPrice: discountPriceFromApi === null ? null : (discountPriceFromApi || 0), // **هنا نضع قيمة discountPrice بالضبط كما هي من الـ API (أو null)**
               inStock: this.currentVariant.inStock || 0,
-
               colorEN: this.currentVariant.color?.en || '',
               colorAR: this.currentVariant.color?.ar || '',
             });
@@ -146,13 +194,24 @@ export class EditVariantComponent implements OnInit {
 
   updateDiscountPrice(): void {
     const price = this.variantForm.get('price')?.value || 0;
-    const discount = this.variantForm.get('discount')?.value || 0;
-    let discountPrice = price;
+    const discount = this.variantForm.get('discount')?.value; // لا تستخدم || 0 هنا لتجنب تحويل null إلى 0 مباشرةً
+    let calculatedDiscountPrice: number | null = null; // متغير لتخزين القيمة المحسوبة
 
-    if (discount > 0 && price > 0) {
-      discountPrice = price * (1 - discount / 100);
+    // إذا كان الخصم غير موجود أو صفر، اجعل سعر الخصم null
+    if (discount === null || discount === undefined || discount === 0) {
+      calculatedDiscountPrice = null;
+    } else if (price > 0) {
+      // إذا كان هناك خصم وسعر صالح، قم بالحساب
+      calculatedDiscountPrice = price * (1 - discount / 100);
+      calculatedDiscountPrice = parseFloat(calculatedDiscountPrice.toFixed(2));
+    } else {
+      // لو السعر 0 أو غير صالح، وسعر الخصم مش 0، ممكن تخليه 0 أو null حسب المنطق المطلوب
+      calculatedDiscountPrice = 0; // أو null
     }
-    this.variantForm.get('discountPrice')?.setValue(discountPrice);
+
+    // قم بتحديث قيمة discountPrice في الفورم
+    // لو calculatedDiscountPrice هو null، سيتم تعيينه كـ null في FormControl
+    this.variantForm.get('discountPrice')?.setValue(calculatedDiscountPrice, { emitEvent: false });
   }
 
   calculateDiscountPercentage(originalPrice: number | undefined, discountPrice: number | undefined): number {
@@ -251,8 +310,49 @@ export class EditVariantComponent implements OnInit {
     formData.append('color', JSON.stringify({ en: formValue.colorEN, ar: formValue.colorAR }));
 
     formData.append('price', formValue.price.toString());
-    formData.append('discount', formValue.discount.toString()); // أضف حقل الخصم
-    formData.append('discountPrice', formValue.discountPrice.toString()); // أضف سعر الخصم
+
+    // formData.append('discount', formValue.discount.toString()); // أضف حقل الخصم
+
+    // formData.append('discountPrice', formValue.discountPrice.toString()); // أضف سعر الخصم
+
+    // **هنا التعديل بخصوص 'discount'**
+    // تأكد أن discount له قيمة قبل تحويله لـ string
+    const discountValue = formValue.discount;
+    if (discountValue !== null && discountValue !== undefined) {
+      formData.append('discount', discountValue.toString());
+    } else {
+      // لو discountValue كانت null أو undefined، ممكن تبعتها 0 أو متبعتهاش خالص
+      // الأفضل إنك تبعتها 0 أو String('0') لو الباك إند بيتوقع قيمة رقمية دايماً
+      formData.append('discount', '0'); // أو ممكن متضيفش السطر ده خالص لو الـ API بيسمح بغيابها
+    }
+
+    // **بالنسبة لـ discountPrice، هنطبق نفس منطق addNewVariant**
+    // عشان نضمن إنها بتتبعت صح (null أو قيمة)
+    const price = Number(formValue.price); // تأكد إنها رقم
+    const discount = Number(formValue.discount); // تأكد إنها رقم
+
+    let finalDiscountPrice: number | null = null;
+
+    if (isNaN(discount) || discount === 0) {
+      finalDiscountPrice = null;
+    } else {
+      if (isNaN(price) || price < 0) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Price value for discount calculation.' });
+        return;
+      }
+      finalDiscountPrice = price - (price * discount / 100);
+      finalDiscountPrice = parseFloat(finalDiscountPrice.toFixed(2));
+    }
+
+    // **هنا النقطة الحاسمة لـ discountPrice:**
+    if (finalDiscountPrice !== null) {
+      if (isNaN(finalDiscountPrice)) {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Calculated discount price resulted in NaN.' });
+        return;
+      }
+      formData.append('discountPrice', finalDiscountPrice.toString());
+    }
+    // لو finalDiscountPrice == null، مش هيتم إضافة discountPrice للـ FormData
 
     formData.append('inStock', formValue.inStock.toString());
 

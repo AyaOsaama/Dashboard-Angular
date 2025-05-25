@@ -24,6 +24,8 @@ import { CurrencyPipe } from '@angular/common';
 import { RatingModule } from 'primeng/rating';
 import { TagModule } from 'primeng/tag';
 import { ProductVariant } from '../../model/product';
+import { forkJoin } from 'rxjs'; // استيراد forkJoin
+import { take } from 'rxjs/operators'; // استيراد take (اختياري لكن مفيد)
 
 
 
@@ -134,16 +136,68 @@ export class ProductControlComponent implements OnInit {
     this.prodForm.get('price')?.valueChanges.subscribe(() => this.updateDiscountPrice());
     this.prodForm.get('discount')?.valueChanges.subscribe(() => this.updateDiscountPrice());
 
+    forkJoin([
+      this.CategoriesServiceApi.getAllCategory().pipe(take(1)), // take(1) عشان الـ observable يخلص بعد أول قيمة
+      this.SubCategoryServiceApi.getSubCategories().pipe(take(1))
+    ]).subscribe({
+      next: ([categoriesRes, subcategoriesRes]) => {
+        // بمجرد ما الاتنين يكملوا تحميل، هنحط البيانات في الـ arrays بتاعتنا
+        this.category = categoriesRes.categories;
+        this.subcategory = subcategoriesRes.subcategories;
+        console.log('تم تحميل البيانات الأولية: Categories و Subcategories جاهزة.');
+        console.log('Categories:', this.category);
+        console.log('Subcategories:', this.subcategory);
+
+        // دلوقتي بعد ما البيانات الأساسية اتحملت، نقدر نعمل setup للـ listener بتاع تغيير الـ Category
+        this.setupCategoryChangeListener();
+
+        // وبعدين نحمل تفاصيل المنتج لو إحنا في وضع التعديل (عشان الـ product ID)
+        this.getProductIdFromRoute();
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'فشل في تحميل البيانات الأولية (التصنيفات الرئيسية والفرعية)' });
+        console.error('خطأ في تحميل البيانات الأولية:', err);
+      }
+    });
+
     this.fetchCategories();
     this.fetchSubcategories();
     this.getProductIdFromRoute();
 
+
+
     this.prodForm.get('categoryMain')?.valueChanges.subscribe(selectedCategoryId => {
-      this.filteredSubcategories = this.subcategory.filter(sub =>
-        sub.categoriesId && sub.categoriesId._id === selectedCategoryId
-      );
+      // --- هنا بنبدأ تسجيل المعلومات للمراجعة ---
+
+      // 1. شوف الـ ID بتاع التصنيف الرئيسي اللي اخترته حالياً
+      console.log('1. تم اختيار Category ID:', selectedCategoryId);
+
+      // 2. شوف كل التصنيفات الفرعية اللي عندك في الـ array (قبل أي فلترة)
+      // ده عشان نتأكد إن this.subcategory مش فاضية من الأساس
+      console.log('2. كل التصنيفات الفرعية المتاحة (قبل الفلترة):', this.subcategory);
+
+      this.filteredSubcategories = this.subcategory.filter(sub => {
+        // 3. لكل تصنيف فرعي، شوف الـ ID بتاع التصنيف الرئيسي اللي هو مربوط بيه، وقارنه بالـ ID المختار
+        // ده بيبين هل المقارنة بتتم صح ولا لأ
+        const subCategoryIdInFilter = sub.categoryId?._id; // الـ ?. بتخلي الكود ميكسرش لو categoryId مش موجود
+        console.log(`3. جاري مقارنة Subcategory ID: "<span class="math-inline">\{subCategoryIdInFilter\}" مع Category ID المختار\: "</span>{selectedCategoryId}"`);
+
+        // دي عملية الفلترة نفسها اللي بتختار التصنيفات الفرعية المطابقة
+        return sub.categoryId && sub.categoryId._id === selectedCategoryId;
+      });
+
+      // 4. بعد ما الفلترة خلصت، شوف إيه التصنيفات الفرعية اللي طلعت في الآخر
+      // لو دي فاضية، يبقى هي دي المشكلة الأساسية
+      console.log('4. التصنيفات الفرعية بعد الفلترة:', this.filteredSubcategories);
+
+      // --- هنا بننتهي من تسجيل المعلومات ---
+
       this.prodForm.patchValue({ categorySub: '' });
     });
+
+
+
+
   }
 
   getProductIdFromRoute() {
@@ -155,10 +209,34 @@ export class ProductControlComponent implements OnInit {
     });
   }
 
+  // دالة جديدة عشان نحط فيها الـ listener بتاع تغيير الـ Category
+  setupCategoryChangeListener(): void {
+    this.prodForm.get('categoryMain')?.valueChanges.subscribe(selectedCategoryId => {
+      console.log('تم اختيار Category ID:', selectedCategoryId);
+      // نتأكد إن this.subcategory فيها بيانات قبل ما نعمل فلترة
+      if (this.subcategory && this.subcategory.length > 0) {
+        this.filteredSubcategories = this.subcategory.filter(sub => {
+          const subCategoryId = sub.categoryId?._id;
+          console.log(`جاري مقارنة Subcategory ID: "${subCategoryId}" مع Selected Category ID: "${selectedCategoryId}"`);
+          return subCategoryId === selectedCategoryId;
+        });
+      } else {
+        this.filteredSubcategories = []; // المفروض مفيش بيانات هنا لو forkJoin اشتغل صح
+        console.warn('Subcategory array فارغة أثناء listener تغيير الـ Category. ده ممكن يكون مشكلة.');
+      }
+      console.log('التصنيفات الفرعية بعد الفلترة:', this.filteredSubcategories);
+      this.prodForm.patchValue({ categorySub: '' });
+    });
+  }
+
+
+
   loadProductDetails(id: string) {
     this.ProductApiService.getProdByIdStr(id).subscribe({
       next: (data: any) => {
         this.product = data.product;
+        console.log("بيانات المنتج بعد التحميل:", this.product);
+
         if (this.product && this.product.variants?.length > 0) {
           const firstVariant = this.product.variants[0];
           this.isEditMode = true;
@@ -168,6 +246,20 @@ export class ProductControlComponent implements OnInit {
             discountPercentage = Math.round((1 - firstVariant.discountPrice / firstVariant.price) * 100);
           }
 
+          const mainCategoryIdFromProduct = this.product.categories?.main?._id || '';
+          const subCategoryIdFromProduct = this.product.categories?.sub?._id || '';
+
+          // فلترة الـ subcategories يدوياً لضمان عرضها في وضع التعديل
+          // ده مهم عشان الـ dropdown يكون فيه الخيارات الصحيحة لما الصفحة تفتح
+          if (mainCategoryIdFromProduct && this.subcategory && this.subcategory.length > 0) {
+            this.filteredSubcategories = this.subcategory.filter(sub =>
+              sub.categoryId && sub.categoryId._id === mainCategoryIdFromProduct
+            );
+          } else {
+            this.filteredSubcategories = [];
+          }
+
+          // دلوقتي نعمل patch للـ form بكل القيم
           this.prodForm.patchValue({
             nameEN: firstVariant.name?.en || '',
             nameAR: firstVariant.name?.ar || '',
@@ -180,8 +272,8 @@ export class ProductControlComponent implements OnInit {
             brand: this.product.brand || '',
             materialEN: this.product.material?.en || '',
             materialAR: this.product.material?.ar || '',
-            categoryMain: this.product.categories?.main?._id || '',
-            categorySub: this.product.categories?.sub?._id || '',
+            categoryMain: mainCategoryIdFromProduct,
+            categorySub: subCategoryIdFromProduct, // هنا بنحط الـ ID مباشرة
             colorEN: firstVariant.color?.en || '',
             colorAR: firstVariant.color?.ar || '',
           });
@@ -192,8 +284,8 @@ export class ProductControlComponent implements OnInit {
         }
       },
       error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load product details' });
-        console.error('Error loading product details:', error);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'فشل في تحميل تفاصيل المنتج' });
+        console.error('خطأ في تحميل تفاصيل المنتج:', error);
       }
     });
     this.showVariantTable = false;
@@ -208,12 +300,24 @@ export class ProductControlComponent implements OnInit {
     });
   }
 
+  
+
   fetchSubcategories() {
     this.SubCategoryServiceApi.getSubCategories().subscribe({
       next: (res) => {
-        this.subcategory = res.subcategories;
+        // هنا هتحط console.log عشان تشوف الـ res.subcategories جاية إزاي
+        console.log('API Response for Subcategories:', res);
+        if (res && res.subcategories) {
+          this.subcategory = res.subcategories;
+          console.log('Subcategories loaded into this.subcategory:', this.subcategory);
+        } else {
+          console.log('Subcategories response is empty or malformed:', res);
+        }
       },
-      error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' }),
+      error: (err) => { // مهم جداً نشوف أي أخطاء هنا
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' });
+        console.error('Error fetching subcategories:', err); // شوف تفاصيل الخطأ هنا
+      }
     });
   }
 
@@ -323,13 +427,26 @@ export class ProductControlComponent implements OnInit {
       ar: formValue.materialAR
     }));
 
+    // *** نقطة التعديل هنا ***
+    let calculatedDiscountPrice: number | null = formValue.discountPrice;
+    // لو قيمة الخصم (discount) غير موجودة أو صفر (يعني المستخدم مدخلش خصم)
+    if (formValue.discount === null || formValue.discount === 0) {
+      calculatedDiscountPrice = null; // اجعل سعر الخصم null
+    } else {
+      calculatedDiscountPrice = formValue.price - (formValue.price * formValue.discount / 100);
+      calculatedDiscountPrice = parseFloat(calculatedDiscountPrice.toFixed(2)); // تأكد من أن القيمة هي رقم عشري بدقة نقطتين
+    }
+    // **************************
+
+
     const variants = [
       {
         name: { en: formValue.nameEN, ar: formValue.nameAR },
         color: { en: formValue.colorEN, ar: formValue.colorAR },
         price: formValue.price,
         // discountPrice: formValue.discountPrice,
-        discountPrice: this.prodForm.get('discountPrice')?.value,
+        discountPrice: calculatedDiscountPrice, // استخدم القيمة المعدلة هنا
+        // discountPrice: this.prodForm.get('discountPrice')?.value,
         inStock: formValue.inStock
       }
     ];

@@ -8,9 +8,10 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class SubService {
-  private apiUrl =`${environment.apiUrl}/subcategories`
+  private apiUrl = `${environment.apiUrl}/subcategories`
 
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   getSubCategories(): Observable<{ subcategories: SubCategory[] }> {
     return this.http.get<{ subcategories: SubCategory[] }>(this.apiUrl);

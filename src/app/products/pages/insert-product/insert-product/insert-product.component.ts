@@ -101,7 +101,7 @@ export class InsertProductComponent implements OnInit {
     this.categoryId = event.value;
 
     this.filteredSubcategories = this.subcategory.filter(sub =>
-      sub.categoriesId && sub.categoriesId._id === this.categoryId
+      sub.categoryId && sub.categoryId._id === this.categoryId
     );
 
     this.subcategoryId = null;
@@ -209,12 +209,21 @@ export class InsertProductComponent implements OnInit {
       ar: formValue.materialAR
     }));
 
+    // *** نقطة التعديل هنا ***
+    let calculatedDiscountPrice: number | null = formValue.discountPrice;
+    // لو قيمة الخصم (discount) غير موجودة أو صفر (يعني المستخدم مدخلش خصم)
+    if (formValue.discount === null || formValue.discount === 0) {
+      calculatedDiscountPrice = null; // اجعل سعر الخصم null
+    }
+    // **************************
+
     const variants = [
       {
         name: { en: formValue.nameEN, ar: formValue.nameAR },
         color: { en: formValue.colorEN, ar: formValue.colorAR },
         price: formValue.price,
-        discountPrice: formValue.discountPrice,
+        discountPrice: calculatedDiscountPrice, // استخدم القيمة المعدلة هنا
+        // discountPrice: formValue.discountPrice,
         inStock: formValue.inStock
       }
     ];
