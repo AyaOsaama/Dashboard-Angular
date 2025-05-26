@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule,FormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ProductApiService } from '../../../services/product-api.service';
+import { ProductApiService } from '../../../../service/product-api.service';
 import { Router } from '@angular/router';
 import { FileUploadEvent } from 'primeng/fileupload';
 import { CommonModule } from '@angular/common';
@@ -19,27 +19,42 @@ import { CategoriesService } from '../../../../category/services/categories.serv
 import { ICategory } from '../../../../category/model/icategory';
 import { SelectModule } from 'primeng/select';
 import { SubService } from '../../../../subcategory/services/services/subcategory.service';
+
+
+
 @Component({
   selector: 'app-insert-product',
   templateUrl: './insert-product.component.html',
   styleUrls: ['./insert-product.component.css'],
-  providers: [MessageService,InputGroupModule],
-  imports: [CommonModule, ReactiveFormsModule,FloatLabelModule,InputGroupModule,InputTextModule,
-    ToastModule,ButtonModule,FileUploadModule,DropdownModule,InputNumberModule,InputNumberModule,FormsModule,
-    FluidModule,InputGroupAddonModule,SelectModule
-    
+  providers: [MessageService, InputGroupModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FloatLabelModule,
+    InputGroupModule,
+    InputTextModule,
+    ToastModule,
+    ButtonModule,
+    FileUploadModule,
+    DropdownModule,
+    InputNumberModule,
+    FormsModule,
+    FluidModule,
+    InputGroupAddonModule,
+    SelectModule
+
   ],
 
 })
 export class InsertProductComponent implements OnInit {
   prodForm: FormGroup;
   uploadedFiles: File[] = [];
-  category!: any[] ;
+  category!: any[];
   mainImageUrl: string = '';
   imageUrls: string[] = [];
-  categoryId!:string;
-  subcategoryId!:string |null;
-  subcategory!: any[] ;
+  categoryId!: string;
+  subcategoryId!: string | null;
+  subcategory!: any[];
   filteredSubcategories: any[] = [];
   mainImageFile: File | null = null;
   additionalImages: File[] = [];
@@ -61,7 +76,7 @@ export class InsertProductComponent implements OnInit {
       nameAR: [''],
       price: [0, Validators.min(0)],
       discount: [0, [Validators.min(0), Validators.max(100)]],
-      discountPrice: [{ value: 0}],
+      discountPrice: [{ value: 0 }],
       colorEN: [''],
       colorAR: [''],
       DescriptionEN: [''],
@@ -71,7 +86,7 @@ export class InsertProductComponent implements OnInit {
       image: [''],
       images: [[]]
     });
-    
+
   }
 
   ngOnInit(): void {
@@ -81,28 +96,28 @@ export class InsertProductComponent implements OnInit {
     this.fetchSubcategories();
 
   }
+
   onCategoryChange(event: any) {
     this.categoryId = event.value;
-  
+
     this.filteredSubcategories = this.subcategory.filter(sub =>
-      sub.categoriesId && sub.categoriesId._id === this.categoryId
+      sub.categoryId && sub.categoryId._id === this.categoryId
     );
-  
+
     this.subcategoryId = null;
-  
+
     console.log('Category ID:', this.categoryId);
   }
-  
+
   onSubcategoryChange(event: any) {
     this.subcategoryId = event.value;
     console.log('Selected Subcategory ID:', this.subcategoryId);
   }
-  
+
   updateDiscountPrice(): void {
     const price = this.prodForm.get('price')?.value || 0;
     const discount = this.prodForm.get('discount')?.value || 0;
     const discountPrice = price - (price * discount / 100);
-  
     this.prodForm.patchValue({ discountPrice: parseFloat(discountPrice.toFixed(2)) }, { emitEvent: false });
   }
 
@@ -127,17 +142,17 @@ export class InsertProductComponent implements OnInit {
 
   fetchCategories() {
     this.categoeryService.getAllCategory().subscribe({
-      
+
       next: (res) => {
         this.category = res.categories;
-       console.log('====================================');
-       console.log(res.categories);
-       console.log('====================================');
+        console.log('====================================');
+        console.log(res.categories);
+        console.log('====================================');
       },
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' }),
     });
   }
-  fetchSubcategories(){
+  fetchSubcategories() {
     this.subcategoeryService.getSubCategories().subscribe({
       next: (res) => {
         this.subcategory = res.subcategories;
@@ -148,7 +163,7 @@ export class InsertProductComponent implements OnInit {
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' }),
     });
   }
- 
+
   onSelectMainImage(event: any): void {
     const file = event.files[0];
     if (file) {
@@ -162,67 +177,78 @@ export class InsertProductComponent implements OnInit {
       this.imageUrls.push(URL.createObjectURL(file));
     }
   }
-  
 
-addNewProduct() {
-  if (this.prodForm.invalid) {
-    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly' });
-    return;
+
+  addNewProduct() {
+    if (this.prodForm.invalid) {
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill in all required fields correctly' });
+      return;
+    }
+
+    if (!this.mainImageFile) {
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please upload the main product image' });
+      return;
+    }
+
+    const formValue = this.prodForm.value;
+    const formData = new FormData();
+
+    formData.append('brand', formValue.brand);
+    formData.append('categories', JSON.stringify({
+      main: this.categoryId,
+      sub: this.subcategoryId ?? ''
+    }));
+
+    formData.append('description', JSON.stringify({
+      en: formValue.DescriptionEN,
+      ar: formValue.DescriptionAR
+    }));
+
+    formData.append('material', JSON.stringify({
+      en: formValue.materialEN,
+      ar: formValue.materialAR
+    }));
+
+    // *** نقطة التعديل هنا ***
+    let calculatedDiscountPrice: number | null = formValue.discountPrice;
+    // لو قيمة الخصم (discount) غير موجودة أو صفر (يعني المستخدم مدخلش خصم)
+    if (formValue.discount === null || formValue.discount === 0) {
+      calculatedDiscountPrice = null; // اجعل سعر الخصم null
+    }
+    // **************************
+
+    const variants = [
+      {
+        name: { en: formValue.nameEN, ar: formValue.nameAR },
+        color: { en: formValue.colorEN, ar: formValue.colorAR },
+        price: formValue.price,
+        discountPrice: calculatedDiscountPrice, // استخدم القيمة المعدلة هنا
+        // discountPrice: formValue.discountPrice,
+        inStock: formValue.inStock
+      }
+    ];
+    formData.append('variants', JSON.stringify(variants));
+
+    formData.append('variantImage', this.mainImageFile);
+    this.additionalImages.forEach((file) => {
+      formData.append('variantImages', file);
+    });
+
+    this.productApi.addNewProduct(formData).subscribe({
+      next: (res) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
+        this.router.navigate(['/products']);
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the product' });
+        console.error(err);
+      }
+    });
   }
 
-  if (!this.mainImageFile) {
-    this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please upload the main product image' });
-    return;
+
+  exitInsert() {
+    this.router.navigate(['/products']);
   }
 
-  const formValue = this.prodForm.value;
-  const formData = new FormData();
-
-  formData.append('brand', formValue.brand);
-  formData.append('categories', JSON.stringify({
-    main: this.categoryId,
-    sub: this.subcategoryId ?? ''
-  }));
-
-  formData.append('description', JSON.stringify({
-    en: formValue.DescriptionEN,
-    ar: formValue.DescriptionAR
-  }));
-
-  formData.append('material', JSON.stringify({
-    en: formValue.materialEN,
-    ar: formValue.materialAR
-  }));
-
-  const variants = [
-    {
-      name: { en: formValue.nameEN, ar: formValue.nameAR },
-      color: { en: formValue.colorEN, ar: formValue.colorAR },
-      price: formValue.price,
-      discountPrice: formValue.discountPrice,
-      inStock: formValue.inStock
-    }
-  ];
-  formData.append('variants', JSON.stringify(variants));
-
-  formData.append('variantImage', this.mainImageFile);
-  this.additionalImages.forEach((file) => {
-    formData.append('variantImages', file);
-  });
-
-  this.productApi.addNewProduct(formData).subscribe({
-    next: (res) => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product added successfully' });
-      this.router.navigate(['/products']);
-    },
-    error: (err) => {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the product' });
-      console.error(err);
-    }
-  });
-}
-
-  
-  
-  
 }

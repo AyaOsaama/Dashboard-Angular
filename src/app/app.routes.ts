@@ -14,44 +14,55 @@ import { InsertPostComponent } from './posts/pages/insert-post/insert-post/inser
 import { NotFoundComponent } from './not-found/not-found.component';
 import { loginGuard } from './Gurads/login.guard';
 import { authGuard } from './Gurads/auth.guard';
-import { LoginComponent } from './auth/login/pages/login.component.js';import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
+import { LoginComponent } from './auth/login/pages/login.component.js'; import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './orders/pages/order-details/order-details.component';
 import { TestComponent } from './test/test.component';
+import { ProductControlComponent } from './products/pages/product-control/product-control.component';
+import { InsertVariantComponent } from './products/pages/product-control/insert-variant/insert-variant.component';
+import { EditVariantComponent } from './products/pages/product-control/edit-variant/edit-variant.component';
+// import { ProductControlComponent } from './products/pages/product-control/product-control/product-control.component';
+// import { EditProductComponent } from './products/pages/edit-product/edit-product.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
-  { path: '',redirectTo: 'login',pathMatch: 'full',
+  {
+    path: '', redirectTo: 'login', pathMatch: 'full',
   },
 
-    {
-      path: '',
-      component: MainLayoutComponent,
-      canActivate: [authGuard],
-      children: [
-        {path:'test', component:TestComponent},
-        { path: 'dashboard', component: DashboardComponent },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      { path: 'test', component: TestComponent },
+      { path: 'dashboard', component: DashboardComponent },
 
-        { path: 'products', component: ProductsListComponent },
-        { path: 'products/insert', component: InsertProductComponent },
+      { path: 'products', component: ProductsListComponent },
+      { path: 'products/insert', component: InsertProductComponent },
+      { path: 'products/product-control/:idFromURL', component: ProductControlComponent },
+      // { path: 'products/edit-product/:id', component: EditProductComponent },
+      { path: 'insert-variant', component: InsertVariantComponent },
+      { path: 'products/:productId/edit-variant/:variantId', component: EditVariantComponent }, // <--- المسار الجديد لتعديل الفاريانت
 
-        { path: 'categories', component: CategoriesListComponent },
-        { path: 'categories/insert', component: InsertCategoryComponent },
 
-        { path: 'subcategories', component: SubCategoriesListComponent },
-        { path: 'subcategories/insert', component: InsertSubcategoriesListComponent },
+      { path: 'categories', component: CategoriesListComponent },
+      { path: 'categories/insert', component: InsertCategoryComponent },
 
-        { path: 'orders' , component:OrdersListComponent},
-        { path: 'orders/:id', component: OrderDetailsComponent },
+      { path: 'subcategories', component: SubCategoriesListComponent },
+      { path: 'subcategories/insert', component: InsertSubcategoriesListComponent },
 
-        { path: 'users', component: UsersListComponent },
-        { path: 'users/insert', component: InsertUserComponent },
+      { path: 'orders', component: OrdersListComponent },
+      { path: 'orders/:id', component: OrderDetailsComponent },
 
-        { path: 'posts', component: PostsListComponent },
-        { path: 'posts/insert', component: InsertPostComponent },
+      { path: 'users', component: UsersListComponent },
+      { path: 'users/insert', component: InsertUserComponent },
 
-      ]
-    },
+      { path: 'posts', component: PostsListComponent },
+      { path: 'posts/insert', component: InsertPostComponent },
 
-    { path: '**', component: NotFoundComponent }
-  ];
+    ]
+  },
+
+  { path: '**', component: NotFoundComponent }
+];
 

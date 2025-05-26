@@ -1,13 +1,11 @@
 <p-toast></p-toast>
- 
+
 <div class="screen  p-4">
-  <div
-    class=" max-w-2xl bg-white rounded-2xl shadow-2xl p-10 space-y-8 border border-[#ddd4c7] card"
-  >
+  <div class=" max-w-2xl bg-white rounded-2xl shadow-2xl p-10 space-y-8 border border-[#ddd4c7] card">
     <h2 class="text-4xl font-bold text-center text-[#4b3f2f]">
       Add Subcategory
     </h2>
- 
+
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-8 form">
       <!-- Name Fields -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 ">
@@ -16,59 +14,42 @@
           <p-floatlabel variant="on">
             <p-iconfield>
               <p-inputicon class="pi pi-globe" />
-              <input
-                pInputText
-                id="name_en"
-                [(ngModel)]="value3"
-                autocomplete="off"
-                formControlName="name_en"
-              />
+              <input pInputText id="name_en" [(ngModel)]="value3" autocomplete="off" formControlName="name_en" />
             </p-iconfield>
             <label for="name_en">Name EN</label>
           </p-floatlabel>
           <small class="block text-red-500 h-5">
- 
-            <span
-            *ngIf="
+
+            <span *ngIf="
               form.controls['name_en'].invalid &&
               form.controls['name_en'].touched
-              "
-            class="!block  !h-5 text-red-500"
-            >
-            English name is required
-          </span>
-        </small>
+              " class="!block  !h-5 text-red-500">
+              English name is required
+            </span>
+          </small>
         </div>
- 
+
         <!-- Arabic -->
         <div class="space-y-2">
           <p-floatlabel variant="on">
             <p-iconfield>
               <p-inputicon class="pi pi-language" />
-              <input
-                pInputText
-                id="name_ar"
-                formControlName="name_ar"
-                class="text-right"
-              />
+              <input pInputText id="name_ar" formControlName="name_ar" class="text-right" />
             </p-iconfield>
             <label for="name_ar">Name AR</label>
           </p-floatlabel>
           <small class="block text-red-500 h-5">
- 
-            <span
-            *ngIf="
+
+            <span *ngIf="
               form.controls['name_ar'].invalid &&
               form.controls['name_ar'].touched
-              "
-            class=" !block  !h-5 text-red-500"
-            >
-            Arabic name is required
-          </span>
-        </small>
+              " class=" !block  !h-5 text-red-500">
+              Arabic name is required
+            </span>
+          </small>
         </div>
       </div>
- 
+
       <!-- Tags -->
       <div class="!space-y-2 !mt-3">
         <p-floatlabel variant="on">
@@ -79,41 +60,29 @@
           <label for="tags">Tags</label>
         </p-floatlabel>
       </div>
- 
+
       <!-- Category Select -->
       <div class="space-y-2 !my-5">
         <label class="text-lg block font-bold text-center text-[#4b3f2f]">
-           Parent Category
+          Parent Category
         </label>
- 
- 
+
+
         <p-inputgroup class="w-full">
           <p-inputgroup-addon class="bg-[#c0a97f] text-white">
             <i class="pi pi-th-large"></i>
           </p-inputgroup-addon>
-          <p-select
-          [options]="category"
-          formControlName="categoryId"
-          optionValue="_id"
-          optionLabel="name.en"
-          placeholder="Select a category"
-          class="w-full"
-          ></p-select>
+          <p-select [options]="category" formControlName="categoryId" optionValue="_id" optionLabel="name.en"
+            placeholder="Select a category" class="w-full"></p-select>
         </p-inputgroup>
       </div>
- 
+
       <!-- Submit Button -->
       <div class="pt-6 !mt-3">
-        <button
-          pButton
-          type="submit"
-          label="Add Subcategory"
+        <button pButton type="submit" label="Add Subcategory"
           class="w-full   !text-2xl !p-button-success !text-bold !p-button-success !px-8 !py-3  !rounded-lg !shadow"
- 
-          [disabled]="form.invalid || loading"
-        ></button>
+          [disabled]="form.invalid || loading"></button>
       </div>
     </form>
   </div>
 </div>
- 

@@ -1,22 +1,25 @@
 <div class="container !mx-auto !my-8 !p-8 !bg-white !shadow-xl !rounded-2xl">
-  <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">Insert New Product</h2>
+  <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">Insert New Variant</h2>
 
-  <form (ngSubmit)="addNewProduct()" [formGroup]="prodForm" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+  <form (ngSubmit)="addNewVariant()" [formGroup]="variantForm" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
     <!-- RIGHT COLUMN -->
     <div class="!space-y-6">
+      <!-- name En -->
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Name (EN)</label>
         <input pInputText formControlName="nameEN" placeholder="Product name in English"
           class="!w-full !p-3 !rounded-lg" />
       </div>
 
+
+      <!-- name Ar -->
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Name (AR)</label>
         <input pInputText formControlName="nameAR" placeholder="اسم المنتج بالعربية" class="!w-full !p-3 !rounded-lg" />
       </div>
 
-
+      <!-- price discount discount price inStock -->
       <div class="!grid !grid-cols-2 !gap-4">
         <div>
           <label class="!block !text-gray-700 !font-semibold !mb-2">Price</label>
@@ -37,18 +40,8 @@
             class="!w-full !p-2 !rounded-lg" />
         </div>
       </div>
-      <div>
-        <label class="!block !text-gray-700 !font-semibold !mb-2">Description (EN)</label>
-        <textarea pInputTextarea formControlName="DescriptionEN" rows="4" placeholder="Description in English"
-          class="!w-full !p-3 border !rounded-lg"></textarea>
-      </div>
 
-      <div>
-        <label class="!block !text-gray-700 !font-semibold !mb-2">Description (AR)</label>
-        <textarea pInputTextarea formControlName="DescriptionAR" rows="4" placeholder="الوصف بالعربية"
-          class="!w-full !p-3 border !rounded-lg"></textarea>
-      </div>
-
+      <!-- main Image -->
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Main Image</label>
         <p-fileupload name="image" [customUpload]="true" (onSelect)="onSelectMainImage($event)" accept="image/*"
@@ -61,57 +54,8 @@
 
     <!-- LEFT COLUMN -->
     <div class="!space-y-6">
-      <div>
-        <label class="!block !text-gray-700 !font-semibold !mb-2">Brand</label>
-        <input pInputText formControlName="brand" placeholder="Brand" class="!w-full !p-3 !rounded-lg" />
-      </div>
-
-      <div>
-        <label class="!block !text-gray-700 !font-semibold !mb-2">Category</label>
-        <p-inputgroup>
-          <p-inputgroup>
-            <p-inputgroup-addon>
-              <i class=" pi pi-map"></i>
-            </p-inputgroup-addon>
-            <div class="card flex justify-center !w-full">
-              <p-select [options]="category" [(ngModel)]="categoryId" [ngModelOptions]="{standalone: true}"
-                optionValue="_id" optionLabel="name.en" placeholder="Select a category" class="w-full md:w-56"
-                (onChange)="onCategoryChange($event)" />
-            </div>
-          </p-inputgroup>
-        </p-inputgroup>
-      </div>
-
-      <div>
-        <label class="!block !text-gray-700 !font-semibold !mb-2">Subcategory</label>
-        <p-inputgroup class="!w-full">
-          <p-inputgroup>
-            <p-inputgroup-addon>
-              <i class=" pi pi-map"></i>
-            </p-inputgroup-addon>
-            <div class="card flex justify-center !w-full">
-              <p-select class="!w-full" [options]="filteredSubcategories" [(ngModel)]="subcategoryId"
-                [ngModelOptions]="{standalone: true}" optionValue="_id" optionLabel="name.en"
-                placeholder="Select a subcategory" class="w-full md:w-56" (onChange)="onSubcategoryChange($event)" />
-            </div>
-          </p-inputgroup>
-        </p-inputgroup>
-      </div>
-
-
+      <!-- color En & Ar -->
       <div class="!grid !grid-cols-2 !gap-4">
-        <div>
-          <label class="!block !text-gray-700 !font-semibold !mb-2">Material (EN)</label>
-          <input pInputText formControlName="materialEN" placeholder="Material in English"
-            class="!w-full !p-3 !rounded-lg" />
-        </div>
-
-        <div>
-          <label class="!block !text-gray-700 !font-semibold !mb-2">Material (AR)</label>
-          <input pInputText formControlName="materialAR" placeholder="الخامة بالعربية"
-            class="!w-full !p-3 !rounded-lg" />
-        </div>
-
         <div>
           <label class="!block !text-gray-700 !font-semibold !mb-2">Color (EN)</label>
           <input pInputText formControlName="colorEN" placeholder="Color in English" class="!w-full !p-3 !rounded-lg" />
@@ -122,6 +66,7 @@
           <input pInputText formControlName="colorAR" placeholder="اللون بالعربية" class="!w-full !p-3 !rounded-lg" />
         </div>
       </div>
+
       <div>
         <label class="!block !text-gray-700 !font-semibold !mb-2">Additional Images</label>
         <p-fileupload name="images[]" [customUpload]="true" (onSelect)="onSelectImages($event)" [multiple]="true"
@@ -134,7 +79,7 @@
 
     <!-- Submit Button -->
     <div class="!md:col-span-2 !mt-8 !text-center">
-      <button style="margin-right:16px;" pButton type="submit" label="Insert Product"
+      <button style="margin-right:16px;" pButton type="submit" label="Insert Variant"
         class="!p-button-success !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
 
       <button style="margin-right:16px;" pButton type="button" label="Cancel" (click)="exitInsert()"

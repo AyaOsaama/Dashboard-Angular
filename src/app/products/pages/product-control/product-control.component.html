@@ -1,0 +1,252 @@
+<div class="container !mx-auto !my-8 !p-8 !bg-white !shadow-xl !rounded-2xl">
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast key="myToast"></p-toast>
+  <h2 class="!text-3xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">Edit Product</h2>
+  <h3 class="!text-2xl !font-bold !text-gray-800 !mb-10 !border-b !pb-4">
+    {{'Product ID :'}} {{ product._id }}
+  </h3>
+
+
+  <!-- <form (ngSubmit)="updateProduct()" [formGroup]="prodForm" #Form="ngForm"
+    class="grid grid-cols-1 lg:grid-cols-2 gap-10"> -->
+  <form (ngSubmit)="controlProduct(product._id)" [formGroup]="prodForm" class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+    <!-- RIGHT COLUMN -->
+    <div class="!space-y-6">
+
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Name (EN)</label>
+        <input pInputText formControlName="nameEN" placeholder="Product name in English"
+          class="!w-full !p-3 !rounded-lg" />
+      </div>
+
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Name (AR)</label>
+        <input pInputText formControlName="nameAR" placeholder="اسم المنتج بالعربية" class="!w-full !p-3 !rounded-lg" />
+      </div>
+
+
+      <div class="!grid !grid-cols-2 !gap-4">
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">Price</label>
+          <p-inputnumber formControlName="price" mode="currency" currency="USD" class="!w-full !p-2 !rounded-lg" />
+        </div>
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">Discount %</label>
+          <p-inputnumber formControlName="discount" prefix="%" class="!w-full !p-2 !rounded-lg" />
+        </div>
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">Discount Price</label>
+          <p-inputnumber formControlName="discountPrice" mode="currency" currency="USD" [disabled]="true"
+            class="!w-full !p-2 !rounded-lg" />
+        </div>
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">In Stock</label>
+          <p-inputnumber formControlName="inStock" mode="decimal" [useGrouping]="false"
+            class="!w-full !p-2 !rounded-lg" />
+        </div>
+      </div>
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Description (EN)</label>
+        <textarea pInputTextarea formControlName="DescriptionEN" rows="4" placeholder="Description in English"
+          class="!w-full !p-3 border !rounded-lg"></textarea>
+      </div>
+
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Description (AR)</label>
+        <textarea pInputTextarea formControlName="DescriptionAR" rows="4" placeholder="الوصف بالعربية"
+          class="!w-full !p-3 border !rounded-lg"></textarea>
+      </div>
+
+
+      <!-- Main Image -->
+      <label class="!block !text-gray-700 !font-semibold !mb-2">Main Image</label>
+      <p-fileupload name="image" [customUpload]="true" (onSelect)="onSelectMainImage($event)" accept="image/*"
+        maxFileSize="1000000" mode="basic" />
+      <div *ngIf="mainImageUrl" class="!mt-3 relative">
+        <img [src]="mainImageUrl" class="!w-52 !rounded !shadow-md" />
+        <button type="button" (click)="removeMainImage()"
+          class="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs">X</button>
+      </div>
+
+      <!-- <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Main Image</label>
+        <p-fileupload name="image" [customUpload]="true" (onSelect)="onSelectMainImage($event)" accept="image/*"
+          maxFileSize="1000000" mode="basic" />
+        <div *ngIf="mainImageUrl" class="!mt-3">
+          <img [src]="mainImageUrl" class="!w-52 !rounded !shadow-md" />
+        </div>
+      </div> -->
+    </div>
+
+    <!-- LEFT COLUMN -->
+    <div class="!space-y-6">
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Brand</label>
+        <input pInputText formControlName="brand" placeholder="Brand" class="!w-full !p-3 !rounded-lg" />
+      </div>
+
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Category</label>
+        <p-inputgroup>
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class=" pi pi-map"></i>
+            </p-inputgroup-addon>
+            <div class="card flex justify-center !w-full">
+              <!-- <p-select [options]="category" [(ngModel)]="categoryId" optionValue="_id" optionLabel="name.en"
+                placeholder="Select a category" class="w-full md:w-56" (onChange)="onCategoryChange($event)" /> -->
+              <p-select [options]="category" formControlName="categoryMain" optionValue="_id" optionLabel="name.en"
+                placeholder="Select a category" class="w-full md:w-56" />
+            </div>
+          </p-inputgroup>
+        </p-inputgroup>
+      </div>
+
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Subcategory</label>
+        <p-inputgroup class="!w-full">
+          <p-inputgroup>
+            <p-inputgroup-addon>
+              <i class=" pi pi-map"></i>
+            </p-inputgroup-addon>
+
+            <div class="card flex justify-center !w-full">
+              <!-- <p-select class="!w-full" [options]="filteredSubcategories" [(ngModel)]="subcategoryId" optionValue="_id"
+                optionLabel="name.en" placeholder="Select a subcategory" class="w-full md:w-56"
+                (onChange)="onSubcategoryChange($event)" /> -->
+
+              <p-select class="!w-full" [options]="filteredSubcategories" formControlName="categorySub"
+                optionValue="_id" optionLabel="name.en" placeholder="Select a subcategory" class="w-full md:w-56" />
+            </div>
+
+          </p-inputgroup>
+        </p-inputgroup>
+      </div>
+
+
+      <div class="!grid !grid-cols-2 !gap-4">
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">Material (EN)</label>
+          <input pInputText formControlName="materialEN" placeholder="Material in English"
+            class="!w-full !p-3 !rounded-lg" />
+        </div>
+
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">Material (AR)</label>
+          <input pInputText formControlName="materialAR" placeholder="الخامة بالعربية"
+            class="!w-full !p-3 !rounded-lg" />
+        </div>
+
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">Color (EN)</label>
+          <input pInputText formControlName="colorEN" placeholder="Color in English" class="!w-full !p-3 !rounded-lg" />
+        </div>
+
+        <div>
+          <label class="!block !text-gray-700 !font-semibold !mb-2">Color (AR)</label>
+          <input pInputText formControlName="colorAR" placeholder="اللون بالعربية" class="!w-full !p-3 !rounded-lg" />
+        </div>
+      </div>
+
+      <!-- Additional IMages -->
+      <div>
+        <label class="!block !text-gray-700 !font-semibold !mb-2">Additional Images</label>
+        <p-fileupload name="images[]" [customUpload]="true" (onSelect)="onSelectImages($event)" [multiple]="true"
+          accept="image/*" maxFileSize="1000000" mode="advanced" />
+
+        <div *ngIf="imageUrls.length" class="!mt-3 grid grid-cols-3 gap-4">
+          <div *ngFor="let img of imageUrls; let i = index" class="relative">
+            <img [src]="img" class="!w-full !h-28 !object-cover !rounded-lg !shadow" />
+            <button type="button" (click)="removeAdditionalImage(i)"
+              class="absolute top-1 right-1 bg-red-600 text-white rounded-full px-2 py-1 text-xs">X</button>
+          </div>
+        </div>
+
+
+        <!-- <ul *ngIf="imageUrls.length" class="!mt-3 !text-sm !text-gray-600 !list-disc !list-inside">
+          <li *ngFor="let file of additionalImages">{{ file.name }} - {{ file.size }} bytes</li>
+        </ul> -->
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="!md:col-span-2 !mt-8 !text-center space-x-4">
+      <button style="margin-right:16px;" pButton type="button"
+        label="{{ showVariantTable ? 'Hide Variants' : 'Show Variants' }}" (click)="toggleVariantTable()"
+        class="!p-button-info !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
+
+      <button style="margin-right:16px;" pButton type="submit" label="Edit Product"
+        class="!p-button-success !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
+
+      <button style="margin-right:16px;" pButton type="button" label="Cancel Edit" (click)="cancelEdit()"
+        class="p-button-danger !px-8 !py-3 !text-lg !rounded-lg !shadow"></button>
+
+
+    </div>
+  </form>
+
+
+  <div *ngIf="showVariantTable" class="!mt-12 !border-t !pt-10">
+    <h3 class="!text-2xl !font-bold !mb-6 text-blue-800">Product Variants</h3>
+
+    <div class="text-right mb-6">
+      <button pButton type="button" label="Add New Variant" (click)="addNewVariant()"
+        class="p-button-primary !px-6 !py-2 !rounded-lg"></button>
+    </div>
+
+    <p-table [value]="product?.variants" [tableStyle]="{ 'min-width': '60rem' }"> <ng-template pTemplate="header">
+        <tr>
+          <th class="text-left p-3">ID</th>
+          <th class="text-left p-3">Name (EN)</th>
+          <th class="text-left p-3">Name (AR)</th>
+          <th class="text-left p-3">Price</th>
+          <th class="text-left p-3">Discount Price</th>
+          <th class="text-left p-3">In Stock</th>
+          <th class="text-left p-3">Color (EN)</th>
+          <th class="text-left p-3">Color (AR)</th>
+          <th class="text-left p-3">Main Image</th>
+          <th class="text-left p-3">Additional Images</th>
+          <th class="text-left p-3" style="width: 10rem;">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-variant>
+        <tr>
+          <td class="p-3">{{ variant._id }}</td>
+          <td class="p-3">{{ variant.name?.en || 'N/A' }}</td>
+          <td class="p-3">{{ variant.name?.ar || 'N/A' }}</td>
+          <td class="p-3">{{ variant.price | currency: 'USD' }}</td>
+          <td class="p-3">{{ variant.discountPrice | currency: 'USD' }}</td>
+          <td class="p-3">{{ variant.inStock }}</td>
+          <td class="p-3">{{ variant.color?.en || 'N/A' }}</td>
+          <td class="p-3">{{ variant.color?.ar || 'N/A' }}</td>
+          <td class="p-3">
+            <img *ngIf="variant.image" [src]="variant.image" alt="Variant Main Image" class="w-16 rounded" />
+            <span *ngIf="!variant.image">-</span>
+          </td>
+          <td class="p-3">
+            <div *ngIf="variant.images && variant.images.length > 0" class="flex flex-wrap gap-1">
+              <img *ngFor="let img of variant.images" [src]="img" alt="Variant Thumbnail"
+                class="w-12 h-12 rounded border" />
+            </div>
+            <span *ngIf="!variant.images || variant.images.length === 0">-</span>
+          </td>
+          <td class="p-3 flex gap-2">
+            <button pButton type="button" icon="pi pi-pencil" class="p-button-sm p-button-secondary mr-2"
+              (click)="editVariant(variant)"></button>
+            <button pButton type="button" icon="pi pi-trash" class="p-button-sm p-button-danger"
+              (click)="onDeleteVariant(variant)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptyMessage">
+        <tr>
+          <td colspan="11" class="text-center text-gray-600">No variants found for this product.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div *ngIf="!product?.variants?.length" class="text-center text-gray-600 mt-4">No variants available.</div>
+
+  </div>
+
+</div>

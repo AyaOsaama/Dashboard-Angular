@@ -1,1 +1,51 @@
-<p>insert-category works!</p>
+<h2 class="text-2xl font-semibold text-gray-800 mb-4">Add New Category</h2>
+
+<p-card>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label class="font-semibold block mb-1">name (EN)</label>
+      <input type="text" pInputText [(ngModel)]="newCategories.name.en" class="w-full">
+    </div>
+    <div>
+      <label class="font-semibold block mb-1">name (AR)</label>
+      <input type="text" pInputText [(ngModel)]="newCategories.name.ar" class="w-full">
+    </div>
+    <div>
+      <label class="font-semibold block mb-1">Description (EN)</label>
+      <textarea pInputTextarea rows="3" [(ngModel)]="newCategories.description.en" class="w-full"></textarea>
+    </div>
+    <div>
+      <label class="font-semibold block mb-1">Description (AR)</label>
+      <textarea pInputTextarea rows="3" [(ngModel)]="newCategories.description.ar" class="w-full"></textarea>
+    </div>
+
+    <!-- <div class="md:col-span-2">
+      <label class="font-semibold block mb-1">Content (EN)</label>
+      <textarea pInputTextarea rows="4" [(ngModel)]="newCategories.content.en" class="w-full"></textarea>
+    </div>
+    <div class="md:col-span-2">
+      <label class="font-semibold block mb-1">Content (AR)</label>
+      <textarea pInputTextarea rows="4" [(ngModel)]="newCategories.content.ar" class="w-full"></textarea>
+    </div> -->
+
+    <!--
+    <div class="md:col-span-2">
+      <label class="font-semibold block mb-1">Author</label>
+      <input type="text" pInputText [(ngModel)]="newCategories.author" class="w-full">
+    </div> -->
+
+    <div class="md:col-span-2">
+      <label class="font-semibold block mb-2">Image</label>
+      <div class="flex items-center gap-4">
+        <img [src]="newCategories.imagePreview || defaultAvatar" alt="Preview" width="100" height="100"
+          class="rounded shadow border border-gray-300 object-cover">
+        <input type="file" (change)="onImageSelectedForCategory($event)">
+      </div>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-4 mt-4">
+    <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="onCancel()"></button>
+    <button pButton label="Add Category" icon="pi pi-check" class="p-button-success" (click)="onAddCategory()"></button>
+  </div>
+</p-card>
