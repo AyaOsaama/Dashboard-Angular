@@ -70,15 +70,10 @@ export class PostsListComponent {
   loadPosts(){
     this.postService.getAllPosts().subscribe({
       next: (res) => {
-        console.log('====================================');
-        console.log(res);
-        console.log('====================================');
+  
         this.posts = res.posts; 
         this.filteredPosts=res.posts;
         if(this.filteredPosts)
-        console.log('====================================');
-        console.log(res.posts);
-        console.log('====================================');
         this.loading = false;
       },
       error: (err) => {

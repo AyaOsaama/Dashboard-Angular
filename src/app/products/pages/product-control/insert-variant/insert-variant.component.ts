@@ -102,9 +102,7 @@ export class InsertVariantComponent implements OnInit {
       if (!this.productId) {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Product ID not found in route.' });
         this.router.navigate(['/products']); // مثال: العودة لصفحة المنتجات
-      } else {
-        console.log('Adding variant for Product ID:', this.productId);
-      }
+      } 
     });
   }
 
@@ -225,7 +223,6 @@ export class InsertVariantComponent implements OnInit {
     // لو الخصم مش رقم (NaN) أو قيمته صفر
     if (isNaN(discount) || discount === 0) {
       finalDiscountPrice = null; // نضعها null هنا
-      console.log('Discount is NaN or 0. Setting finalDiscountPrice to null.');
     } else {
       // لو فيه خصم (رقم أكبر من صفر)، نقوم بالحساب
       if (isNaN(price) || price < 0) { // تحقق إضافي، مع إنه المفروض يكون تم فوق
@@ -235,7 +232,6 @@ export class InsertVariantComponent implements OnInit {
       }
       finalDiscountPrice = price - (price * discount / 100);
       finalDiscountPrice = parseFloat(finalDiscountPrice.toFixed(2));
-      console.log('Discount is not NaN or 0. Calculated finalDiscountPrice:', finalDiscountPrice);
     }
 
     // **هنا النقطة الحاسمة:**
@@ -249,11 +245,7 @@ export class InsertVariantComponent implements OnInit {
         return;
       }
       formData.append('discountPrice', finalDiscountPrice.toString());
-      console.log('Appending discountPrice as string:', finalDiscountPrice.toString());
-    } else {
-      console.log('finalDiscountPrice is null. NOT appending discountPrice to FormData.');
-      // لا يتم إضافة discountPrice للـ FormData إذا كانت قيمتها null
-    }
+    } 
 
     formData.append('inStock', formValue.inStock.toString());
 
@@ -269,7 +261,6 @@ export class InsertVariantComponent implements OnInit {
     this.productApiService.addVariant(this.productId, formData).subscribe({
       next: (response) => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Variant added successfully!' });
-        console.log('Variant added:', response);
         this.router.navigate(['/products/product-control', this.productId]);
       },
       error: (error) => {

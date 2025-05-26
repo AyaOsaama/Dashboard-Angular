@@ -230,10 +230,6 @@ export class DashboardComponent implements OnInit {
   loadTopProductsInCart() {
     this.dashboardService.getTopProductsInCart().subscribe({
       next: (res) => {
-        console.log('====================================');
-        console.log(`load Top Product`, res.topProducts);
-        console.log('====================================');
-
         const allTopProducts = res.topProducts;
         const labels = allTopProducts.map((item: any) => item.name);
         const data = allTopProducts.map((item: any) => item.totalQuantity);
@@ -294,9 +290,6 @@ export class DashboardComponent implements OnInit {
   loadTotalCartValue() {
     this.dashboardService.getTotalCartValue().subscribe({
       next: (res) => {
-        console.log('====================================');
-        console.log(res);
-        console.log('====================================');
         this.totalCartValueData = {
           labels: ['Total Cart Value'],
           datasets: [
@@ -343,8 +336,7 @@ export class DashboardComponent implements OnInit {
       totalUsers: this.dashboardService.getAllUsersCount(),
     }).subscribe({
       next: ({ usersWithItems, totalUsers }) => {
-        console.log('Users with cart items:', usersWithItems);
-        console.log('Total users:', totalUsers);
+      
 
         const withItems = usersWithItems.userCount;
         const withoutItems = totalUsers.totalUsers - withItems;
@@ -435,9 +427,6 @@ export class DashboardComponent implements OnInit {
           },
         };
 
-        console.log('mostRatedProducts:', mostRatedProducts);
-        console.log('ratingDistributionData:', this.ratingDistributionData);
-        console.log('averageRating:', averageRating);
 
         this.topRatedProducts = Array.isArray(
           mostRatedProducts?.topRatedProducts
@@ -456,7 +445,6 @@ export class DashboardComponent implements OnInit {
       this.productKPIs.totalVariants = res.totalVariants || 0;
     });
     this.dashboardService.getBrandsCount().subscribe((res) => {
-      console.log('brandsCount API response:', res); // أضف هذا السطر
       this.productKPIs.brandsCount = res.brandsCount || 0;
     });
     this.dashboardService.getDiscountedVariantsCount().subscribe((res) => {

@@ -25,9 +25,6 @@ export class OrderDetailsComponent {
     this.orderService.getOrderById(this.orderId).subscribe({
       next: (res) => {
         this.order = res.order
-        console.log('====================================');
-        console.log(this.order);
-        console.log('====================================');
       },
       error: (err) => console.error(err)
     });

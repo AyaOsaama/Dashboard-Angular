@@ -62,7 +62,6 @@ export class CategoriesListComponent {
   loadCategories() {
     this.categoryService.getAllCategory().subscribe({
       next: data => {
-        console.log(data);
         this.categories = data.categories; 
       },
       error: err => console.error('Failed to load categories:', err)
@@ -99,7 +98,6 @@ export class CategoriesListComponent {
     if (this.editedCategory._id) {
   this.categoryService.updateCategory(this.editedCategory._id, formData).subscribe({
     next: (updatedCat) => {
-      console.log('Category updated', updatedCat);
       this.editCategoryDialog = false;
       this.loadCategories();
 

@@ -144,9 +144,7 @@ export class ProductControlComponent implements OnInit {
         // بمجرد ما الاتنين يكملوا تحميل، هنحط البيانات في الـ arrays بتاعتنا
         this.category = categoriesRes.categories;
         this.subcategory = subcategoriesRes.subcategories;
-        console.log('تم تحميل البيانات الأولية: Categories و Subcategories جاهزة.');
-        console.log('Categories:', this.category);
-        console.log('Subcategories:', this.subcategory);
+      
 
         // دلوقتي بعد ما البيانات الأساسية اتحملت، نقدر نعمل setup للـ listener بتاع تغيير الـ Category
         this.setupCategoryChangeListener();
@@ -167,20 +165,12 @@ export class ProductControlComponent implements OnInit {
 
 
     this.prodForm.get('categoryMain')?.valueChanges.subscribe(selectedCategoryId => {
-      // --- هنا بنبدأ تسجيل المعلومات للمراجعة ---
-
-      // 1. شوف الـ ID بتاع التصنيف الرئيسي اللي اخترته حالياً
-      console.log('1. تم اختيار Category ID:', selectedCategoryId);
-
-      // 2. شوف كل التصنيفات الفرعية اللي عندك في الـ array (قبل أي فلترة)
-      // ده عشان نتأكد إن this.subcategory مش فاضية من الأساس
-      console.log('2. كل التصنيفات الفرعية المتاحة (قبل الفلترة):', this.subcategory);
+   
 
       this.filteredSubcategories = this.subcategory.filter(sub => {
         // 3. لكل تصنيف فرعي، شوف الـ ID بتاع التصنيف الرئيسي اللي هو مربوط بيه، وقارنه بالـ ID المختار
         // ده بيبين هل المقارنة بتتم صح ولا لأ
         const subCategoryIdInFilter = sub.categoryId?._id; // الـ ?. بتخلي الكود ميكسرش لو categoryId مش موجود
-        console.log(`3. جاري مقارنة Subcategory ID: "<span class="math-inline">\{subCategoryIdInFilter\}" مع Category ID المختار\: "</span>{selectedCategoryId}"`);
 
         // دي عملية الفلترة نفسها اللي بتختار التصنيفات الفرعية المطابقة
         return sub.categoryId && sub.categoryId._id === selectedCategoryId;
@@ -188,7 +178,6 @@ export class ProductControlComponent implements OnInit {
 
       // 4. بعد ما الفلترة خلصت، شوف إيه التصنيفات الفرعية اللي طلعت في الآخر
       // لو دي فاضية، يبقى هي دي المشكلة الأساسية
-      console.log('4. التصنيفات الفرعية بعد الفلترة:', this.filteredSubcategories);
 
       // --- هنا بننتهي من تسجيل المعلومات ---
 
@@ -212,19 +201,16 @@ export class ProductControlComponent implements OnInit {
   // دالة جديدة عشان نحط فيها الـ listener بتاع تغيير الـ Category
   setupCategoryChangeListener(): void {
     this.prodForm.get('categoryMain')?.valueChanges.subscribe(selectedCategoryId => {
-      console.log('تم اختيار Category ID:', selectedCategoryId);
       // نتأكد إن this.subcategory فيها بيانات قبل ما نعمل فلترة
       if (this.subcategory && this.subcategory.length > 0) {
         this.filteredSubcategories = this.subcategory.filter(sub => {
           const subCategoryId = sub.categoryId?._id;
-          console.log(`جاري مقارنة Subcategory ID: "${subCategoryId}" مع Selected Category ID: "${selectedCategoryId}"`);
           return subCategoryId === selectedCategoryId;
         });
       } else {
         this.filteredSubcategories = []; // المفروض مفيش بيانات هنا لو forkJoin اشتغل صح
         console.warn('Subcategory array فارغة أثناء listener تغيير الـ Category. ده ممكن يكون مشكلة.');
       }
-      console.log('التصنيفات الفرعية بعد الفلترة:', this.filteredSubcategories);
       this.prodForm.patchValue({ categorySub: '' });
     });
   }
@@ -235,7 +221,6 @@ export class ProductControlComponent implements OnInit {
     this.ProductApiService.getProdByIdStr(id).subscribe({
       next: (data: any) => {
         this.product = data.product;
-        console.log("بيانات المنتج بعد التحميل:", this.product);
 
         if (this.product && this.product.variants?.length > 0) {
           const firstVariant = this.product.variants[0];
@@ -305,13 +290,9 @@ export class ProductControlComponent implements OnInit {
   fetchSubcategories() {
     this.SubCategoryServiceApi.getSubCategories().subscribe({
       next: (res) => {
-        // هنا هتحط console.log عشان تشوف الـ res.subcategories جاية إزاي
-        console.log('API Response for Subcategories:', res);
         if (res && res.subcategories) {
           this.subcategory = res.subcategories;
-          console.log('Subcategories loaded into this.subcategory:', this.subcategory);
         } else {
-          console.log('Subcategories response is empty or malformed:', res);
         }
       },
       error: (err) => { // مهم جداً نشوف أي أخطاء هنا
@@ -384,7 +365,6 @@ export class ProductControlComponent implements OnInit {
 
   editProduct(productId: string) {
     this.updateProduct();
-    console.log('بدء تعديل المنتج برقم:', productId);
   }
   exitComponent() {
     this.router.navigate(['/products']);
@@ -482,7 +462,6 @@ export class ProductControlComponent implements OnInit {
 
   addNewVariant(): void {
     if (this.productId) {
-      console.log('Navigating to add new variant for Product ID:', this.productId);
       this.router.navigate(['/insert-variant'], { queryParams: { productId: this.productId } });
     } else {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cannot add variant, Product ID is missing.' });
@@ -491,13 +470,11 @@ export class ProductControlComponent implements OnInit {
 
 
   editVariant(variant: any): void {
-    console.log('Edit Variant clicked:', variant);
     this.router.navigate(['/products', this.productId, 'edit-variant', variant._id]);
     this.messageService.add({ severity: 'info', summary: 'Info', detail: `Edit Variant logic for ID ${variant._id} pending implementation.` });
   }
 
   confirmDeleteVariant(variant: any): void {
-    console.log('Confirm delete for variant:', variant);
     this.confirmationService.confirm({
       message: `Are you Sure you want to Delete Variant: ${variant.name?.en || variant._id}?`,
       header: 'Confirm Deletion',
@@ -515,7 +492,6 @@ export class ProductControlComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Product ID is missing for variant deletion' });
       return;
     }
-    console.log('Deleting variant with ID:', variantId);
 
     this.messageService.add({ severity: 'info', summary: 'Info', detail: `Delete variant logic for ID ${variantId} is pending implementation.` });
 
@@ -553,7 +529,6 @@ export class ProductControlComponent implements OnInit {
           return;
         }
 
-        console.log(`[Frontend] Attempting to delete variant with ID: ${variantToDelete._id} from product: ${this.productId}`);
 
         this.ProductApiService.deleteProductVariant(this.productId, variantToDelete._id).subscribe({
           next: () => {
@@ -566,7 +541,6 @@ export class ProductControlComponent implements OnInit {
               detail: 'Variant deleted successfully from the database.',
               life: 3000
             });
-            console.log(`[Frontend] Variant ${variantToDelete._id} deleted successfully.`);
           },
           error: (err) => {
             console.error('[Frontend] Failed to delete variant:', err);

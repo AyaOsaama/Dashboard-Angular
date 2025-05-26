@@ -70,16 +70,13 @@ this.form = this.fb.group({
   }
   onCategoryChange(event: any) {
     this.categoryId = event.value;
-    console.log('Category ID:', this.categoryId);
   }
   fetchCategories() {
     this.categoeryService.getAllCategory().subscribe({
       
       next: (res) => {
         this.category = res.categories;
-       console.log('====================================');
-       console.log(res.categories);
-       console.log('====================================');
+   
       },
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' }),
     });

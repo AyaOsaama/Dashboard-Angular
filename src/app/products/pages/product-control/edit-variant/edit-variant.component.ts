@@ -285,7 +285,6 @@ export class EditVariantComponent implements OnInit {
 
   editVariant() {
     this.updateVariant();
-    console.log('بدء تعديل المنتج برقم:');
   }
   exitComponent() {
     this.router.navigate(['/products/product-control', this.productId]);

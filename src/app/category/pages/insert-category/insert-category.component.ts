@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
 export class InsertCategoryComponent {
 
   newCategories: Iimagecategory = this.createEmptyCategory();
-  defaultAvatar = 'https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-image-182145777.jpg';
+  defaultAvatar = 'https://images.icon-icons.com/1863/PNG/512/add-photo-alternate_119464.png';
 
   constructor(
     private categoriesService: CategoriesService,

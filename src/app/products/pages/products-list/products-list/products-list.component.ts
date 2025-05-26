@@ -76,7 +76,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       next: (res: any) => {
         if (Array.isArray(res.products)) {
           this.products = res.products;
-          console.log('Products:', this.products);
         } else {
           console.error('The Data is not an Array:', res);
           this.products = [];
@@ -118,7 +117,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        console.log('Deleting product with ID:', product._id);
         this.ProductApiService.deleteProduct(product._id).subscribe({
           next: () => {
             this.products = this.products.filter(p => p._id !== product._id);
@@ -172,7 +170,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
   }
 
   loadAllCategories() {
-    console.log('loadAllCategories called');
     this.ProductApiService.getAllCategories().subscribe({
       next: (categoriesResponse: any) => {
         if (categoriesResponse && Array.isArray(categoriesResponse.categories)) {
@@ -213,7 +210,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
       },
     });
 
-    console.log('All Main & Sub Categories Loaded Successfully  :', this.categoriesCache);
   }
 
   getCategoryName(
@@ -234,7 +230,6 @@ export class ProductsListComponent implements OnInit, OnDestroy {
     this.subCategorySubscription = this.SubCategoryServiceApi.getSubCategoriesByCategoryId(categoryId).subscribe({
       next: (response) => {
         this.subCategories = response.subcategories;
-        console.log('Subcategories:', this.subCategories);
       },
       error: (error) => {
         console.error('Error loading subcategories:', error);

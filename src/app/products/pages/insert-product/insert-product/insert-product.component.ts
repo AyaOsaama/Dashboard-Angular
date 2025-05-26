@@ -106,12 +106,10 @@ export class InsertProductComponent implements OnInit {
 
     this.subcategoryId = null;
 
-    console.log('Category ID:', this.categoryId);
   }
 
   onSubcategoryChange(event: any) {
     this.subcategoryId = event.value;
-    console.log('Selected Subcategory ID:', this.subcategoryId);
   }
 
   updateDiscountPrice(): void {
@@ -145,9 +143,7 @@ export class InsertProductComponent implements OnInit {
 
       next: (res) => {
         this.category = res.categories;
-        console.log('====================================');
-        console.log(res.categories);
-        console.log('====================================');
+     
       },
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' }),
     });
@@ -155,10 +151,7 @@ export class InsertProductComponent implements OnInit {
   fetchSubcategories() {
     this.subcategoeryService.getSubCategories().subscribe({
       next: (res) => {
-        this.subcategory = res.subcategories;
-        console.log('====================================');
-        console.log(res.subcategories);
-        console.log('====================================');
+      
       },
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' }),
     });

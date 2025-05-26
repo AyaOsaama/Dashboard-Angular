@@ -123,7 +123,7 @@
         </div>
 
         <!-- Rating Distribution -->
-        <div *ngIf="ratingDistributionData.labels.length > 0" class="!mb-10">
+        <div *ngIf="ratingDistributionData?.labels.length > 0" class="!mb-10">
           <p-card header="Rating Distribution">
             <p-chart type="doughnut" [data]="ratingDistributionData" [options]="ratingDistributionOptions"></p-chart>
           </p-card>

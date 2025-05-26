@@ -79,7 +79,6 @@ export class OrdersListComponent implements OnInit {
   ngOnInit() {
     this.orderService.getAllOrders().subscribe({
       next: (data) => {
-        console.log('Fetched Orders:', data); //{[]}
         this.orders = data.orders.map((order) => ({
           ...order,
           shippingAddress:
@@ -94,10 +93,7 @@ export class OrdersListComponent implements OnInit {
                   postalCode: '',
                 }
               : order.shippingAddress,
-        })); // [{[]}]
-        console.log('====================================');
-        console.log(this.orders);
-        console.log('====================================');
+        }));
       },
       error: (err) => console.error('Failed to load orders:', err),
     });
@@ -106,11 +102,7 @@ export class OrdersListComponent implements OnInit {
   loadOrders() {
     this.orderService.getAllOrders().subscribe({
       next: (data) => {
-        console.log('Fetched Orders:', data); //{[]}
         this.orders = data.orders; // [{[]}]
-        console.log('====================================');
-        console.log(this.orders);
-        console.log('====================================');
       },
       error: (err) => console.error('Failed to load orders:', err),
     });

@@ -51,9 +51,7 @@ export class SubCategoriesListComponent implements OnInit {
     this.subService.getSubCategories().subscribe({
       next: (data) => {       
         this.subCategories = data.subcategories
-        console.log('====================================');
-        console.log(data.subcategories);
-        console.log('====================================');
+     
       },
       error: (err) => console.error(err),
     });
