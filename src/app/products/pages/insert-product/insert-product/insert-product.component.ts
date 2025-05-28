@@ -148,10 +148,16 @@ export class InsertProductComponent implements OnInit {
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch categories' }),
     });
   }
-  fetchSubcategories() {
+fetchSubcategories() {
     this.subcategoeryService.getSubCategories().subscribe({
-      next: (res) => {
-      
+      next: (res: any) => {
+        this.subcategory = res.subcategories;
+        this.filteredSubcategories = [...this.subcategory];
+        // if (this.categoryId) {
+        //   this.filteredSubcategories = this.subcategory.filter(sub =>
+        //     sub.categoryId && sub.categoryId._id === this.categoryId
+        //   );
+        // }
       },
       error: () => this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch subcategories' }),
     });
