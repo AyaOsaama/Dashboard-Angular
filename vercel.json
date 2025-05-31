@@ -1,9 +1,14 @@
 {
   "builds": [
     {
-      "src": "src/main.ts",
-      "use": "@vercel/angular"
+      "src": "dist/dashboard/**",
+      "use": "@vercel/static"
     }
   ],
-  "outputDirectory": "dist/dashboard/browser"
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
