@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -43,13 +43,12 @@ import { ProductApiService } from '../../../../service/product-api.service';
     ConfirmDialogModule,
     DialogModule,
     TableModule,
-    CurrencyPipe,
     RatingModule,
     TagModule
   ],
   templateUrl: './edit-variant.component.html',
   styleUrl: './edit-variant.component.css',
-  providers: [MessageService, ConfirmationService, CurrencyPipe],
+  providers: [MessageService, ConfirmationService],
 })
 export class EditVariantComponent implements OnInit {
 
@@ -72,7 +71,6 @@ export class EditVariantComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private f_builder: FormBuilder,
-    private currencyPipe: CurrencyPipe
   ) {
     this.variantForm = this.f_builder.group({
       inStock: [0, Validators.min(0)],
