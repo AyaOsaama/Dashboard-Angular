@@ -71,7 +71,7 @@ export class CategoriesListComponent {
   
   
   addNewCategory() {
-    this.router.navigate(['subcategories/insert']); 
+    this.router.navigate(['categories/insert']); 
   }
 
   onEditCategory(category: ICategory) {

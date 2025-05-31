@@ -24,7 +24,7 @@
   
     <ng-template pTemplate="header">
     =
-      <img alt="Post Image" class="w-full Image" [src]="post.image || defaultImage" />
+      <img alt="Post Image" class="w-full Image" [src]="post?.image || defaultImage" />
     </ng-template>
 
     <ng-template pTemplate="title"> {{ post.title.en }} </ng-template>
@@ -108,26 +108,32 @@
   [closable]="true"
 >
   <div *ngIf="selectedPost?.comments?.length > 0; else noComments">
-    <div *ngFor="let comment of selectedPost.comments" class="mb-3">
-      <div class="flex align-items-center gap-2">
+    <div *ngFor="let comment of selectedPost.comments" class="!mb-5 !p-3 rounded-lg bg-gray-100 shadow-sm">
+      <div class="flex items-center gap-3 mb-2">
         <img 
-          [src]="comment.user.image || defaultAvatar" 
-          width="32" 
-          height="32" 
-          class="border-circle" 
+          [src]="comment.user?.image || defaultAvatar" 
+          alt="User Avatar"
+          class="w-10 h-10 rounded-full object-cover border border-gray-300"
         />
-        <strong>{{ comment.user.userName.en || 'Unknown' }}</strong>
+        <div>
+          <h3 class="text-sm font-semibold text-gray-800">
+            {{ comment?.user?.userName?.en || 'Unknown' }}
+          </h3>
+          <!-- <p class="text-xs text-gray-500">
+            {{ comment.createdAt ? (comment.createdAt | date: 'medium') : '' }}
+          </p> -->
+              <p class="text-gray-700 text-sm pl-1">{{ comment.comment }}</p>
+
+        </div>
       </div>
-      <p class="ml-2 mt-1 mb-0">{{ comment.comment }}</p>
-      <small class="ml-2 text-muted">
-        {{ comment.createdAt ? (comment.createdAt | date: 'short') : '' }}
-      </small>
     </div>
   </div>
+
   <ng-template #noComments>
-    <p>No comments yet.</p>
+    <p class="text-center text-gray-500">No comments yet.</p>
   </ng-template>
 </p-dialog>
+
 
 <!-- Edit Post Modal -->
 <p-dialog header="Edit Post" [(visible)]="editPostDialog" [modal]="true" [style]="{ width: '700px' }">
