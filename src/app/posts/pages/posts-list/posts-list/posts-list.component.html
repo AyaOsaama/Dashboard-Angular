@@ -37,12 +37,12 @@
       <div class="button mt-3">
         <span (click)="openLikesDialog(post)" class="cursor-pointer text-primary">
           <i class="pi pi-thumbs-up mr-1"></i>
-          {{ post.likes.length || 0 }} Likes
+          {{ post?.likes?.length || 0 }} Likes
         </span>
 
         <span (click)="openCommentsDialog(post)" class="cursor-pointer text-primary">
           <i class="pi pi-comments mr-1"></i>
-          {{ post.comments.length || 0 }} Comments
+          {{ post?.comments?.length || 0 }} Comments
         </span>
       </div>
     </div>
@@ -86,12 +86,12 @@
   <div *ngIf="selectedPost?.likes?.length > 0; else noLikes">
     <div *ngFor="let like of selectedPost.likes" class="mb-2 flex align-items-center gap-2">
       <img 
-        [src]="like.user.image || defaultAvatar" 
+        [src]="like.user?.image || defaultAvatar" 
         width="32" 
         height="32" 
         class="border-circle" 
       />
-      <strong>{{ like.user.userName.en || 'Unknown' }}</strong>
+      <strong>{{ like?.user?.userName?.en || 'Unknown' }}</strong>
     </div>
   </div>
   <ng-template #noLikes>
@@ -111,7 +111,7 @@
     <div *ngFor="let comment of selectedPost.comments" class="!mb-5 !p-3 rounded-lg bg-gray-100 shadow-sm">
       <div class="flex items-center gap-3 mb-2">
         <img 
-          [src]="comment.user?.image || defaultAvatar" 
+          [src]="comment?.user?.image || defaultAvatar" 
           alt="User Avatar"
           class="w-10 h-10 rounded-full object-cover border border-gray-300"
         />
@@ -170,7 +170,7 @@
       <label class="font-semibold block mb-2">Image</label>
       <div class="flex items-center gap-4">
         <img 
-          [src]="editedPost.imagePreview || defaultImage" 
+          [src]="editedPost?.imagePreview || defaultImage" 
           alt="Preview" 
           width="100" 
           height="100" 

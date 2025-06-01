@@ -16,7 +16,6 @@ import { loginGuard } from './Gurads/login.guard';
 import { authGuard } from './Gurads/auth.guard';
 import { LoginComponent } from './auth/login/pages/login.component.js'; import { OrdersListComponent } from './orders/pages/orders-list/orders-list/orders-list.component';
 import { OrderDetailsComponent } from './orders/pages/order-details/order-details.component';
-import { TestComponent } from './test/test.component';
 import { ProductControlComponent } from './products/pages/product-control/product-control.component';
 import { InsertVariantComponent } from './products/pages/product-control/insert-variant/insert-variant.component';
 import { EditVariantComponent } from './products/pages/product-control/edit-variant/edit-variant.component';
@@ -34,31 +33,30 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'test', component: TestComponent },
-      { path: 'dashboard', component: DashboardComponent },
+      { path: '/dashboard', component: DashboardComponent },
 
-      { path: 'products', component: ProductsListComponent },
-      { path: 'products/insert', component: InsertProductComponent },
-      { path: 'products/product-control/:idFromURL', component: ProductControlComponent },
+      { path: '/products', component: ProductsListComponent },
+      { path: '/products/insert', component: InsertProductComponent },
+      { path: '/products/product-control/:idFromURL', component: ProductControlComponent },
       // { path: 'products/edit-product/:id', component: EditProductComponent },
-      { path: 'insert-variant', component: InsertVariantComponent },
-      { path: 'products/:productId/edit-variant/:variantId', component: EditVariantComponent }, // <--- المسار الجديد لتعديل الفاريانت
+      { path: '/insert-variant', component: InsertVariantComponent },
+      { path: '/products/:productId/edit-variant/:variantId', component: EditVariantComponent }, // <--- المسار الجديد لتعديل الفاريانت
 
 
-      { path: 'categories', component: CategoriesListComponent },
-      { path: 'categories/insert', component: InsertCategoryComponent },
+      { path: '/categories', component: CategoriesListComponent },
+      { path: '/categories/insert', component: InsertCategoryComponent },
 
-      { path: 'subcategories', component: SubCategoriesListComponent },
-      { path: 'subcategories/insert', component: InsertSubcategoriesListComponent },
+      { path: '/subcategories', component: SubCategoriesListComponent },
+      { path: '/subcategories/insert', component: InsertSubcategoriesListComponent },
 
-      { path: 'orders', component: OrdersListComponent },
-      { path: 'orders/:id', component: OrderDetailsComponent },
+      { path: '/orders', component: OrdersListComponent },
+      { path: '/orders/:id', component: OrderDetailsComponent },
 
-      { path: 'users', component: UsersListComponent },
-      { path: 'users/insert', component: InsertUserComponent },
+      { path: '/users', component: UsersListComponent },
+      { path: '/users/insert', component: InsertUserComponent },
 
-      { path: 'posts', component: PostsListComponent },
-      { path: 'posts/insert', component: InsertPostComponent },
+      { path: '/posts', component: PostsListComponent },
+      { path: '/posts/insert', component: InsertPostComponent },
 
     ]
   },
